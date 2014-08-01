@@ -2,19 +2,15 @@ package epusp.pcs.os.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.Maps;
 import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import epusp.pcs.os.client.rpc.IConnectionService;
 import epusp.pcs.os.client.rpc.IConnectionServiceAsync;
-import epusp.pcs.os.model.User;
 
 public class PCSOS implements EntryPoint {
 
@@ -22,21 +18,21 @@ public class PCSOS implements EntryPoint {
 
 	private static final String APIKey = "AIzaSyDNVvFn0tU2jIjWsOj4oiGaWACX6BgF7Eo";
 	
-	private User user;
+	//private User user;
 	
 	public void onModuleLoad() {
 
-		connection.Hello(new AsyncCallback<User>() {
-
-			public void onSuccess(User result) {
-				user = result;
-
-			}
-
-			public void onFailure(Throwable caught) {
-				RootLayoutPanel.get().add(new Label("I couldn't connect... ;("));
-			}
-		});
+//		connection.Hello(new AsyncCallback<User>() {
+//
+//			public void onSuccess(User result) {
+//				user = result;
+//
+//			}
+//
+//			public void onFailure(Throwable caught) {
+//				RootLayoutPanel.get().add(new Label("I couldn't connect... ;("));
+//			}
+//		});
 
 		Maps.loadMapsApi(APIKey, "2", false, new Runnable() {
 			public void run() {
@@ -58,8 +54,8 @@ public class PCSOS implements EntryPoint {
 		map.addOverlay(new Marker(home));
 
 		// Add an info window to highlight a point of interest
-		map.getInfoWindow().open(map.getCenter(),
-				new InfoWindowContent("Hello, " + user.getName()));
+//		map.getInfoWindow().open(map.getCenter(),
+//				new InfoWindowContent("Hello, " + user.getName()));
 
 		// Add the map to the HTML host page
 		RootLayoutPanel.get().add(map);
