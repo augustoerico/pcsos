@@ -13,6 +13,14 @@ public class Agent extends User implements IsSerializable {
 	
 	private List<Licence> licences = new ArrayList<Licence>();
 	
+	public Agent(String name, String surname){
+		super(name, surname);
+	}
+	
+	public Agent(String name, String secondName, String surname){
+		super(name, secondName, surname);
+	}
+	
 	public void addLicence(Licence licence){
 		licences.add(licence);
 	}

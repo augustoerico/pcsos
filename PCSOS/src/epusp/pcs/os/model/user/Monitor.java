@@ -8,6 +8,14 @@ public class Monitor extends User implements IsSerializable {
 	
 	private Boolean status;
 	
+	public Monitor(String name, String surname){
+		super(name, surname);
+	}
+	
+	public Monitor(String name, String secondName, String surname){
+		super(name, secondName, surname);
+	}
+	
 	public void setStatus(Boolean status){
 		this.status = status;
 	}

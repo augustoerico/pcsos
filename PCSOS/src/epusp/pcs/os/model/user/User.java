@@ -2,9 +2,19 @@ package epusp.pcs.os.model.user;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class User implements IsSerializable{
+import epusp.pcs.os.model.Person;
+
+public class User extends Person implements IsSerializable{
 	private String login;
 	private String senha;
+	
+	public User(String name, String surname){
+		super(name, surname);
+	}
+	
+	public User(String name, String secondName, String surname){
+		super(name, secondName, surname);
+	}
 	
 	public String getLogin(){
 		return login;
