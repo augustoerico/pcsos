@@ -6,15 +6,21 @@ public class Id implements IsSerializable{
 	
 	public static long counter = 0;
 	
-	private long value;
+	private String value;
 	
-	public Id(){
-		super();
-		value = counter;
+	public Id(String type){
+		value = type + "_" + counter;
 		counter++;
 	}
 	
-	public long getValue(){
+	public String getValue(){
 		return value;
+	}
+	
+	/*
+	 * Seen by IsSerializable
+	 */
+	public Id(){
+		super();
 	}
 }

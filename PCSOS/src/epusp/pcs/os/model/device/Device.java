@@ -6,7 +6,7 @@ import epusp.pcs.os.model.Id;
 
 public class Device implements IsSerializable {
 	
-	private Id id = new Id();
+	private Id id = new Id(Device.class.getName());
 	
 	private Place currentPlace;
 	
