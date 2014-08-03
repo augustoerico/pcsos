@@ -1,0 +1,19 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:f="urn:import:epusp.pcs.os.login.client.widget">
+
+	<ui:image field='backgroundPicture' src='../images/login-background.gif' />
+
+	<ui:style>
+	@sprite .backgroundPicture {
+		gwt-image: 'backgroundPicture';
+	}
+	</ui:style>
+
+	<g:HorizontalPanel ui:field="hp" title="Welcome" styleName="{style.backgroundPicture}">
+		<g:cell horizontalAlignment="ALIGN_CENTER" verticalAlignment="ALIGN_MIDDLE">
+			<f:Login ui:field="login" />
+		</g:cell>
+	</g:HorizontalPanel>
+
+</ui:UiBinder> 

@@ -10,13 +10,22 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</welcome-file-list>
 
 	<servlet>
-		<servlet-name>connection</servlet-name>
+		<servlet-name>connectionService</servlet-name>
 		<servlet-class>epusp.pcs.os.server.Connection</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>connection</servlet-name>
+		<servlet-name>connectionService</servlet-name>
 		<url-pattern>/pcsos/connection</url-pattern>
 	</servlet-mapping>
 
+
+	<servlet>
+		<servlet-name>loginService</servlet-name>
+		<servlet-class>epusp.pcs.os.server.login.LoginConnection</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>loginService</servlet-name>
+		<url-pattern>/pcsos/loginService</url-pattern>
+	</servlet-mapping>
 
 </web-app>
