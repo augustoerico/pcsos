@@ -1,21 +1,53 @@
 package epusp.pcs.os.model;
 
-public class EmergencyCall {
+import java.util.Date;
 
-	private String message;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-	private String victim;
+import epusp.pcs.os.model.person.Victim;
+import epusp.pcs.os.model.person.user.Monitor;
+
+public class EmergencyCall implements IsSerializable{
+
+	private Date begin, end;
+
+	private Victim victim;
 	
-	public EmergencyCall(String message, String victim){
-		this.message = message;
+	private Monitor monitor;
+	
+	public EmergencyCall(Date begin, Victim victim){
+		this.begin = begin;
 		this.victim = victim;
 	}
 	
-	public String getMessage(){
-		return message;
+	public Victim getVictim(){
+		return victim;
+	}
+
+	public Date getBegin() {
+		return begin;
+	}
+
+	public Date getEnd() {
+		return end;
+	}
+
+	public void setEnd(Date end) {
+		this.end = end;
 	}
 	
-	public String getVictim(){
-		return victim;
+	public Monitor getMonitor() {
+		return monitor;
+	}
+
+	public void setMonitor(Monitor monitor) {
+		this.monitor = monitor;
+	}
+	
+	/*
+	 * Seen by IsSerializable
+	 */
+	public EmergencyCall(){
+		super();
 	}
 }

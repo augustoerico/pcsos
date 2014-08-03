@@ -1,5 +1,13 @@
 package epusp.pcs.os.model.licence;
 
-public enum LicenceTypes {
-	Car;
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public enum LicenceTypes implements IsSerializable{
+	Drive;
+	
+	/*
+	 * Seen by IsSerializable
+	 */
+	LicenceTypes(){
+	}
 }
