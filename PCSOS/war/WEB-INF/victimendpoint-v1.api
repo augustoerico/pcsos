@@ -1,0 +1,251 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://epusp-pcsos.appspot.com/_ah/api",
+  "name" : "victimendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://epusp-pcsos.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "pcs.epusp",
+  "ownerName" : "pcs.epusp",
+  "packagePath" : "os.model.person",
+  "methods" : {
+    "victimendpoint.updateVictim" : {
+      "path" : "victim",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.model.person.VictimEndpoint.updateVictim",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "victimendpoint.listVictim" : {
+      "path" : "victim",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.model.person.VictimEndpoint.listVictim",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "victimendpoint.removeVictim" : {
+      "path" : "victim/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.model.person.VictimEndpoint.removeVictim",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "victimendpoint.getVictim" : {
+      "path" : "victim/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.model.person.VictimEndpoint.getVictim",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "victimendpoint.insertVictim" : {
+      "path" : "victim",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.model.person.VictimEndpoint.insertVictim",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "Victim" : {
+        "id" : "Victim",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "secondName" : {
+            "type" : "string"
+          },
+          "surname" : {
+            "type" : "string"
+          },
+          "isActive" : {
+            "type" : "boolean"
+          },
+          "device" : {
+            "$ref" : "Device"
+          },
+          "active" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "Key" : {
+        "id" : "Key",
+        "type" : "object",
+        "properties" : {
+          "kind" : {
+            "type" : "string"
+          },
+          "appId" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "namespace" : {
+            "type" : "string"
+          },
+          "complete" : {
+            "type" : "boolean"
+          },
+          "parent" : {
+            "$ref" : "Key"
+          }
+        }
+      },
+      "Device" : {
+        "id" : "Device",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "$ref" : "Key"
+          },
+          "latitude" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "longitude" : {
+            "type" : "number",
+            "format" : "float"
+          }
+        }
+      },
+      "CollectionResponse_Victim" : {
+        "id" : "CollectionResponse_Victim",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Victim"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "epusp.pcs.os.model.person.VictimEndpoint.updateVictim" : {
+        "request" : {
+          "$ref" : "Victim"
+        },
+        "response" : {
+          "$ref" : "Victim"
+        }
+      },
+      "epusp.pcs.os.model.person.VictimEndpoint.listVictim" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Victim"
+        }
+      },
+      "epusp.pcs.os.model.person.VictimEndpoint.removeVictim" : {
+      },
+      "epusp.pcs.os.model.person.VictimEndpoint.getVictim" : {
+        "response" : {
+          "$ref" : "Victim"
+        }
+      },
+      "epusp.pcs.os.model.person.VictimEndpoint.insertVictim" : {
+        "request" : {
+          "$ref" : "Victim"
+        },
+        "response" : {
+          "$ref" : "Victim"
+        }
+      }
+    }
+  }
+}
