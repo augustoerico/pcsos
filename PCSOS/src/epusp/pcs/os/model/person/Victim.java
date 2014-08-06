@@ -1,11 +1,16 @@
 package epusp.pcs.os.model.person;
 
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 import epusp.pcs.os.model.device.Device;
 
+@PersistenceCapable
 public class Victim extends Person implements IsSerializable {
 	
+	@Persistent
 	private Device device;
 	
 	public Victim(String name, String surname){

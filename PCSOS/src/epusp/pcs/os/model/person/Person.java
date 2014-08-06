@@ -1,12 +1,26 @@
 package epusp.pcs.os.model.person;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+import com.google.appengine.api.datastore.Key;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+@PersistenceCapable
 public abstract class Person implements IsSerializable {
-	
+
+	@PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    private Key key;
+	@Persistent
 	private String name;
+	@Persistent
 	private String secondName;
+	@Persistent
 	private String surname;
+	@Persistent
 	private Boolean isActive = false; //default value
 	
 	public Person(String name, String surname){
