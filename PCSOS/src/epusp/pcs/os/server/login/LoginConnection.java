@@ -7,6 +7,8 @@ import java.net.URLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.ServletException;
+
 import org.json.JSONObject;
 
 import epusp.pcs.os.login.client.rpc.ILoginService;
@@ -19,6 +21,11 @@ public class LoginConnection extends Connection implements ILoginService{
 	private static final long serialVersionUID = 1L;
 
 	private static Logger log = Logger.getLogger(LoginConnection.class.getCanonicalName());
+	
+    public void init() throws ServletException
+    {
+         System.out.println("Creating temporary data for testing");
+    }
 
 	@Override
 	public User loginDetails(String token){
