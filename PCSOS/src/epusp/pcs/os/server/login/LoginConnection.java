@@ -25,6 +25,9 @@ public class LoginConnection extends Connection implements ILoginService{
     public void init() throws ServletException
     {
          System.out.println("Creating temporary data for testing");
+         Admin admin = new Admin("Giovanni", "Gatti Pinheiro");
+         admin.setEmail("giovanni.gatti.pinheiro@gmail.com");
+         admin.setIsActive(true);
     }
 
 	@Override
