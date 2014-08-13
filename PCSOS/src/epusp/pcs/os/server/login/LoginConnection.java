@@ -9,13 +9,10 @@ import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
-import com.google.appengine.api.users.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
-
 import epusp.pcs.os.login.client.rpc.ILoginService;
+import epusp.pcs.os.model.person.user.Admin;
+import epusp.pcs.os.model.person.user.User;
 import epusp.pcs.os.server.Connection;
-import epusp.pcs.os.shared.client.LoginInfo;
 
 public class LoginConnection extends Connection implements ILoginService{
 
@@ -24,7 +21,7 @@ public class LoginConnection extends Connection implements ILoginService{
 	private static Logger log = Logger.getLogger(LoginConnection.class.getCanonicalName());
 
 	@Override
-	public LoginInfo loginDetails(String token){
+	public User loginDetails(String token){
 		if(token != null){
 			String url = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=" + token;
 
@@ -59,25 +56,16 @@ public class LoginConnection extends Connection implements ILoginService{
 				log.log(Level.SEVERE, e.getMessage());
 			}
 			System.out.println(r.toString());
-			final LoginInfo loginInfo = new LoginInfo();
+			
 			try {
 				final JSONObject obj = new JSONObject(r.toString());
-				loginInfo.setLoggedIn(true);
-				loginInfo.setName(obj.getString("name"));
-				loginInfo.setPictureUrl(obj.getString("picture"));
-				
-				final UserService userService = UserServiceFactory.getUserService();
-				final User user = userService.getCurrentUser();
-				if (null != user) {
-					loginInfo.setEmailAddress(user.getEmail());
-				} else {
-					return null;
-				}
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
 			}
 			
-			return loginInfo;
+			User user = new Admin("", "");
+			
+			return user;
 		}else
 			return null;
 	}

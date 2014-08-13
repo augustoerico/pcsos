@@ -4,14 +4,17 @@
 	<inherits name="com.google.gwt.user.User" />
 	<inherits name="com.google.gwt.user.theme.clean.Clean" />
 	
+	<inherits name="com.google.api.gwt.oauth2.OAuth2" />
+
 	<inherits name="com.google.gwt.logging.Logging" />
-	<set-property name="gwt.logging.logLevel" value="ALL"/>
+	<set-property name="gwt.logging.logLevel" value="ALL" />
 	<set-property name="gwt.logging.popupHandler" value="DISABLED" />
-	
+
 	<source path="login/client" />
 	<source path="login/exceptions" />
 	<source path="shared" />
 	<source path="model" />
-	
+
 	<entry-point class="epusp.pcs.os.login.client.Panel" />
+	<entry-point class="epusp.pcs.os.login.client.Panel"></entry-point>
 </module>

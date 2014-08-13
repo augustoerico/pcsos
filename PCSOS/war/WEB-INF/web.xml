@@ -2,7 +2,6 @@
 
 	<welcome-file-list>
 		<welcome-file>PCSOS.html</welcome-file>
-		<welcome-file>AdminWorkstation.html</welcome-file>
 	</welcome-file-list>
 
 	<servlet>
