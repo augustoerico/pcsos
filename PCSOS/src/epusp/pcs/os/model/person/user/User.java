@@ -6,8 +6,7 @@ import epusp.pcs.os.model.person.Person;
 
 public abstract class User extends Person implements IsSerializable{
 	
-	private String login;
-	private String senha;
+	private String email;
 	
 	public User(String name, String surname){
 		super(name, surname);
@@ -17,20 +16,12 @@ public abstract class User extends Person implements IsSerializable{
 		super(name, secondName, surname);
 	}
 	
-	public String getLogin(){
-		return login;
+	public String getEmail(){
+		return email;
 	}
 	
-	public void setLogin(String login){
-		this.login = login;
-	}
-	
-	public String getSenha() {
-		return senha;
-	}
-	
-	public void setSenha(String senha) {
-		this.senha = senha;
+	public void setEmail(String email){
+		this.email = email;
 	}
 	
 	public abstract AccountTypes getType();

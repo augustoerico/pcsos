@@ -8,8 +8,4 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 
 	private static final long serialVersionUID = 1L;
 
-	public String Hello() throws Exception {
-		return "Helo World!";
-	}
-	
 }

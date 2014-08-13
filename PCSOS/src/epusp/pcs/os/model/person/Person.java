@@ -25,6 +25,10 @@ public abstract class Person implements IsSerializable {
 	private String surname;
 	@Persistent
 	private Boolean isActive = false; //default value
+	@Persistent
+	private String imageURL;
+	@Persistent
+	private String googleUserID;
 	
 	public Person(String name, String surname){
 		this.name = name;
@@ -63,6 +67,22 @@ public abstract class Person implements IsSerializable {
 	
 	public void setIsActive(Boolean isActive){
 		this.isActive = isActive;
+	}
+	
+	public String getPictureURL() {
+		return imageURL;
+	}
+
+	public void setPictureURL(String imageURL) {
+		this.imageURL = imageURL;
+	}
+	
+	public String getGoogleUserID() {
+		return googleUserID;
+	}
+
+	public void setGoogleUserID(String googleUserID) {
+		this.googleUserID = googleUserID;
 	}
 
 	/*

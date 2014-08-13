@@ -2,12 +2,10 @@ package epusp.pcs.os.login.client.rpc;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import epusp.pcs.os.model.person.user.User;
+import epusp.pcs.os.shared.client.LoginInfo;
 
 public interface ILoginServiceAsync {
-	
-	void Hello(AsyncCallback<String> callback);
 
-	void login(String username, String password, AsyncCallback<User> callback);
+	void loginDetails(String token, AsyncCallback<LoginInfo> callback);
 
 }

@@ -2,6 +2,7 @@
 
 	<welcome-file-list>
 		<welcome-file>PCSOS.html</welcome-file>
+		<welcome-file>AdminWorkstation.html</welcome-file>
 	</welcome-file-list>
 
 	<servlet>
@@ -22,6 +23,20 @@
 		<servlet-name>loginService</servlet-name>
 		<url-pattern>/pcsos/loginService</url-pattern>
 	</servlet-mapping>
+
+  <servlet>
+    <servlet-name>SystemServiceServlet</servlet-name>
+    <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+    <init-param>
+      <param-name>services</param-name>
+      <param-value/>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SystemServiceServlet</servlet-name>
+    <url-pattern>/_ah/spi/*</url-pattern>
+  </servlet-mapping>
 
   <servlet>
     <servlet-name>SystemServiceServlet</servlet-name>

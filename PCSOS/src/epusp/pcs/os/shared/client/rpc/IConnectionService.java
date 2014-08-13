@@ -6,6 +6,4 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("connectionService")
 public interface IConnectionService extends RemoteService {
 	
-	public String Hello() throws Exception;
-
 }

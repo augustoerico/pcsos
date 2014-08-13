@@ -1,22 +1,84 @@
 package epusp.pcs.os.server.login;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.json.JSONObject;
+
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+
 import epusp.pcs.os.login.client.rpc.ILoginService;
-import epusp.pcs.os.login.exceptions.LoginException;
-import epusp.pcs.os.model.person.user.SuperUser;
-import epusp.pcs.os.model.person.user.User;
 import epusp.pcs.os.server.Connection;
+import epusp.pcs.os.shared.client.LoginInfo;
 
 public class LoginConnection extends Connection implements ILoginService{
 
 	private static final long serialVersionUID = 1L;
 
+	private static Logger log = Logger.getLogger(LoginConnection.class.getCanonicalName());
+
 	@Override
-	public User login(String username, String password) throws LoginException{
-		//To do: create a true login (including password validation)
-		SuperUser superUser = new SuperUser("Giovanni", "Gatti Pinheiro");
-		superUser.setIsActive(true);
-		superUser.setLogin("giovanni.gatti@usp.br");
-		superUser.setSenha("pcsos");
-		return superUser;
+	public LoginInfo loginDetails(String token){
+		if(token != null){
+			String url = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=" + token;
+
+			final StringBuffer r = new StringBuffer();
+			try {
+				final URL u = new URL(url);
+				final URLConnection uc = u.openConnection();
+				final int end = 1000;
+				InputStreamReader isr = null;
+				BufferedReader br = null;
+				try {
+					isr = new InputStreamReader(uc.getInputStream());
+					br = new BufferedReader(isr);
+					final int chk = 0;
+					while ((url = br.readLine()) != null) {
+						if ((chk >= 0) && ((chk < end))) {
+							r.append(url).append('\n');
+						}
+					}
+				} catch (final java.net.ConnectException cex) {
+					r.append(cex.getMessage());
+				} catch (final Exception ex) {
+					log.log(Level.SEVERE, ex.getMessage());
+				} finally {
+					try {
+						br.close();
+					} catch (final Exception ex) {
+						log.log(Level.SEVERE, ex.getMessage());
+					}
+				}
+			} catch (final Exception e) {
+				log.log(Level.SEVERE, e.getMessage());
+			}
+			System.out.println(r.toString());
+			final LoginInfo loginInfo = new LoginInfo();
+			try {
+				final JSONObject obj = new JSONObject(r.toString());
+				loginInfo.setLoggedIn(true);
+				loginInfo.setName(obj.getString("name"));
+				loginInfo.setPictureUrl(obj.getString("picture"));
+				
+				final UserService userService = UserServiceFactory.getUserService();
+				final User user = userService.getCurrentUser();
+				if (null != user) {
+					loginInfo.setEmailAddress(user.getEmail());
+				} else {
+					return null;
+				}
+			} catch (Exception e) {
+				log.log(Level.SEVERE, e.getMessage());
+			}
+			
+			return loginInfo;
+		}else
+			return null;
 	}
 }

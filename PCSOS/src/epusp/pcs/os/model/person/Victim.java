@@ -28,11 +28,12 @@ public class Victim extends Person implements IsSerializable {
 	public void setDevice(Device device) {
 		this.device = device;
 	}
-
+	
 	/*
 	 * Seen by IsSerializable
 	 */
 	public Victim(){
 		super();
 	}
+
 }
