@@ -11,6 +11,10 @@ import javax.servlet.ServletException;
 
 import org.json.JSONObject;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+
 import epusp.pcs.os.login.client.rpc.ILoginService;
 import epusp.pcs.os.model.person.user.Admin;
 import epusp.pcs.os.model.person.user.User;
@@ -24,10 +28,14 @@ public class LoginConnection extends Connection implements ILoginService{
 	
     public void init() throws ServletException
     {
-         System.out.println("Creating temporary data for testing");
-         Admin admin = new Admin("Giovanni", "Gatti Pinheiro");
-         admin.setEmail("giovanni.gatti.pinheiro@gmail.com");
-         admin.setIsActive(true);
+//         System.out.println("Creating temporary data for testing");
+//         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+//         Entity admin = new Entity("Admin");
+//         admin.setProperty("name","Giovanni");
+//         admin.setProperty("surname", "Gatti Pinheiro");
+//         admin.setProperty("email", "giovanni.gatti.pinheiro@gmail.com");
+//         admin.setProperty("isActive", true);
+//         datastore.put(admin);
     }
 
 	@Override
