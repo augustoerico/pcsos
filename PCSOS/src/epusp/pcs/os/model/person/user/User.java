@@ -1,11 +1,19 @@
 package epusp.pcs.os.model.person.user;
 
+import javax.jdo.annotations.Inheritance;
+import javax.jdo.annotations.InheritanceStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 import epusp.pcs.os.model.person.Person;
 
+@PersistenceCapable
+@Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
 public abstract class User extends Person implements IsSerializable{
 	
+	@Persistent
 	private String email;
 	
 	public User(String name, String surname){

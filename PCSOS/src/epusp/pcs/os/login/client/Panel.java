@@ -9,7 +9,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import epusp.pcs.os.login.client.rpc.ILoginService;
 import epusp.pcs.os.login.client.rpc.ILoginServiceAsync;
-import epusp.pcs.os.model.person.user.User;
 
 public class Panel implements EntryPoint {
 
@@ -28,12 +27,11 @@ public class Panel implements EntryPoint {
 		Auth.get().login(req, new Callback<String, Throwable>() {
 			@Override
 			public void onSuccess(String token) {
-				loginService.loginDetails(token, new AsyncCallback<User>() {
+				loginService.login(token, new AsyncCallback<String>() {
 					
 					@Override
-					public void onSuccess(User result) {
-						// TODO Auto-generated method stub
-						
+					public void onSuccess(String result) {
+						redirect(result);
 					}
 					
 					@Override
@@ -50,6 +48,9 @@ public class Panel implements EntryPoint {
 		});
 	}
 
+	private void redirect(String url){
+		System.out.println("got here!");
+	}
 
 
 }

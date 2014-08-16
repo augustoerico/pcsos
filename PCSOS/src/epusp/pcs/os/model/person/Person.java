@@ -4,17 +4,17 @@ import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
-//import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
 public abstract class Person implements IsSerializable {
 
-//	@PrimaryKey
-//    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-//    private Key key;
+	@PrimaryKey
+	@Persistent
+	private String googleUserID;
 	@Persistent
 	private String name;
 	@Persistent
@@ -25,8 +25,6 @@ public abstract class Person implements IsSerializable {
 	private Boolean isActive = false; //default value
 	@Persistent
 	private String imageURL;
-	@Persistent
-	private String googleUserID;
 	
 	public Person(String name, String surname){
 		this.name = name;
@@ -38,14 +36,6 @@ public abstract class Person implements IsSerializable {
 		this.secondName = secondName;
 		this.surname = surname;
 	}
-	
-//	public Key getKey() {
-//		return key;
-//	}
-//
-//	public void setKey(Key key) {
-//		this.key = key;
-//	}
 
 	public String getName(){
 		return name;

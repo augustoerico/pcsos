@@ -7,6 +7,7 @@ import java.net.URLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
 
 import org.json.JSONObject;
@@ -15,27 +16,34 @@ import epusp.pcs.os.login.client.rpc.ILoginService;
 import epusp.pcs.os.model.person.user.Admin;
 import epusp.pcs.os.model.person.user.User;
 import epusp.pcs.os.server.Connection;
+import epusp.pcs.os.server.PMF;
 
 public class LoginConnection extends Connection implements ILoginService{
 
 	private static final long serialVersionUID = 1L;
 
 	private static Logger log = Logger.getLogger(LoginConnection.class.getCanonicalName());
-	
-    public void init() throws ServletException
-    {
-//         System.out.println("Creating temporary data for testing");
-//         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-//         Entity admin = new Entity("Admin");
-//         admin.setProperty("name","Giovanni");
-//         admin.setProperty("surname", "Gatti Pinheiro");
-//         admin.setProperty("email", "giovanni.gatti.pinheiro@gmail.com");
-//         admin.setProperty("isActive", true);
-//         datastore.put(admin);
-    }
+
+	public void init() throws ServletException
+	{
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+
+		System.out.println("Initializing with test data");
+		Admin admin = new Admin("Giovanni", "Gatti Pinheiro");
+		admin.setEmail("giovanni.gatti.pinheiro@gmail.com");
+		admin.setIsActive(true);
+		admin.setGoogleUserID("115057125698280242918");
+		admin.setPictureURL("https://lh5.googleusercontent.com/--PBV1HBWVsc/AAAAAAAAAAI/AAAAAAAAAFQ/O57isBLRtRA/photo.jpg");
+
+		try{
+			pm.makePersistent(admin);
+		}finally{
+			pm.close();
+		}
+	}
 
 	@Override
-	public User loginDetails(String token){
+	public String login(String token){
 		if(token != null){
 			String url = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=" + token;
 
@@ -70,16 +78,43 @@ public class LoginConnection extends Connection implements ILoginService{
 				log.log(Level.SEVERE, e.getMessage());
 			}
 			System.out.println(r.toString());
-			
+
+			String userId = null;
+
 			try {
 				final JSONObject obj = new JSONObject(r.toString());
+				userId = obj.getString("id");
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
 			}
-			
-			User user = new Admin("", "");
-			
-			return user;
+
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			User user = null;
+			try{
+				user = pm.getObjectById(User.class, userId);
+			}finally{
+				pm.close();
+			}
+
+			getThreadLocalRequest().getSession().setAttribute(userInfo, user);
+
+			switch(user.getType()){
+			case Admin:
+				return "";
+			case Agent:
+				return "";
+			case Auditor:
+				return "";
+			case Monitor:
+				return "";
+			case SuperUser:
+				return "";
+			default:
+				return null;
+			}
+
+
+
 		}else
 			return null;
 	}
