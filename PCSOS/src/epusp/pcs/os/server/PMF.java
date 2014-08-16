@@ -1,4 +1,4 @@
-package epusp.pcs.os.model.person;
+package epusp.pcs.os.server;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;

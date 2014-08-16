@@ -11,10 +11,6 @@ import javax.servlet.ServletException;
 
 import org.json.JSONObject;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-
 import epusp.pcs.os.login.client.rpc.ILoginService;
 import epusp.pcs.os.model.person.user.Admin;
 import epusp.pcs.os.model.person.user.User;
