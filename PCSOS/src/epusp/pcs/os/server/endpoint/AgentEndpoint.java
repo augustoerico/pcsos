@@ -1,27 +1,29 @@
-package epusp.pcs.os.model.endpoint;
-
-import epusp.pcs.os.model.person.Victim;
-import epusp.pcs.os.server.PMF;
-
-import com.google.api.server.spi.config.Api;
-import com.google.api.server.spi.config.ApiMethod;
-import com.google.api.server.spi.config.ApiNamespace;
-import com.google.api.server.spi.response.CollectionResponse;
-import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.datanucleus.query.JDOCursorHelper;
+package epusp.pcs.os.server.endpoint;
 
 import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 
-@Api(name = "victimendpoint", namespace = @ApiNamespace(ownerDomain = "pcs.epusp", ownerName = "pcs.epusp", packagePath = "os.model.person"))
-public class VictimEndpoint {
+import com.google.api.server.spi.config.Api;
+import com.google.api.server.spi.config.ApiMethod;
+import com.google.api.server.spi.config.ApiNamespace;
+import com.google.api.server.spi.response.CollectionResponse;
+import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.datanucleus.query.JDOCursorHelper;
+
+import epusp.pcs.os.model.person.user.Agent;
+import epusp.pcs.os.server.PMF;
+
+@Api(name = "agentendpoint", namespace = @ApiNamespace(ownerDomain = "pcs.epusp", ownerName = "pcs.epusp", packagePath = "os.model.person.user"))
+public class AgentEndpoint {
 
 	/**
 	 * This method lists all the entities inserted in datastore.
@@ -31,18 +33,18 @@ public class VictimEndpoint {
 	 * persisted and a cursor to the next page.
 	 */
 	@SuppressWarnings({ "unchecked", "unused" })
-	@ApiMethod(name = "listVictim")
-	public CollectionResponse<Victim> listVictim(
+	@ApiMethod(name = "listAgent")
+	public CollectionResponse<Agent> listAgent(
 			@Nullable @Named("cursor") String cursorString,
 			@Nullable @Named("limit") Integer limit) {
 
 		PersistenceManager mgr = null;
 		Cursor cursor = null;
-		List<Victim> execute = null;
+		List<Agent> execute = null;
 
 		try {
 			mgr = getPersistenceManager();
-			Query query = mgr.newQuery(Victim.class);
+			Query query = mgr.newQuery(Agent.class);
 			if (cursorString != null && cursorString != "") {
 				cursor = Cursor.fromWebSafeString(cursorString);
 				HashMap<String, Object> extensionMap = new HashMap<String, Object>();
@@ -54,20 +56,20 @@ public class VictimEndpoint {
 				query.setRange(0, limit);
 			}
 
-			execute = (List<Victim>) query.execute();
+			execute = (List<Agent>) query.execute();
 			cursor = JDOCursorHelper.getCursor(execute);
 			if (cursor != null)
 				cursorString = cursor.toWebSafeString();
 
 			// Tight loop for fetching all entities from datastore and accomodate
 			// for lazy fetch.
-			for (Victim obj : execute)
+			for (Agent obj : execute)
 				;
 		} finally {
 			mgr.close();
 		}
 
-		return CollectionResponse.<Victim> builder().setItems(execute)
+		return CollectionResponse.<Agent> builder().setItems(execute)
 				.setNextPageToken(cursorString).build();
 	}
 
@@ -77,16 +79,18 @@ public class VictimEndpoint {
 	 * @param id the primary key of the java bean.
 	 * @return The entity with primary key id.
 	 */
-	@ApiMethod(name = "getVictim")
-	public Victim getVictim(@Named("id") Long id) {
+	@ApiMethod(name = "getAgent")
+	public Agent getAgent(@Named("email") String email) {
 		PersistenceManager mgr = getPersistenceManager();
-		Victim victim = null;
+		Agent agent = null, detached = null;
 		try {
-			victim = mgr.getObjectById(Victim.class, id);
+			Key k = KeyFactory.createKey(Agent.class.getSimpleName(), email);
+			agent = mgr.getObjectById(Agent.class, k);
+			detached = mgr.detachCopy(agent);
 		} finally {
 			mgr.close();
 		}
-		return victim;
+		return detached;
 	}
 
 	/**
@@ -94,21 +98,21 @@ public class VictimEndpoint {
 	 * exists in the datastore, an exception is thrown.
 	 * It uses HTTP POST method.
 	 *
-	 * @param victim the entity to be inserted.
+	 * @param agent the entity to be inserted.
 	 * @return The inserted entity.
 	 */
-	@ApiMethod(name = "insertVictim")
-	public Victim insertVictim(Victim victim) {
+	@ApiMethod(name = "insertAgent")
+	public Agent insertAgent(Agent agent) {
 		PersistenceManager mgr = getPersistenceManager();
 		try {
-			if (containsVictim(victim)) {
+			if (containsAgent(agent)) {
 				throw new EntityExistsException("Object already exists");
 			}
-			mgr.makePersistent(victim);
+			mgr.makePersistent(agent);
 		} finally {
 			mgr.close();
 		}
-		return victim;
+		return agent;
 	}
 
 	/**
@@ -116,21 +120,21 @@ public class VictimEndpoint {
 	 * exist in the datastore, an exception is thrown.
 	 * It uses HTTP PUT method.
 	 *
-	 * @param victim the entity to be updated.
+	 * @param agent the entity to be updated.
 	 * @return The updated entity.
 	 */
-	@ApiMethod(name = "updateVictim")
-	public Victim updateVictim(Victim victim) {
+	@ApiMethod(name = "updateAgent")
+	public Agent updateAgent(Agent agent) {
 		PersistenceManager mgr = getPersistenceManager();
 		try {
-			if (!containsVictim(victim)) {
+			if (!containsAgent(agent)) {
 				throw new EntityNotFoundException("Object does not exist");
 			}
-			mgr.makePersistent(victim);
+			mgr.makePersistent(agent);
 		} finally {
 			mgr.close();
 		}
-		return victim;
+		return agent;
 	}
 
 	/**
@@ -139,22 +143,24 @@ public class VictimEndpoint {
 	 *
 	 * @param id the primary key of the entity to be deleted.
 	 */
-	@ApiMethod(name = "removeVictim")
-	public void removeVictim(@Named("id") Long id) {
+	@ApiMethod(name = "removeAgent")
+	public void removeAgent(@Named("email") String email) {
 		PersistenceManager mgr = getPersistenceManager();
 		try {
-			Victim victim = mgr.getObjectById(Victim.class, id);
-			mgr.deletePersistent(victim);
+			Key k = KeyFactory.createKey(Agent.class.getSimpleName(), email);
+			Agent agent = mgr.getObjectById(Agent.class, k);
+			mgr.deletePersistent(agent);
 		} finally {
 			mgr.close();
 		}
 	}
 
-	private boolean containsVictim(Victim victim) {
+	private boolean containsAgent(Agent agent) {
 		PersistenceManager mgr = getPersistenceManager();
 		boolean contains = true;
 		try {
-			mgr.getObjectById(Victim.class, victim.getId());
+			Key k = KeyFactory.createKey(Agent.class.getSimpleName(), agent.getEmail());
+			mgr.getObjectById(Agent.class, k);
 		} catch (javax.jdo.JDOObjectNotFoundException ex) {
 			contains = false;
 		} finally {

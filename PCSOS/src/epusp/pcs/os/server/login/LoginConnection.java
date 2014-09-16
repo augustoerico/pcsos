@@ -12,8 +12,12 @@ import javax.servlet.ServletException;
 
 import org.json.JSONObject;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+
 import epusp.pcs.os.login.client.rpc.ILoginService;
 import epusp.pcs.os.model.person.user.Admin;
+import epusp.pcs.os.model.person.user.Agent;
 import epusp.pcs.os.model.person.user.User;
 import epusp.pcs.os.server.Connection;
 import epusp.pcs.os.server.PMF;
@@ -78,11 +82,11 @@ public class LoginConnection extends Connection implements ILoginService{
 			}
 			System.out.println(r.toString());
 
-			String userId = null;
+			String userEmail = null;
 
 			try {
 				final JSONObject obj = new JSONObject(r.toString());
-				userId = obj.getString("id");
+				userEmail = obj.getString("id");
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
 			}
@@ -90,7 +94,8 @@ public class LoginConnection extends Connection implements ILoginService{
 			PersistenceManager pm = PMF.get().getPersistenceManager();
 			User user = null;
 			try{
-				user = pm.getObjectById(User.class, userId);
+				Key k = KeyFactory.createKey(Agent.class.getSimpleName(), userEmail);
+				user = pm.getObjectById(Admin.class, k);
 			}finally{
 				pm.close();
 			}

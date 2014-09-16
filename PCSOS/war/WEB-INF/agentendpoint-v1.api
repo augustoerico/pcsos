@@ -27,22 +27,6 @@
   "ownerName" : "pcs.epusp",
   "packagePath" : "os.model.person.user",
   "methods" : {
-    "agentendpoint.updateAgent" : {
-      "path" : "agent",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epusp.pcs.os.model.endpoint.AgentEndpoint.updateAgent",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "agentendpoint.listAgent" : {
       "path" : "agent",
       "httpMethod" : "GET",
@@ -50,7 +34,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epusp.pcs.os.model.endpoint.AgentEndpoint.listAgent",
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.AgentEndpoint.listAgent",
       "request" : {
         "parameters" : {
           "cursor" : {
@@ -75,7 +59,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epusp.pcs.os.model.endpoint.AgentEndpoint.removeAgent",
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.AgentEndpoint.removeAgent",
       "request" : {
         "parameters" : {
           "email" : {
@@ -89,14 +73,14 @@
         "body" : "empty"
       }
     },
-    "agentendpoint.insertAgent" : {
+    "agentendpoint.updateAgent" : {
       "path" : "agent",
-      "httpMethod" : "POST",
+      "httpMethod" : "PUT",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epusp.pcs.os.model.endpoint.AgentEndpoint.insertAgent",
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.AgentEndpoint.updateAgent",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -112,7 +96,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epusp.pcs.os.model.endpoint.AgentEndpoint.getAgent",
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.AgentEndpoint.getAgent",
       "request" : {
         "parameters" : {
           "email" : {
@@ -125,10 +109,41 @@
       "response" : {
         "body" : "autoTemplate(backendResponse)"
       }
+    },
+    "agentendpoint.insertAgent" : {
+      "path" : "agent",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.AgentEndpoint.insertAgent",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
     }
   },
   "descriptor" : {
     "schemas" : {
+      "CollectionResponse_Agent" : {
+        "id" : "CollectionResponse_Agent",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Agent"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      },
       "Agent" : {
         "id" : "Agent",
         "type" : "object",
@@ -489,40 +504,17 @@
             "$ref" : "DataType"
           }
         }
-      },
-      "CollectionResponse_Agent" : {
-        "id" : "CollectionResponse_Agent",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "Agent"
-            }
-          },
-          "nextPageToken" : {
-            "type" : "string"
-          }
-        }
       }
     },
     "methods" : {
-      "epusp.pcs.os.model.endpoint.AgentEndpoint.updateAgent" : {
-        "request" : {
-          "$ref" : "Agent"
-        },
-        "response" : {
-          "$ref" : "Agent"
-        }
-      },
-      "epusp.pcs.os.model.endpoint.AgentEndpoint.listAgent" : {
+      "epusp.pcs.os.server.endpoint.AgentEndpoint.listAgent" : {
         "response" : {
           "$ref" : "CollectionResponse_Agent"
         }
       },
-      "epusp.pcs.os.model.endpoint.AgentEndpoint.removeAgent" : {
+      "epusp.pcs.os.server.endpoint.AgentEndpoint.removeAgent" : {
       },
-      "epusp.pcs.os.model.endpoint.AgentEndpoint.insertAgent" : {
+      "epusp.pcs.os.server.endpoint.AgentEndpoint.updateAgent" : {
         "request" : {
           "$ref" : "Agent"
         },
@@ -530,7 +522,15 @@
           "$ref" : "Agent"
         }
       },
-      "epusp.pcs.os.model.endpoint.AgentEndpoint.getAgent" : {
+      "epusp.pcs.os.server.endpoint.AgentEndpoint.getAgent" : {
+        "response" : {
+          "$ref" : "Agent"
+        }
+      },
+      "epusp.pcs.os.server.endpoint.AgentEndpoint.insertAgent" : {
+        "request" : {
+          "$ref" : "Agent"
+        },
         "response" : {
           "$ref" : "Agent"
         }
