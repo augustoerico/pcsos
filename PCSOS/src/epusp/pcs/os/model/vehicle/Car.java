@@ -1,17 +1,32 @@
 package epusp.pcs.os.model.vehicle;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import java.io.Serializable;
+
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.NotPersistent;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
 
 import epusp.pcs.os.model.person.user.Agent;
 
-
-public class Car extends Vehicle implements IsSerializable{
+@PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
+public class Car extends Vehicle implements Serializable{
 	
-	public static final VehicleTypes vehicleType = VehicleTypes.Car;
+	@NotPersistent
+	private static final long serialVersionUID = 1L;
 
+	@NotPersistent
 	public static int maxCarOccupants = 5;
 	
+	@NotPersistent
 	private Agent driver;
+	
+	@Persistent
+	private String plate;
+	
+	public Car(String plate){
+		this.plate = plate;
+	}
 	
 	public Agent getDriver() {
 		return driver;
@@ -21,9 +36,13 @@ public class Car extends Vehicle implements IsSerializable{
 		this.driver = driver;
 	}
 	
+	public String getPlate(){
+		return plate;
+	}
+	
 	@Override
 	public VehicleTypes getType() {
-		return vehicleType;
+		return VehicleTypes.Car;
 	}
 
 	@Override
@@ -32,7 +51,7 @@ public class Car extends Vehicle implements IsSerializable{
 	}
 	
 	/*
-	 * Seen by IsSerializable
+	 * Seen by Serializable
 	 */
 	public Car() {
 		super();

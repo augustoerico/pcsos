@@ -1,39 +1,54 @@
 package epusp.pcs.os.model.vehicle;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Inheritance;
+import javax.jdo.annotations.InheritanceStrategy;
+import javax.jdo.annotations.NotPersistent;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
-import epusp.pcs.os.model.device.Device;
+import epusp.pcs.os.model.SystemObject;
 import epusp.pcs.os.model.person.user.Agent;
 
-public abstract class Vehicle implements IsSerializable {
+@PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
+@Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
+public abstract class Vehicle extends SystemObject implements Serializable {
 	
+	@PrimaryKey
+	@Persistent(valueStrategy=IdGeneratorStrategy.INCREMENT)
+	private Long id;
+	
+	@NotPersistent
+	private static final long serialVersionUID = 1L;
+
+	@NotPersistent
 	private List<Agent> agents = new ArrayList<Agent>();
 	
-	private Boolean isAvailable;
+	@NotPersistent
+	private Boolean status;
 	
-	private Device device;
+	@NotPersistent
+	private double latitude;
 	
-	public Vehicle(Device device){
-		this.device = device;
+	@NotPersistent
+	private double longitude;
+	
+	public Long getId(){
+		return id;
+	}
+	
+	public Boolean isAvailable() {
+		return status;
 	}
 
-	public Device getDevice(){
-		return device;
-	}
-	
-	public void updateDevice(Device device){
-		this.device = device;
-	}
-	
-	public Boolean getIsAvailable() {
-		return isAvailable;
-	}
-
-	public void setIsAvailable(Boolean isAvailable) {
-		this.isAvailable = isAvailable;
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 	
 	public List<Agent> getAgents() {
@@ -46,6 +61,22 @@ public abstract class Vehicle implements IsSerializable {
 	
 	public void removeAgents() {
 		agents.clear();
+	}
+	
+	public double getLatitude(){
+		return latitude;
+	}
+	
+	public double getLongitude(){
+		return longitude;
+	}
+	
+	public void setLatitude(double latitude){
+		this.latitude =latitude;
+	}
+	
+	public void setLongitude(double longitude){
+		this.longitude = longitude;
 	}
 	
 	public abstract VehicleTypes getType();

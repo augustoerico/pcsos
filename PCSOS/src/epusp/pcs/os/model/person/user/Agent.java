@@ -1,31 +1,33 @@
 package epusp.pcs.os.model.person.user;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.annotations.FetchGroup;
+import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-
 import epusp.pcs.os.model.licence.Licence;
 
-@PersistenceCapable
-public class Agent extends User implements IsSerializable {
+@PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
+@FetchGroup(name = "licences", members = { @Persistent(name = "licences") })
+public class Agent extends User implements Serializable {
 
 	@NotPersistent
-	public static final AccountTypes accountType = AccountTypes.Agent;
+	private static final long serialVersionUID = 1L;
 	
-	@Persistent
+	@Persistent(mappedBy = "agent")
 	private List<Licence> licences = new ArrayList<Licence>();
 	
-	public Agent(String name, String surname){
-		super(name, surname);
+	public Agent(String name, String surname, String email){
+		super(name, surname, email);
 	}
 	
-	public Agent(String name, String secondName, String surname){
-		super(name, secondName, surname);
+	public Agent(String name, String secondName, String surname, String email){
+		super(name, secondName, surname, email);
 	}
 	
 	public void addLicence(Licence licence){
@@ -38,11 +40,11 @@ public class Agent extends User implements IsSerializable {
 	
 	@Override
 	public AccountTypes getType() {
-		return accountType;
+		return AccountTypes.Agent;
 	}
 	
 	/*
-	 * Seen by IsSerializable
+	 * Seen by Serializable
 	 */
 	public Agent(){
 		super();

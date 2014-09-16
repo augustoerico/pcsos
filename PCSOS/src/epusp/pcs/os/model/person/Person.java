@@ -1,40 +1,80 @@
 package epusp.pcs.os.model.person;
 
+import java.io.Serializable;
+
+import javax.jdo.annotations.Extension;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
+import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import epusp.pcs.os.model.SystemObject;
 
-@PersistenceCapable
+@PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
-public abstract class Person implements IsSerializable {
+public abstract class Person extends SystemObject implements Serializable {
+
+	@NotPersistent
+	private static final long serialVersionUID = 1L;
 
 	@PrimaryKey
-	@Persistent
-	private String googleUserID;
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
+	private String id;
+	
+    @Persistent
+    @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
+	private String email;
+    
+    @Persistent
+    private String googleUserId;
+	
 	@Persistent
 	private String name;
+	
 	@Persistent
 	private String secondName;
+	
 	@Persistent
 	private String surname;
+	
 	@Persistent
 	private Boolean isActive = false; //default value
+	
 	@Persistent
 	private String imageURL;
 	
-	public Person(String name, String surname){
+	public Person(String name, String surname, String email){
 		this.name = name;
 		this.surname = surname;
+		this.email = email;
 	}
 	
-	public Person(String name, String secondName, String surname){
+	public Person(String name, String secondName, String surname, String email){
 		this.name = name;
 		this.secondName = secondName;
 		this.surname = surname;
+		this.email = email;
+	}
+	
+	public String getId(){
+		return id;
+	}
+	
+	public String getEmail(){
+		return email;
+	}
+	
+	public String getGoogleUserId() {
+		return googleUserId;
+	}
+
+	public void setGoogleUserId(String googleUserId) {
+		this.googleUserId = googleUserId;
 	}
 
 	public String getName(){
@@ -64,17 +104,9 @@ public abstract class Person implements IsSerializable {
 	public void setPictureURL(String imageURL) {
 		this.imageURL = imageURL;
 	}
-	
-	public String getGoogleUserID() {
-		return googleUserID;
-	}
-
-	public void setGoogleUserID(String googleUserID) {
-		this.googleUserID = googleUserID;
-	}
 
 	/*
-	 * Seen by IsSerializable
+	 * Seen by Serializable
 	 */
 	public Person(){
 		super();

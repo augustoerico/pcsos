@@ -1,13 +1,40 @@
 package epusp.pcs.os.model.licence;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import javax.jdo.annotations.Extension;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Inheritance;
+import javax.jdo.annotations.InheritanceStrategy;
+import javax.jdo.annotations.NotPersistent;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
-public abstract class Licence implements IsSerializable {
+import epusp.pcs.os.model.person.user.Agent;
+
+@PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
+@Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
+public abstract class Licence implements Serializable {
 	
+	@NotPersistent
+	private static final long serialVersionUID = 1L;
+	
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
+	private String id;
+	
+    @Persistent
+    @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
 	private String registerCode;
+    
+    @Persistent
+    private Agent agent;
 	
+	@Persistent
 	private Date effectiveUntil;
 	
 	public Licence(String registerCode){

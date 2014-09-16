@@ -1,0 +1,505 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://epusp-pcsos.appspot.com/_ah/api",
+  "name" : "victimendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://epusp-pcsos.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "pcs.epusp",
+  "ownerName" : "pcs.epusp",
+  "packagePath" : "os.model.person",
+  "methods" : {
+    "victimendpoint.insertVictim" : {
+      "path" : "victim",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.model.endpoint.VictimEndpoint.insertVictim",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "victimendpoint.getVictim" : {
+      "path" : "victim/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.model.endpoint.VictimEndpoint.getVictim",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "victimendpoint.updateVictim" : {
+      "path" : "victim",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.model.endpoint.VictimEndpoint.updateVictim",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "victimendpoint.removeVictim" : {
+      "path" : "victim/{id}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.model.endpoint.VictimEndpoint.removeVictim",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "victimendpoint.listVictim" : {
+      "path" : "victim",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.model.endpoint.VictimEndpoint.listVictim",
+      "request" : {
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "Victim" : {
+        "id" : "Victim",
+        "type" : "object",
+        "properties" : {
+          "stringAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "StringAttribute"
+            }
+          },
+          "stringArrayAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "StringArrayAttribute"
+            }
+          },
+          "booleanAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "BooleanAttribute"
+            }
+          },
+          "booleanArrayAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "BooleanArrayAttribute"
+            }
+          },
+          "dateAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "DateAttribute"
+            }
+          },
+          "dateArrayAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "DateArrayAttribute"
+            }
+          },
+          "integerAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "IntegerAttribute"
+            }
+          },
+          "integerArrayAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "IntegerArrayAttribute"
+            }
+          },
+          "floatAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "FloatAttribute"
+            }
+          },
+          "floatArrayAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "FloatArrayAttribute"
+            }
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "googleUserId" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "secondName" : {
+            "type" : "string"
+          },
+          "surname" : {
+            "type" : "string"
+          },
+          "isActive" : {
+            "type" : "boolean"
+          },
+          "active" : {
+            "type" : "boolean"
+          },
+          "pictureURL" : {
+            "type" : "string"
+          },
+          "allAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "IAttribute"
+            }
+          },
+          "allAttributeKeys" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "StringAttribute" : {
+        "id" : "StringAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "string"
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "DataType" : {
+        "id" : "DataType",
+        "type" : "string",
+        "enum" : [ "BOOLEAN", "BOOLEAN_ARRAY", "DATE", "DATE_ARRAY", "STRING", "STRING_ARRAY", "INTEGER", "INTERGER_ARRAY", "FLOAT", "FLOAT_ARRAY", "TIPO_SANGUINEO" ]
+      },
+      "StringArrayAttribute" : {
+        "id" : "StringArrayAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "valuesAsList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "BooleanAttribute" : {
+        "id" : "BooleanAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "boolean"
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "BooleanArrayAttribute" : {
+        "id" : "BooleanArrayAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "array",
+            "items" : {
+              "type" : "boolean"
+            }
+          },
+          "valuesAsList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "boolean"
+            }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "DateAttribute" : {
+        "id" : "DateAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "DateArrayAttribute" : {
+        "id" : "DateArrayAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "$ref" : "_any"
+          },
+          "valuesAsList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "format" : "date-time"
+            }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "_any" : {
+        "id" : "_any",
+        "type" : "any"
+      },
+      "IntegerAttribute" : {
+        "id" : "IntegerAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "integer"
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "IntegerArrayAttribute" : {
+        "id" : "IntegerArrayAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "valuesAsList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "FloatAttribute" : {
+        "id" : "FloatAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "FloatArrayAttribute" : {
+        "id" : "FloatArrayAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "array",
+            "items" : {
+              "type" : "number",
+              "format" : "float"
+            }
+          },
+          "valuesAsList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "number",
+              "format" : "float"
+            }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "IAttribute" : {
+        "id" : "IAttribute",
+        "type" : "object",
+        "properties" : {
+          "value" : {
+            "$ref" : "_any"
+          },
+          "attributeName" : {
+            "type" : "string"
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "CollectionResponse_Victim" : {
+        "id" : "CollectionResponse_Victim",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Victim"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "epusp.pcs.os.model.endpoint.VictimEndpoint.insertVictim" : {
+        "request" : {
+          "$ref" : "Victim"
+        },
+        "response" : {
+          "$ref" : "Victim"
+        }
+      },
+      "epusp.pcs.os.model.endpoint.VictimEndpoint.getVictim" : {
+        "response" : {
+          "$ref" : "Victim"
+        }
+      },
+      "epusp.pcs.os.model.endpoint.VictimEndpoint.updateVictim" : {
+        "request" : {
+          "$ref" : "Victim"
+        },
+        "response" : {
+          "$ref" : "Victim"
+        }
+      },
+      "epusp.pcs.os.model.endpoint.VictimEndpoint.removeVictim" : {
+      },
+      "epusp.pcs.os.model.endpoint.VictimEndpoint.listVictim" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Victim"
+        }
+      }
+    }
+  }
+}

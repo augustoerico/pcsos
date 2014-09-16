@@ -1,38 +1,39 @@
 package epusp.pcs.os.model.person.user;
 
+import java.io.Serializable;
+
+import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-
-@PersistenceCapable
-public class Monitor extends User implements IsSerializable {
+@PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
+public class Monitor extends User implements Serializable {
 
 	@NotPersistent
-	public static final AccountTypes accountType = AccountTypes.Monitor;
+	private static final long serialVersionUID = 1L;
 	
 	@NotPersistent
 	private Boolean status;
 	
-	public Monitor(String name, String surname){
-		super(name, surname);
+	public Monitor(String name, String surname, String email){
+		super(name, surname, email);
 	}
 	
-	public Monitor(String name, String secondName, String surname){
-		super(name, secondName, surname);
+	public Monitor(String name, String secondName, String surname, String email){
+		super(name, secondName, surname, email);
 	}
 	
 	public void setStatus(Boolean status){
 		this.status = status;
 	}
 	
-	public Boolean isFree(){
+	public Boolean isAvailable(){
 		return status;
 	}
 	
 	@Override
 	public AccountTypes getType() {
-		return accountType;
+		return  AccountTypes.Monitor;
 	}
 	
 	/*

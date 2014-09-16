@@ -29,7 +29,7 @@
     <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
     <init-param>
       <param-name>services</param-name>
-      <param-value/>
+      <param-value>epusp.pcs.os.model.endpoint.AgentEndpoint,epusp.pcs.os.model.endpoint.VictimEndpoint</param-value>
     </init-param>
   </servlet>
 

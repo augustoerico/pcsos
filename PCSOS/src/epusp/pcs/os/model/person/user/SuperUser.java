@@ -1,27 +1,28 @@
 package epusp.pcs.os.model.person.user;
 
+import java.io.Serializable;
+
+import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-
-@PersistenceCapable
-public class SuperUser extends User implements IsSerializable{
+@PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
+public class SuperUser extends User implements Serializable{
 
 	@NotPersistent
-	public static final AccountTypes accountType = AccountTypes.SuperUser;
+	private static final long serialVersionUID = 1L;
 	
-	public SuperUser(String name, String surname){
-		super(name, surname);
+	public SuperUser(String name, String surname, String email){
+		super(name, surname, email);
 	}
 	
-	public SuperUser(String name, String secondName, String surname){
-		super(name, secondName, surname);
+	public SuperUser(String name, String secondName, String surname, String email){
+		super(name, secondName, surname, email);
 	}
 	
 	@Override
 	public AccountTypes getType() {
-		return accountType;
+		return AccountTypes.SuperUser;
 	}
 	
 	/*

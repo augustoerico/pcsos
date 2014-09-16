@@ -1,36 +1,30 @@
 package epusp.pcs.os.model.person;
 
+import java.io.Serializable;
+
+import javax.jdo.annotations.FetchGroup;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-
-import epusp.pcs.os.model.device.Device;
-
-@PersistenceCapable
-public class Victim extends Person implements IsSerializable {
+@PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
+@FetchGroup(name = "device", members = { @Persistent(name = "device") })
+public class Victim extends Person implements Serializable {
 	
-	@Persistent
-	private Device device;
-	
-	public Victim(String name, String surname){
-		super(name, surname);
+	@NotPersistent
+	private static final long serialVersionUID = 1L;
+
+	public Victim(String name, String surname, String email){
+		super(name, surname, email);
 	}
 	
-	public Victim(String name, String secondName, String surname){
-		super(name, secondName, surname);
-	}
-	
-	public Device getDevice() {
-		return device;
-	}
-
-	public void setDevice(Device device) {
-		this.device = device;
+	public Victim(String name, String secondName, String surname, String email){
+		super(name, secondName, surname, email);
 	}
 	
 	/*
-	 * Seen by IsSerializable
+	 * Seen by Serializable
 	 */
 	public Victim(){
 		super();

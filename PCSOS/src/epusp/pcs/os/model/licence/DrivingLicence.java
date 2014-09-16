@@ -1,15 +1,23 @@
 package epusp.pcs.os.model.licence;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import javax.jdo.annotations.NotPersistent;
+import javax.jdo.annotations.Persistent;
 
-public class DrivingLicence extends Licence implements IsSerializable{
+public class DrivingLicence extends Licence implements Serializable{
 
-	public static final LicenceTypes licenceType = LicenceTypes.Drive;
+	@NotPersistent
+	private static final long serialVersionUID = 1L;
+
+	@NotPersistent
+	public static final LicenceTypes licenceType = LicenceTypes.DrivingLicence;
 	
+	@Persistent
 	private DrivingCategories category;
 	
+	@Persistent
 	private Boolean hasAcategory;
 	
 	public DrivingLicence(String registerCode){

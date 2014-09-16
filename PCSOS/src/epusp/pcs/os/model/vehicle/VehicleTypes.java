@@ -1,8 +1,8 @@
 package epusp.pcs.os.model.vehicle;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import java.io.Serializable;
 
-public enum VehicleTypes implements IsSerializable {
+public enum VehicleTypes implements Serializable {
 	Car;
 	
 	/*

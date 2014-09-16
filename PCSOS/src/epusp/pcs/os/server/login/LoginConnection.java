@@ -29,10 +29,9 @@ public class LoginConnection extends Connection implements ILoginService{
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 
 		System.out.println("Initializing with test data");
-		Admin admin = new Admin("Giovanni", "Gatti Pinheiro");
-		admin.setEmail("giovanni.gatti.pinheiro@gmail.com");
+		Admin admin = new Admin("Giovanni", "Gatti Pinheiro", "giovanni.gatti.pinheiro@gmail.com");
 		admin.setIsActive(true);
-		admin.setGoogleUserID("115057125698280242918");
+		admin.setGoogleUserId("115057125698280242918");
 		admin.setPictureURL("https://lh5.googleusercontent.com/--PBV1HBWVsc/AAAAAAAAAAI/AAAAAAAAAFQ/O57isBLRtRA/photo.jpg");
 
 		try{

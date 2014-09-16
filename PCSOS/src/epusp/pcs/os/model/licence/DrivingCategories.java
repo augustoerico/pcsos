@@ -1,8 +1,8 @@
 package epusp.pcs.os.model.licence;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import java.io.Serializable;
 
-public enum DrivingCategories implements IsSerializable {
+public enum DrivingCategories implements Serializable {
 	B, C, D, E;
 	
 	/*
