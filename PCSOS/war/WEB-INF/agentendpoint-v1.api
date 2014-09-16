@@ -471,12 +471,12 @@
           "registerCode" : {
             "type" : "string"
           },
+          "licenceType" : {
+            "$ref" : "LicenceTypes"
+          },
           "validUntil" : {
             "type" : "string",
             "format" : "date-time"
-          },
-          "licenceType" : {
-            "$ref" : "LicenceTypes"
           }
         }
       },

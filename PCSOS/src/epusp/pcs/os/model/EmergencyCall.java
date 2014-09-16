@@ -22,7 +22,7 @@ import epusp.pcs.os.model.vehicle.Car;
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
 @FetchGroup(name="all_attributes", members = {@Persistent(name="victim"), @Persistent(name="monitor"), @Persistent(name="cars")})
-public class EmergencyCall extends SystemObject implements Serializable {
+public class EmergencyCall implements Serializable {
 
 	@PrimaryKey
 	@Persistent(valueStrategy=IdGeneratorStrategy.INCREMENT)
