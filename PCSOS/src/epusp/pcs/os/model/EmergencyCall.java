@@ -17,7 +17,6 @@ import javax.jdo.annotations.PrimaryKey;
 
 import epusp.pcs.os.model.person.Victim;
 import epusp.pcs.os.model.person.user.Monitor;
-import epusp.pcs.os.model.vehicle.Car;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
@@ -41,7 +40,7 @@ public class EmergencyCall implements Serializable {
 	private Monitor monitor;
 
 	@Persistent
-	private List<Car> cars = new ArrayList<Car>();
+	private List<Long> vehicles = new ArrayList<Long>();
 	
 	@Persistent
 	private final List<Double> latitudes = new ArrayList<Double>();
@@ -98,6 +97,14 @@ public class EmergencyCall implements Serializable {
 	
 	public int getPositionSize(){
 		return latitudes.size();
+	}
+	
+	public void addVehicle(Long vehicleId){
+		vehicles.add(vehicleId);
+	}
+	
+	public List<Long> getVehicles(){
+		return vehicles;
 	}
 	
 	/*
