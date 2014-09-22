@@ -1,4 +1,4 @@
-package epusp.pcs.os.model;
+package epusp.pcs.os.model.oncall;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import epusp.pcs.os.model.person.user.Monitor;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
-@FetchGroup(name="all_attributes", members = {@Persistent(name="victim"), @Persistent(name="monitor"), @Persistent(name="cars")})
+@FetchGroup(name="all_attributes", members = {@Persistent(name="victim"), @Persistent(name="monitor"), @Persistent(name="vehicles")})
 public class EmergencyCall implements Serializable {
 
 	@PrimaryKey
@@ -40,7 +40,7 @@ public class EmergencyCall implements Serializable {
 	private Monitor monitor;
 
 	@Persistent
-	private List<Long> vehicles = new ArrayList<Long>();
+	private List<VehicleOnCall> vehicles = new ArrayList<VehicleOnCall>();
 	
 	@Persistent
 	private final List<Double> latitudes = new ArrayList<Double>();
@@ -81,30 +81,57 @@ public class EmergencyCall implements Serializable {
 		this.monitor = monitor;
 	}
 
-	public void addPosition(double latitude, double longitude){
-		latitudes.add(latitude);
-		longitudes.add(longitude);
-	}
-
-	public Double[] getPosition(int i){
-		Double[] position = new Double[2];
-		if(i < latitudes.size()){
-			position[0] = latitudes.get(i);
-			position[1] = latitudes.get(i);
-		}
-		return position;
+	public void addVictimPosition(Position position){
+		latitudes.add(position.getLatitude());
+		longitudes.add(position.getLongitude());
 	}
 	
-	public int getPositionSize(){
+	public Position getVictimPosition(int i){
+		return new Position(latitudes.get(i), longitudes.get(i));
+	}
+	
+	public int getVictimPositionSize(){
 		return latitudes.size();
 	}
 	
 	public void addVehicle(Long vehicleId){
-		vehicles.add(vehicleId);
+		vehicles.add(new VehicleOnCall(vehicleId));
 	}
 	
-	public List<Long> getVehicles(){
-		return vehicles;
+	public void addVehiclePosition(Long vehicleId, Position position){
+		for(VehicleOnCall vehicle : vehicles){
+			if(vehicle.getVehicleId().equals(vehicleId)){
+				vehicle.addPosition(position);
+				return;
+			}
+		}
+	}
+
+	public Position getVehiclePosition(Long vehicleId, int i){
+		for(VehicleOnCall vehicle : vehicles){
+			if(vehicle.getVehicleId().equals(vehicleId)){
+				return vehicle.getPosition(i);
+			}
+		}
+		return null;
+	}
+	
+	public int getVehiclePositionSize(Long vehicleId){
+		for(VehicleOnCall vehicle : vehicles){
+			if(vehicle.getVehicleId().equals(vehicleId)){
+				return vehicle.getSize();
+			}
+		}
+		return 0;
+	}
+	
+	public Position getLastVehiclePosition(Long vehicleId){
+		for(VehicleOnCall vehicle : vehicles){
+			if(vehicle.getVehicleId().equals(vehicleId)){
+				return vehicle.getLastPosition();
+			}
+		}
+		return null;
 	}
 	
 	/*

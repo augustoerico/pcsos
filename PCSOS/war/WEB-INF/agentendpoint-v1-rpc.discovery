@@ -1,0 +1,587 @@
+{
+ "kind": "discovery#rpcDescription",
+ "etag": "\"koCc_mmAOJe4d9CoedmJUnZeEcg/OBdnNIoSdkZvN2tdkVsz_FC8wTM\"",
+ "discoveryVersion": "v1",
+ "id": "agentendpoint:v1",
+ "name": "agentendpoint",
+ "version": "v1",
+ "description": "This is an API",
+ "ownerDomain": "pcs.epusp",
+ "ownerName": "pcs.epusp",
+ "packagePath": "os.model.person.user",
+ "icons": {
+  "x16": "http://www.google.com/images/icons/product/search-16.gif",
+  "x32": "http://www.google.com/images/icons/product/search-32.gif"
+ },
+ "protocol": "rpc",
+ "rootUrl": "https://epusp-pcsos.appspot.com/_ah/api/",
+ "rpcUrl": "https://epusp-pcsos.appspot.com/_ah/api/rpc",
+ "rpcPath": "/_ah/api/rpc",
+ "parameters": {
+  "alt": {
+   "type": "string",
+   "description": "Data format for the response.",
+   "default": "json",
+   "enum": [
+    "json"
+   ],
+   "enumDescriptions": [
+    "Responses with Content-Type of application/json"
+   ],
+   "location": "query"
+  },
+  "fields": {
+   "type": "string",
+   "description": "Selector specifying which fields to include in a partial response.",
+   "location": "query"
+  },
+  "key": {
+   "type": "string",
+   "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+   "location": "query"
+  },
+  "oauth_token": {
+   "type": "string",
+   "description": "OAuth 2.0 token for the current user.",
+   "location": "query"
+  },
+  "prettyPrint": {
+   "type": "boolean",
+   "description": "Returns response with indentations and line breaks.",
+   "default": "true",
+   "location": "query"
+  },
+  "quotaUser": {
+   "type": "string",
+   "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+   "location": "query"
+  },
+  "userIp": {
+   "type": "string",
+   "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+   "location": "query"
+  }
+ },
+ "auth": {
+  "oauth2": {
+   "scopes": {
+    "https://www.googleapis.com/auth/userinfo.email": {
+     "description": "View your email address"
+    }
+   }
+  }
+ },
+ "schemas": {
+  "AccountTypes": {
+   "id": "AccountTypes",
+   "type": "string",
+   "enum": [
+    "Admin",
+    "Agent",
+    "Auditor",
+    "Monitor",
+    "SuperUser"
+   ],
+   "enumDescriptions": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  "Agent": {
+   "id": "Agent",
+   "type": "object",
+   "properties": {
+    "active": {
+     "type": "boolean"
+    },
+    "allAttributeKeys": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "allAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "IAttribute"
+     }
+    },
+    "booleanArrayAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "BooleanArrayAttribute"
+     }
+    },
+    "booleanAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "BooleanAttribute"
+     }
+    },
+    "dateArrayAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "DateArrayAttribute"
+     }
+    },
+    "dateAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "DateAttribute"
+     }
+    },
+    "email": {
+     "type": "string"
+    },
+    "floatArrayAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "FloatArrayAttribute"
+     }
+    },
+    "floatAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "FloatAttribute"
+     }
+    },
+    "googleUserId": {
+     "type": "string"
+    },
+    "id": {
+     "type": "string"
+    },
+    "integerArrayAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "IntegerArrayAttribute"
+     }
+    },
+    "integerAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "IntegerAttribute"
+     }
+    },
+    "isActive": {
+     "type": "boolean"
+    },
+    "licences": {
+     "type": "array",
+     "items": {
+      "$ref": "Licence"
+     }
+    },
+    "name": {
+     "type": "string"
+    },
+    "pictureURL": {
+     "type": "string"
+    },
+    "secondName": {
+     "type": "string"
+    },
+    "stringArrayAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "StringArrayAttribute"
+     }
+    },
+    "stringAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "StringAttribute"
+     }
+    },
+    "surname": {
+     "type": "string"
+    },
+    "type": {
+     "$ref": "AccountTypes"
+    }
+   }
+  },
+  "BooleanArrayAttribute": {
+   "id": "BooleanArrayAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "array",
+     "items": {
+      "type": "boolean"
+     }
+    },
+    "valuesAsList": {
+     "type": "array",
+     "items": {
+      "type": "boolean"
+     }
+    }
+   }
+  },
+  "BooleanAttribute": {
+   "id": "BooleanAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "boolean"
+    }
+   }
+  },
+  "CollectionResponse_Agent": {
+   "id": "CollectionResponse_Agent",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "Agent"
+     }
+    },
+    "nextPageToken": {
+     "type": "string"
+    }
+   }
+  },
+  "DataType": {
+   "id": "DataType",
+   "type": "string",
+   "enum": [
+    "BOOLEAN",
+    "BOOLEAN_ARRAY",
+    "DATE",
+    "DATE_ARRAY",
+    "FLOAT",
+    "FLOAT_ARRAY",
+    "INTEGER",
+    "INTERGER_ARRAY",
+    "STRING",
+    "STRING_ARRAY",
+    "TIPO_SANGUINEO"
+   ],
+   "enumDescriptions": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  "DateArrayAttribute": {
+   "id": "DateArrayAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "$ref": "_any"
+    },
+    "valuesAsList": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "format": "date-time"
+     }
+    }
+   }
+  },
+  "DateAttribute": {
+   "id": "DateAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "FloatArrayAttribute": {
+   "id": "FloatArrayAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "array",
+     "items": {
+      "type": "number",
+      "format": "float"
+     }
+    },
+    "valuesAsList": {
+     "type": "array",
+     "items": {
+      "type": "number",
+      "format": "float"
+     }
+    }
+   }
+  },
+  "FloatAttribute": {
+   "id": "FloatAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "number",
+     "format": "float"
+    }
+   }
+  },
+  "IAttribute": {
+   "id": "IAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "$ref": "_any"
+    }
+   }
+  },
+  "IntegerArrayAttribute": {
+   "id": "IntegerArrayAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "format": "int32"
+     }
+    },
+    "valuesAsList": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "format": "int32"
+     }
+    }
+   }
+  },
+  "IntegerAttribute": {
+   "id": "IntegerAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "integer",
+     "format": "int32"
+    }
+   }
+  },
+  "Licence": {
+   "id": "Licence",
+   "type": "object",
+   "properties": {
+    "licenceType": {
+     "$ref": "LicenceTypes"
+    },
+    "registerCode": {
+     "type": "string"
+    },
+    "validUntil": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "LicenceTypes": {
+   "id": "LicenceTypes",
+   "type": "string",
+   "enum": [
+    "DrivingLicence"
+   ],
+   "enumDescriptions": [
+    ""
+   ]
+  },
+  "StringArrayAttribute": {
+   "id": "StringArrayAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "valuesAsList": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "StringAttribute": {
+   "id": "StringAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "string"
+    }
+   }
+  },
+  "_any": {
+   "id": "_any",
+   "type": "any"
+  }
+ },
+ "methods": {
+  "agentendpoint.getAgent": {
+   "id": "agentendpoint.getAgent",
+   "allowGet": true,
+   "parameters": {
+    "email": {
+     "type": "string",
+     "required": true
+    }
+   },
+   "parameterOrder": [
+    "email"
+   ],
+   "returns": {
+    "$ref": "Agent"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "agentendpoint.insertAgent": {
+   "id": "agentendpoint.insertAgent",
+   "parameters": {
+    "resource": {
+     "$ref": "Agent"
+    }
+   },
+   "parameterOrder": [
+    "resource"
+   ],
+   "returns": {
+    "$ref": "Agent"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "agentendpoint.listAgent": {
+   "id": "agentendpoint.listAgent",
+   "allowGet": true,
+   "parameters": {
+    "cursor": {
+     "type": "string"
+    },
+    "limit": {
+     "type": "integer",
+     "format": "int32"
+    }
+   },
+   "returns": {
+    "$ref": "CollectionResponse_Agent"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "agentendpoint.removeAgent": {
+   "id": "agentendpoint.removeAgent",
+   "parameters": {
+    "email": {
+     "type": "string",
+     "required": true
+    }
+   },
+   "parameterOrder": [
+    "email"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "agentendpoint.updateAgent": {
+   "id": "agentendpoint.updateAgent",
+   "parameters": {
+    "resource": {
+     "$ref": "Agent"
+    }
+   },
+   "parameterOrder": [
+    "resource"
+   ],
+   "returns": {
+    "$ref": "Agent"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  }
+ }
+}
