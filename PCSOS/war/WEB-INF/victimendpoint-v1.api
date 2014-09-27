@@ -27,43 +27,6 @@
   "ownerName" : "pcs.epusp",
   "packagePath" : "os.model.person",
   "methods" : {
-    "victimendpoint.removeVictim" : {
-      "path" : "victim/{id}",
-      "httpMethod" : "DELETE",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epusp.pcs.os.server.endpoint.VictimEndpoint.removeVictim",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "int64",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
-    "victimendpoint.updateVictim" : {
-      "path" : "victim",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epusp.pcs.os.server.endpoint.VictimEndpoint.updateVictim",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "victimendpoint.listVictim" : {
       "path" : "victim",
       "httpMethod" : "GET",
@@ -84,6 +47,38 @@
           }
         },
         "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "victimendpoint.insertVictim" : {
+      "path" : "victim",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.VictimEndpoint.insertVictim",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "victimendpoint.updateVictim" : {
+      "path" : "victim",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.VictimEndpoint.updateVictim",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -110,25 +105,45 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "victimendpoint.insertVictim" : {
-      "path" : "victim",
-      "httpMethod" : "POST",
+    "victimendpoint.removeVictim" : {
+      "path" : "victim/{id}",
+      "httpMethod" : "DELETE",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epusp.pcs.os.server.endpoint.VictimEndpoint.insertVictim",
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.VictimEndpoint.removeVictim",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "parameters" : {
+          "id" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
-        "body" : "autoTemplate(backendResponse)"
+        "body" : "empty"
       }
     }
   },
   "descriptor" : {
     "schemas" : {
+      "CollectionResponse_Victim" : {
+        "id" : "CollectionResponse_Victim",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Victim"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      },
       "Victim" : {
         "id" : "Victim",
         "type" : "object",
@@ -454,42 +469,12 @@
             "$ref" : "DataType"
           }
         }
-      },
-      "CollectionResponse_Victim" : {
-        "id" : "CollectionResponse_Victim",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "Victim"
-            }
-          },
-          "nextPageToken" : {
-            "type" : "string"
-          }
-        }
       }
     },
     "methods" : {
-      "epusp.pcs.os.server.endpoint.VictimEndpoint.removeVictim" : {
-      },
-      "epusp.pcs.os.server.endpoint.VictimEndpoint.updateVictim" : {
-        "request" : {
-          "$ref" : "Victim"
-        },
-        "response" : {
-          "$ref" : "Victim"
-        }
-      },
       "epusp.pcs.os.server.endpoint.VictimEndpoint.listVictim" : {
         "response" : {
           "$ref" : "CollectionResponse_Victim"
-        }
-      },
-      "epusp.pcs.os.server.endpoint.VictimEndpoint.getVictim" : {
-        "response" : {
-          "$ref" : "Victim"
         }
       },
       "epusp.pcs.os.server.endpoint.VictimEndpoint.insertVictim" : {
@@ -499,6 +484,21 @@
         "response" : {
           "$ref" : "Victim"
         }
+      },
+      "epusp.pcs.os.server.endpoint.VictimEndpoint.updateVictim" : {
+        "request" : {
+          "$ref" : "Victim"
+        },
+        "response" : {
+          "$ref" : "Victim"
+        }
+      },
+      "epusp.pcs.os.server.endpoint.VictimEndpoint.getVictim" : {
+        "response" : {
+          "$ref" : "Victim"
+        }
+      },
+      "epusp.pcs.os.server.endpoint.VictimEndpoint.removeVictim" : {
       }
     }
   }
