@@ -2,6 +2,7 @@ package epusp.pcs.os.model.oncall;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import epusp.pcs.os.model.person.Victim;
+import epusp.pcs.os.model.person.user.Agent;
 import epusp.pcs.os.model.person.user.Monitor;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
@@ -29,6 +31,9 @@ public class EmergencyCall implements Serializable {
 
 	@NotPersistent
 	private static final long serialVersionUID = 1L;
+	
+	@NotPersistent
+	private EmergencyCallLifecycle emergencyCallLifecycle = EmergencyCallLifecycle.Waiting;
 
 	@Persistent
 	private Date begin, end;
@@ -94,8 +99,8 @@ public class EmergencyCall implements Serializable {
 		return latitudes.size();
 	}
 	
-	public void addVehicle(Long vehicleId){
-		vehicles.add(new VehicleOnCall(vehicleId));
+	public void addVehicle(Long vehicleId, Collection<Agent> agents){
+		vehicles.add(new VehicleOnCall(vehicleId, agents));
 	}
 	
 	public void addVehiclePosition(Long vehicleId, Position position){
@@ -132,6 +137,14 @@ public class EmergencyCall implements Serializable {
 			}
 		}
 		return null;
+	}
+	
+	public EmergencyCallLifecycle getEmergencyCallLifecycle(){
+		return emergencyCallLifecycle;
+	}
+	
+	public void setEmergencyCallLifecycle(EmergencyCallLifecycle emergencyCallLifecycle){
+		this.emergencyCallLifecycle = emergencyCallLifecycle;
 	}
 	
 	/*

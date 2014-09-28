@@ -2,9 +2,11 @@ package epusp.pcs.os.model.oncall;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.jdo.annotations.Extension;
+import javax.jdo.annotations.FetchGroup;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.NotPersistent;
@@ -12,7 +14,10 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import epusp.pcs.os.model.person.user.Agent;
+
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
+@FetchGroup(name="agents", members = {@Persistent(name="agents")})
 public class VehicleOnCall implements Serializable{
 
 	@NotPersistent
@@ -27,13 +32,17 @@ public class VehicleOnCall implements Serializable{
 	private Long vehicleId;
 	
 	@Persistent
+	private List<Agent> agents = new ArrayList<Agent>();
+	
+	@Persistent
 	private List<Double> latitudes = new ArrayList<Double>();
 	
 	@Persistent
 	private List<Double> longitudes = new ArrayList<Double>();
 		
-	public VehicleOnCall(Long vehicleId){
+	public VehicleOnCall(Long vehicleId, Collection<Agent> agents){
 		this.vehicleId = vehicleId;
+		agents.addAll(agents);
 	}
 	
 	public String getId(){

@@ -229,16 +229,16 @@
           "pictureURL" : {
             "type" : "string"
           },
-          "allAttributes" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "IAttribute"
-            }
-          },
           "allAttributeKeys" : {
             "type" : "array",
             "items" : {
               "type" : "string"
+            }
+          },
+          "allAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "IAttribute"
             }
           }
         }
@@ -482,11 +482,11 @@
           "value" : {
             "$ref" : "_any"
           },
-          "attributeName" : {
-            "type" : "string"
-          },
           "dataType" : {
             "$ref" : "DataType"
+          },
+          "attributeName" : {
+            "type" : "string"
           }
         }
       },

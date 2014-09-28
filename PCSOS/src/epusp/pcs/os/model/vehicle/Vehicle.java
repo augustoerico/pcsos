@@ -14,6 +14,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import epusp.pcs.os.model.SystemObject;
+import epusp.pcs.os.model.oncall.Position;
 import epusp.pcs.os.model.person.user.Agent;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
@@ -63,20 +64,22 @@ public abstract class Vehicle extends SystemObject implements Serializable {
 		agents.clear();
 	}
 	
-	public double getLatitude(){
-		return latitude;
+	public Position getPosition(){
+		return new Position(latitude, longitude);
 	}
 	
-	public double getLongitude(){
-		return longitude;
+	public void setPosition(Position position){
+		this.latitude = position.getLatitude();
+		this.longitude = position.getLongitude();
 	}
 	
-	public void setLatitude(double latitude){
-		this.latitude =latitude;
-	}
-	
-	public void setLongitude(double longitude){
-		this.longitude = longitude;
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Vehicle){
+			Vehicle vehicle = (Vehicle) obj;
+			return id.equals(vehicle.getId());
+		}
+		return false;
 	}
 	
 	public abstract VehicleTypes getType();

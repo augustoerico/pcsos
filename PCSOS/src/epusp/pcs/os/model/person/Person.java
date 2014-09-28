@@ -104,6 +104,15 @@ public abstract class Person extends SystemObject implements Serializable {
 	public void setPictureURL(String imageURL) {
 		this.imageURL = imageURL;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Person){
+			Person person = (Person) obj;
+			return id.equals(person.getId());
+		}
+		return false;
+	}
 
 	/*
 	 * Seen by Serializable
