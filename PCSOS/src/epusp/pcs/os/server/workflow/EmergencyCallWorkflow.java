@@ -30,7 +30,7 @@ public enum EmergencyCallWorkflow {
 	
 //	private final CopyOnWriteArrayList<Vehicle> freeSupportVehicles =
 //			new CopyOnWriteArrayList<Vehicle>();
-	
+	//Duas pools de recursos -> escolher por atributo.
 	private final ConcurrentHashMap<Long, Vehicle> activeVehicles =
 			new ConcurrentHashMap<Long, Vehicle>();
 	
