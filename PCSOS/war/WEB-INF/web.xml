@@ -7,6 +7,7 @@
 	<servlet>
 		<servlet-name>connectionService</servlet-name>
 		<servlet-class>epusp.pcs.os.server.Connection</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>connectionService</servlet-name>
@@ -17,7 +18,6 @@
 	<servlet>
 		<servlet-name>loginService</servlet-name>
 		<servlet-class>epusp.pcs.os.server.login.LoginConnection</servlet-class>
-		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>loginService</servlet-name>

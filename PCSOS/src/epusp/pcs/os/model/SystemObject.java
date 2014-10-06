@@ -7,13 +7,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.FetchGroup;
+import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
 import epusp.pcs.os.model.attribute.IAttribute;
 import epusp.pcs.os.model.attribute.types.BooleanAttribute;
@@ -40,6 +43,11 @@ public abstract class SystemObject implements Serializable {
 
 	@NotPersistent
 	private static final long serialVersionUID = 1L;
+	
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	@Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
+	private String id;
 
 	@Persistent
 	private List<StringAttribute> stringAttributes = new ArrayList<StringAttribute>();
@@ -68,6 +76,10 @@ public abstract class SystemObject implements Serializable {
 
 	@NotPersistent
 	private HashMap<String, IAttribute> cache = new HashMap<String, IAttribute>();
+	
+	public String getId(){
+		return id;
+	}
 
 	public List<IAttribute> getAllAttributes(){
 		List<IAttribute> attributes = new ArrayList<IAttribute>();

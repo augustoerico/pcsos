@@ -13,8 +13,6 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import epusp.pcs.os.model.person.user.Agent;
-
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
 public abstract class Licence implements Serializable {
@@ -30,9 +28,6 @@ public abstract class Licence implements Serializable {
     @Persistent
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
 	private String registerCode;
-    
-    @Persistent
-    private Agent agent;
 	
 	@Persistent
 	private Date effectiveUntil;

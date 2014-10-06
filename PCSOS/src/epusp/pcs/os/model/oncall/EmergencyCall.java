@@ -9,24 +9,17 @@ import java.util.List;
 import javax.jdo.annotations.FetchGroup;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.Inheritance;
-import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import epusp.pcs.os.model.person.Victim;
-import epusp.pcs.os.model.person.user.Agent;
-import epusp.pcs.os.model.person.user.Monitor;
-
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
-@Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
 @FetchGroup(name="all_attributes", members = {@Persistent(name="victim"), @Persistent(name="monitor"), @Persistent(name="vehicles")})
 public class EmergencyCall implements Serializable {
 
 	@PrimaryKey
-	@Persistent(valueStrategy=IdGeneratorStrategy.INCREMENT)
+	@Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
 	private Long id;
 
 	@NotPersistent
@@ -39,31 +32,31 @@ public class EmergencyCall implements Serializable {
 	private Date begin, end;
 
 	@Persistent
-	private Victim victim;
+	private String victimEmail;
 
 	@Persistent
-	private Monitor monitor;
+	private String monitorId;
 
 	@Persistent
 	private List<VehicleOnCall> vehicles = new ArrayList<VehicleOnCall>();
 	
 	@Persistent
-	private final List<Double> latitudes = new ArrayList<Double>();
+	private final List<Double> latitudes = new ArrayList<Double>(); 
 
 	@Persistent
 	private final List<Double> longitudes = new ArrayList<Double>();
 
-	public EmergencyCall(Date begin, Victim victim){
+	public EmergencyCall(Date begin, String victimEmail){
 		this.begin = begin;
-		this.victim = victim;
+		this.victimEmail = victimEmail;
 	}
 
 	public Long getId(){
 		return id;
 	}
 
-	public Victim getVictim(){
-		return victim;
+	public String getVictimEmail(){
+		return victimEmail;
 	}
 
 	public Date getBegin() {
@@ -78,19 +71,21 @@ public class EmergencyCall implements Serializable {
 		this.end = end;
 	}
 
-	public Monitor getMonitor() {
-		return monitor;
+	public String getMonitor() {
+		return monitorId;
 	}
 
-	public void setMonitor(Monitor monitor) {
-		this.monitor = monitor;
+	public void setMonitor(String monitorId) {
+		this.monitorId = monitorId;
 	}
 
 	public void addVictimPosition(Position position){
-		latitudes.add(position.getLatitude());
-		longitudes.add(position.getLongitude());
+		if(!position.isEmpty()){
+			latitudes.add(position.getLatitude());
+			longitudes.add(position.getLongitude());
+		}
 	}
-	
+
 	public Position getVictimPosition(int i){
 		return new Position(latitudes.get(i), longitudes.get(i));
 	}
@@ -99,29 +94,38 @@ public class EmergencyCall implements Serializable {
 		return latitudes.size();
 	}
 	
-	public void addVehicle(Long vehicleId, Collection<Agent> agents){
+	public Position getLastVictimPosition(){
+		int i = latitudes.size()-1;
+		if(i < 0)
+			return new Position();
+		return new Position(latitudes.get(i), longitudes.get(i));
+	}
+	
+	public void addVehicle(String vehicleId, Collection<String> agents){
 		vehicles.add(new VehicleOnCall(vehicleId, agents));
 	}
 	
-	public void addVehiclePosition(Long vehicleId, Position position){
-		for(VehicleOnCall vehicle : vehicles){
-			if(vehicle.getVehicleId().equals(vehicleId)){
-				vehicle.addPosition(position);
-				return;
+	public void addVehiclePosition(String vehicleId, Position position){
+		if(!position.isEmpty()){
+			for(VehicleOnCall vehicle : vehicles){
+				if(vehicle.getVehicleId().equals(vehicleId)){
+					vehicle.addPosition(position);
+					return;
+				}
 			}
 		}
 	}
 
-	public Position getVehiclePosition(Long vehicleId, int i){
+	public Position getVehiclePosition(String vehicleId, int i){
 		for(VehicleOnCall vehicle : vehicles){
 			if(vehicle.getVehicleId().equals(vehicleId)){
 				return vehicle.getPosition(i);
 			}
 		}
-		return null;
+		return new Position();
 	}
 	
-	public int getVehiclePositionSize(Long vehicleId){
+	public int getVehiclePositionSize(String vehicleId){
 		for(VehicleOnCall vehicle : vehicles){
 			if(vehicle.getVehicleId().equals(vehicleId)){
 				return vehicle.getSize();
@@ -130,13 +134,17 @@ public class EmergencyCall implements Serializable {
 		return 0;
 	}
 	
-	public Position getLastVehiclePosition(Long vehicleId){
+	public Position getLastVehiclePosition(String vehicleId){
 		for(VehicleOnCall vehicle : vehicles){
 			if(vehicle.getVehicleId().equals(vehicleId)){
 				return vehicle.getLastPosition();
 			}
 		}
-		return null;
+		return new Position();
+	}
+	
+	public List<VehicleOnCall> getVehicles(){
+		return vehicles;
 	}
 	
 	public EmergencyCallLifecycle getEmergencyCallLifecycle(){

@@ -1,6 +1,10 @@
 package epusp.pcs.os.server.workflow;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -10,7 +14,9 @@ import javax.jdo.PersistenceManager;
 import epusp.pcs.os.model.oncall.EmergencyCall;
 import epusp.pcs.os.model.oncall.EmergencyCallLifecycle;
 import epusp.pcs.os.model.oncall.Position;
+import epusp.pcs.os.model.oncall.VehicleOnCall;
 import epusp.pcs.os.model.person.Victim;
+import epusp.pcs.os.model.person.user.Agent;
 import epusp.pcs.os.model.person.user.Monitor;
 import epusp.pcs.os.model.vehicle.Car;
 import epusp.pcs.os.model.vehicle.Vehicle;
@@ -25,23 +31,29 @@ public enum EmergencyCallWorkflow {
 	private final ConcurrentLinkedDeque<Monitor> freeMonitors =
 			new ConcurrentLinkedDeque<Monitor>();
 	
-	private final CopyOnWriteArrayList<Car> freeCars =
-			new CopyOnWriteArrayList<Car>();
+	private final CopyOnWriteArrayList<Vehicle> freePrimaryVehicles =
+			new CopyOnWriteArrayList<Vehicle>();
 	
-//	private final CopyOnWriteArrayList<Vehicle> freeSupportVehicles =
-//			new CopyOnWriteArrayList<Vehicle>();
-	//Duas pools de recursos -> escolher por atributo.
-	private final ConcurrentHashMap<Long, Vehicle> activeVehicles =
-			new ConcurrentHashMap<Long, Vehicle>();
+	private final ConcurrentHashMap<String, Vehicle> freeSupportVehicles =
+			new ConcurrentHashMap<String, Vehicle>();
+
+	private final ConcurrentHashMap<String, Vehicle> activeVehicles =
+			new ConcurrentHashMap<String, Vehicle>();
+	
+	private final ConcurrentHashMap<String, Monitor> activeMonitors =
+			new ConcurrentHashMap<String, Monitor>();
 	
 	private final ConcurrentHashMap<String, EmergencyCall> activeCalls =
 			new ConcurrentHashMap<String, EmergencyCall>();
 	
+	private final ConcurrentHashMap<String, Victim> activeVictims =
+			new ConcurrentHashMap<String, Victim>();
+	
 	private final ConcurrentHashMap<String, EmergencyCall> monitorsOnCall =
 			new ConcurrentHashMap<String, EmergencyCall>();
 	
-	private final ConcurrentHashMap<Long, EmergencyCall> vehiclesOnCall =
-			new ConcurrentHashMap<Long, EmergencyCall>();
+	private final ConcurrentHashMap<String, EmergencyCall> vehiclesOnCall =
+			new ConcurrentHashMap<String, EmergencyCall>();
 	
 	private EmergencyCallWorkflow(){}
 	
@@ -49,22 +61,27 @@ public enum EmergencyCallWorkflow {
 		return INSTANCE;
 	}
 	
-	public void addWaitingCall(String victimId){
-		if(!activeCalls.containsKey(victimId)){
+	/*
+	 * Available resources update methods
+	 */
+	public void addWaitingCall(String victimEmail){
+		if(!activeCalls.containsKey(victimEmail)){
 			PersistenceManager mgr = getPersistenceManager();
 			Victim victim, detached = null;
 			try {
-				victim = mgr.getObjectById(Victim.class, victimId);
+				victim = mgr.getObjectById(Victim.class, victimEmail);
 				detached = mgr.detachCopy(victim);
 			} finally {
 				mgr.close();
 			}
 			
 			if(detached != null){
-				EmergencyCall emergencyCall = new EmergencyCall(new Date(), detached);
+				EmergencyCall emergencyCall = new EmergencyCall(new Date(), victimEmail);
+				System.out.println("Emergency call: " + emergencyCall.getVictimEmail() + " begin: " + emergencyCall.getBegin());
 				waitingCalls.addLast(emergencyCall);
-				activeCalls.put(victimId, emergencyCall);
-				if(!freeMonitors.isEmpty() && !freeCars.isEmpty())
+				activeCalls.putIfAbsent(detached.getEmail(), emergencyCall);
+				activeVictims.putIfAbsent(detached.getEmail(), victim);
+				if(!freeMonitors.isEmpty() && !freePrimaryVehicles.isEmpty())
 					associate();
 			}
 		}
@@ -83,26 +100,38 @@ public enum EmergencyCallWorkflow {
 		if(detached != null){
 			if(!freeMonitors.contains(detached)){
 				freeMonitors.addLast(detached);
-				if(!waitingCalls.isEmpty() && !freeCars.isEmpty())
+				activeMonitors.put(detached.getId(), detached);
+				if(!waitingCalls.isEmpty() && !freePrimaryVehicles.isEmpty())
 					associate();
 			}
 		}
 	}
 	
-	public void addFreeCar(Long carId){
-		if(!activeVehicles.contains(carId)){
+	public void addFreeVehicle(String vehicleId, Collection<Agent> agents){
+		if(!activeVehicles.containsKey(vehicleId)){
 			PersistenceManager mgr = getPersistenceManager();
-			Car car, detached = null;
+			Vehicle vehicle, detached = null;
 			try {
-				car = mgr.getObjectById(Car.class, carId);
-				detached = mgr.detachCopy(car);
+				vehicle = mgr.getObjectById(Car.class, vehicleId);
+				if(vehicle != null)
+					detached = mgr.detachCopy(vehicle);
 			} finally {
 				mgr.close();
-			}
+			}			
 
 			if(detached != null){
-				freeCars.add(detached);
-				activeVehicles.put(carId, detached);
+				switch(detached.getPriority()){
+				case PRIMARY:
+					freePrimaryVehicles.add(detached);
+					break;
+				case SUPPORT:
+					freeSupportVehicles.put(detached.getId(), detached);
+					break;
+				default:
+					break;
+				}
+				detached.addAgents(agents);
+				activeVehicles.put(vehicleId, detached);
 				if(!waitingCalls.isEmpty() && !freeMonitors.isEmpty())
 					associate();
 			}
@@ -113,75 +142,282 @@ public enum EmergencyCallWorkflow {
 		EmergencyCall emergencyCall = waitingCalls.pollFirst();
 		Monitor monitor = freeMonitors.pollFirst();
 		
-		emergencyCall.setMonitor(monitor);
-		
-		Position victimPosition = emergencyCall.getVictimPosition(emergencyCall.getVictimPositionSize()-1);
+		emergencyCall.setMonitor(monitor.getId());
+		Position victimPosition = null;
+		if(emergencyCall.getVictimPositionSize() > 0)
+			victimPosition = emergencyCall.getLastVictimPosition();
 		//Choose best car...
-		Car car = freeCars.remove(0);
-		emergencyCall.addVehicle(car.getId(), car.getAgents());
-		vehiclesOnCall.put(car.getId(), emergencyCall);
+		Vehicle vehicle = freePrimaryVehicles.remove(0);
+		List<String> agents = new ArrayList<String>();
+		for(Agent agent : vehicle.getAgents())
+			agents.add(agent.getId());
+		emergencyCall.addVehicle(vehicle.getId(), agents);
+		emergencyCall.addVehiclePosition(vehicle.getId(), vehicle.getPosition());
+		vehiclesOnCall.put(vehicle.getId(), emergencyCall);
 		monitorsOnCall.put(monitor.getId(), emergencyCall);
 		emergencyCall.setEmergencyCallLifecycle(EmergencyCallLifecycle.WaitingAcknowledgment);
 	}
 	
-	public Boolean hasBeenAssociated(String monitorId){
-		return monitorsOnCall.contains(monitorId);
+	/*
+	 * Check Emergency Call state
+	 */
+	public Boolean isMonitorOnCall(String monitorId){
+		return monitorsOnCall.containsKey(monitorId);
 	}
 	
-	public Boolean hasBeenAssociated(Long vehicleId){
-		return vehiclesOnCall.contains(vehicleId);
+	public Boolean isVehicleOnCall(String vehicleId){
+		return vehiclesOnCall.containsKey(vehicleId);
 	}
 	
-	public void acknowledgment(String monitorId){
+	public void monitorOnCallAcknowledgment(String monitorId){
 		EmergencyCall emergencyCall = monitorsOnCall.get(monitorId);
-		switch (emergencyCall.getEmergencyCallLifecycle()) {
-		case WaitingAcknowledgment:
-			emergencyCall.setEmergencyCallLifecycle(EmergencyCallLifecycle.WaitingCarAcknowledgment);
-			break;
-		case WaitingMonitorAcknowledgment:
-			emergencyCall.setEmergencyCallLifecycle(EmergencyCallLifecycle.OnCall);
-			break;
-		default:
-			break;
+		if(emergencyCall != null)
+			switch (emergencyCall.getEmergencyCallLifecycle()) {
+			case WaitingAcknowledgment:
+				emergencyCall.setEmergencyCallLifecycle(EmergencyCallLifecycle.WaitingCarAcknowledgment);
+				break;
+			case WaitingMonitorAcknowledgment:
+				emergencyCall.setEmergencyCallLifecycle(EmergencyCallLifecycle.OnCall);
+				break;
+			default:
+				break;
+			}
+	}
+
+	public void vehicleOnCallAcknowledgment(String vehicleId){
+		EmergencyCall emergencyCall = vehiclesOnCall.get(vehicleId);
+		if(emergencyCall != null)
+			switch (emergencyCall.getEmergencyCallLifecycle()) {
+			case WaitingAcknowledgment:
+				emergencyCall.setEmergencyCallLifecycle(EmergencyCallLifecycle.WaitingMonitorAcknowledgment);
+				break;
+			case WaitingCarAcknowledgment:
+				emergencyCall.setEmergencyCallLifecycle(EmergencyCallLifecycle.OnCall);
+				break;
+			default:
+				break;
+			}
+	}
+
+	public EmergencyCallLifecycle getEmergencyCallLifecycle(String victimEmail){
+		if(activeCalls.containsKey(victimEmail))
+			return activeCalls.get(victimEmail).getEmergencyCallLifecycle();
+		else
+			return null;
+	}	
+	
+	public void finishCall(String victimEmail){
+		if(activeCalls.containsKey(victimEmail)){
+			activeCalls.get(victimEmail).setEmergencyCallLifecycle(EmergencyCallLifecycle.Finished);
+		}
+	}
+	
+	
+	public void vehicleFinishedCallAcknowledgment(String vehicleId){
+		EmergencyCall emergencyCall = vehiclesOnCall.get(vehicleId);
+		if(emergencyCall != null && emergencyCall.getEmergencyCallLifecycle().equals(EmergencyCallLifecycle.Finished)){
+			vehiclesOnCall.remove(vehicleId);
+			Vehicle vehicle = activeVehicles.get(vehicleId);
+			switch(vehicle.getPriority()){
+			case PRIMARY:
+				freePrimaryVehicles.add(vehicle);
+				break;
+			case SUPPORT:
+				freeSupportVehicles.put(vehicle.getId(), vehicle);
+				break;
+			default:
+				break;
+			}
+			finish(emergencyCall);
+		}
+	}
+	
+	public void monitorFinishedCallAcknowledgment(String monitorId){
+		EmergencyCall emergencyCall = monitorsOnCall.get(monitorId);
+		if(emergencyCall != null && emergencyCall.getEmergencyCallLifecycle().equals(EmergencyCallLifecycle.Finished)){
+			monitorsOnCall.remove(monitorId);
+			Monitor monitor = activeMonitors.get(monitorId);
+			freeMonitors.add(monitor);
+			finish(emergencyCall);
+		}
+	}
+	
+	private void finish(EmergencyCall emergencyCall){
+		List<VehicleOnCall> vehicles = emergencyCall.getVehicles();
+		String monitorId = emergencyCall.getMonitor();
+		
+		if(monitorsOnCall.containsKey(monitorId))
+			return;
+		
+		for(VehicleOnCall vehicleOnCall : vehicles){
+			if(vehiclesOnCall.containsKey(vehicleOnCall.getVehicleId()))
+				return;
+		}
+		
+		emergencyCall.setEnd(new Date());
+		PersistenceManager pm = getPersistenceManager();
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(emergencyCall);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+	}
+	/*
+	 * State update methods
+	 */
+	public void addVictimPosition(String victimEmail, Position position){
+		EmergencyCall emergencyCall = activeCalls.get(victimEmail);
+		if(activeCalls.containsKey(victimEmail) && !emergencyCall.getEmergencyCallLifecycle().equals(EmergencyCallLifecycle.Finished))
+			emergencyCall.addVictimPosition(position);
+	}
+	
+	public void addVehiclePosition(String vehicleId, Position position){
+		if(!position.isEmpty()){
+			EmergencyCall emergencyCall = vehiclesOnCall.get(vehicleId);
+			activeVehicles.get(vehicleId).setPosition(position);
+			if(emergencyCall != null && !emergencyCall.getEmergencyCallLifecycle().equals(EmergencyCallLifecycle.Finished)){
+				vehiclesOnCall.get(vehicleId).addVehiclePosition(vehicleId, position);
+			}
+		}
+	}
+	
+	public void addVehicleToCall(String victimEmail, String vehicleId){
+		Vehicle vehicle = activeVehicles.get(vehicleId);
+		if(activeCalls.containsKey(victimEmail)){
+			EmergencyCall call = activeCalls.get(victimEmail);
+			if(call != null && !call.getEmergencyCallLifecycle().equals(EmergencyCallLifecycle.Finished)){
+				List<String> agents = new ArrayList<String>();
+				for(Agent agent : vehicle.getAgents())
+					agents.add(agent.getId());
+				call.addVehicle(vehicleId, agents);
+				Position p = vehicle.getPosition();
+				if(!p.isEmpty()){
+					call.addVehiclePosition(vehicleId, p);
+				}
+				freeSupportVehicles.remove(vehicleId);
+				vehiclesOnCall.put(vehicle.getId(), call);
+			}
+		}
+	}
+	
+	/*
+	 * Check available resources
+	 */
+	public List<Vehicle> getAvailableSupportVehicles(){
+		 List<Vehicle> available = new ArrayList<Vehicle>();
+		
+		 Enumeration<Vehicle> vehicles = freeSupportVehicles.elements();
+		 
+		 while(vehicles.hasMoreElements()){
+			 Vehicle vehicle = vehicles.nextElement();
+			 available.add(vehicle);
+		 }
+		 
+		 if(available.isEmpty()){
+			 for(Vehicle vehicle : freePrimaryVehicles){
+				 available.add(vehicle);
+			 }
+		 }
+		 
+		 return available;
+	}
+	
+	
+	/*
+	 * Other methods
+	 */
+	public EmergencyCall getMonitorEmergencyCall(String monitorId){
+		return monitorsOnCall.get(monitorId);
+	}
+	
+	public EmergencyCall getVehicleEmergencyCall(String vehicleId){
+		return vehiclesOnCall.get(vehicleId);
+	}
+	
+	public void addAgentsToVehicle(String vehicleId, List<Agent> agents){
+		if(activeVehicles.containsKey(vehicleId)){
+			Vehicle vehicle = activeVehicles.get(vehicleId);
+			vehicle.addAgents(agents);
 		}
 	}
 
-	public void acknowledgment(Long carId){
-		EmergencyCall emergencyCall = vehiclesOnCall.get(carId);
-		switch (emergencyCall.getEmergencyCallLifecycle()) {
-		case WaitingAcknowledgment:
-			emergencyCall.setEmergencyCallLifecycle(EmergencyCallLifecycle.WaitingMonitorAcknowledgment);
-			break;
-		case WaitingCarAcknowledgment:
-			emergencyCall.setEmergencyCallLifecycle(EmergencyCallLifecycle.OnCall);
-			break;
-		default:
-			break;
+	public void addAgentToVehicle(String vehicleId, Agent agent){
+		if(activeVehicles.containsKey(vehicleId)){
+			Vehicle vehicle = activeVehicles.get(vehicleId);
+			vehicle.addAgent(agent);
+		}
+	}
+
+	public void removeAgentFromVehicle(String vehicleId, Agent agent){
+		if(activeVehicles.containsKey(vehicleId)){
+			Vehicle vehicle = activeVehicles.get(vehicleId);
+			vehicle.removeAgent(agent);
+		}
+	}
+
+	public void removeAllAgentsFromVehicle(String vehicleId){
+		if(activeVehicles.containsKey(vehicleId)){
+			Vehicle vehicle = activeVehicles.get(vehicleId);
+			vehicle.removeAgents();
+		}
+	}
+
+	public Victim getVictim(String victimEmail){
+		if(activeCalls.containsKey(victimEmail)){
+			return activeVictims.get(victimEmail);
+		}
+		return null;
+	}
+	
+	public Monitor getMonitor(String monitorId){
+		if(activeMonitors.containsKey(monitorId)){
+			return activeMonitors.get(monitorId);
+		}
+		return null;
+	}
+	
+	public Vehicle getVehicle(String vehicleId){
+		if(activeVehicles.containsKey(vehicleId)){
+			return activeVehicles.get(vehicleId);
+		}
+		return null;
+	}
+	
+	public void monitorLeaving(String monitorId){
+		if(freeMonitors.contains(monitorId)){
+			Monitor monitor = activeMonitors.get(monitorId);
+			activeMonitors.remove(monitorId);
+			freeMonitors.remove(monitor);
 		}
 	}
 	
-	public EmergencyCallLifecycle getEmergencyCallLifecycle(String victimId){
-		return activeCalls.get(victimId).getEmergencyCallLifecycle();
-	}	
-	
-	/* General Update Methods */
-	public void addVictimPosition(String victimId, Position position){
-		activeCalls.get(victimId).addVictimPosition(position);
-	}
-	
-	public void addVehiclePosition(Long vehicleId, Position position){
-		activeVehicles.get(vehicleId).setPosition(position);
-		if(vehiclesOnCall.contains(vehicleId)){
-			vehiclesOnCall.get(vehicleId).addVehiclePosition(vehicleId, position);
+	public void vehicleLeaving(String vehicleId){
+		if(freeSupportVehicles.containsKey(vehicleId) || freePrimaryVehicles.contains(vehicleId)){
+			Vehicle vehicle = activeVehicles.get(vehicleId);
+			activeVehicles.remove(vehicleId);
+			
+			switch(vehicle.getPriority()){
+			case PRIMARY:
+				freePrimaryVehicles.remove(vehicle);
+				break;
+			case SUPPORT:
+				freeSupportVehicles.remove(vehicleId);
+				break;
+			default:
+				break;
+			}			
 		}
 	}
 	
-//	public void addVehicle(Long vehicleId, String victimId){
-//		De onde virá o outro veículo?
-//		Como será o processo em que esse veículo é informado que está numa chamada?
-//		como assosciar essa chamada a esse veículo?
-//	}
-	
+	/*
+	 * private methods
+	 */
 	private static PersistenceManager getPersistenceManager() {
 		return PMF.get().getPersistenceManager();
 	}

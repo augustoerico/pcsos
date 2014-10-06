@@ -28,23 +28,6 @@ public class LoginConnection extends Connection implements ILoginService{
 
 	private static Logger log = Logger.getLogger(LoginConnection.class.getCanonicalName());
 
-	public void init() throws ServletException
-	{
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-
-		System.out.println("Initializing with test data");
-		Admin admin = new Admin("Giovanni", "Gatti Pinheiro", "giovanni.gatti.pinheiro@gmail.com");
-		admin.setIsActive(true);
-		admin.setGoogleUserId("115057125698280242918");
-		admin.setPictureURL("https://lh5.googleusercontent.com/--PBV1HBWVsc/AAAAAAAAAAI/AAAAAAAAAFQ/O57isBLRtRA/photo.jpg");
-
-		try{
-			pm.makePersistent(admin);
-		}finally{
-			pm.close();
-		}
-	}
-
 	@Override
 	public String login(String token){
 		if(token != null){

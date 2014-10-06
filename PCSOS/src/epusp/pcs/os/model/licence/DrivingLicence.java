@@ -3,9 +3,14 @@ package epusp.pcs.os.model.licence;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.NotPersistent;
+import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
+import epusp.pcs.os.model.person.user.Agent;
+
+@PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
 public class DrivingLicence extends Licence implements Serializable{
 
 	@NotPersistent
@@ -13,6 +18,9 @@ public class DrivingLicence extends Licence implements Serializable{
 
 	@NotPersistent
 	public static final LicenceTypes licenceType = LicenceTypes.DrivingLicence;
+	
+    @Persistent(defaultFetchGroup="true")
+    private Agent agent;
 	
 	@Persistent
 	private DrivingCategories category;
@@ -42,6 +50,10 @@ public class DrivingLicence extends Licence implements Serializable{
 
 	public void setHasAcategory(Boolean hasAcategory) {
 		this.hasAcategory = hasAcategory;
+	}
+	
+	public Agent getAgent(){
+		return agent;
 	}
 	
 	@Override

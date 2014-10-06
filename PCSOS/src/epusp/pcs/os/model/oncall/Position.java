@@ -6,7 +6,7 @@ public class Position implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	private double latitude, longitude;
+	private Double latitude, longitude;
 	
 	public Position(double latitude, double longitude){
 		this.latitude = latitude;
@@ -19,6 +19,15 @@ public class Position implements Serializable{
 
 	public double getLongitude() {
 		return longitude;
+	}
+	
+	public Boolean isEmpty(){
+		return (latitude == null) || (longitude == null);
+	}
+	
+	@Override
+	public String toString() {
+		return "(".concat(String.valueOf(latitude)).concat(", ").concat(String.valueOf(longitude)).concat(")");
 	}
 	
 	/*

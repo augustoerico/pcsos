@@ -27,17 +27,26 @@
   "ownerName" : "pcs.epusp",
   "packagePath" : "os.model.person.user",
   "methods" : {
-    "agentendpoint.updateAgent" : {
+    "agentendpoint.listAgent" : {
       "path" : "agent",
-      "httpMethod" : "PUT",
+      "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epusp.pcs.os.server.endpoint.AgentEndpoint.updateAgent",
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.AgentEndpoint.listAgent",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "parameters" : {
+          "cursor" : {
+            "type" : "string",
+            "required" : false
+          },
+          "limit" : {
+            "type" : "int32",
+            "required" : false
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -64,6 +73,22 @@
         "body" : "empty"
       }
     },
+    "agentendpoint.updateAgent" : {
+      "path" : "agent",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.AgentEndpoint.updateAgent",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "agentendpoint.getAgent" : {
       "path" : "agent/{email}",
       "httpMethod" : "GET",
@@ -77,31 +102,6 @@
           "email" : {
             "type" : "string",
             "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "agentendpoint.listAgent" : {
-      "path" : "agent",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epusp.pcs.os.server.endpoint.AgentEndpoint.listAgent",
-      "request" : {
-        "parameters" : {
-          "cursor" : {
-            "type" : "string",
-            "required" : false
-          },
-          "limit" : {
-            "type" : "int32",
-            "required" : false
           }
         },
         "body" : "empty"
@@ -129,10 +129,28 @@
   },
   "descriptor" : {
     "schemas" : {
+      "CollectionResponse_Agent" : {
+        "id" : "CollectionResponse_Agent",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Agent"
+            }
+          },
+          "nextPageToken" : {
+            "type" : "string"
+          }
+        }
+      },
       "Agent" : {
         "id" : "Agent",
         "type" : "object",
         "properties" : {
+          "id" : {
+            "type" : "string"
+          },
           "stringAttributes" : {
             "type" : "array",
             "items" : {
@@ -193,9 +211,6 @@
               "$ref" : "FloatArrayAttribute"
             }
           },
-          "id" : {
-            "type" : "string"
-          },
           "email" : {
             "type" : "string"
           },
@@ -214,14 +229,17 @@
           "isActive" : {
             "type" : "boolean"
           },
+          "drivingLicence" : {
+            "$ref" : "DrivingLicence"
+          },
+          "type" : {
+            "$ref" : "AccountTypes"
+          },
           "licences" : {
             "type" : "array",
             "items" : {
               "$ref" : "Licence"
             }
-          },
-          "type" : {
-            "$ref" : "AccountTypes"
           },
           "active" : {
             "type" : "boolean"
@@ -229,16 +247,16 @@
           "pictureURL" : {
             "type" : "string"
           },
-          "allAttributeKeys" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          },
           "allAttributes" : {
             "type" : "array",
             "items" : {
               "$ref" : "IAttribute"
+            }
+          },
+          "allAttributeKeys" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
             }
           }
         }
@@ -276,14 +294,14 @@
               "type" : "string"
             }
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "valuesAsList" : {
             "type" : "array",
             "items" : {
               "type" : "string"
             }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
       },
@@ -315,14 +333,14 @@
               "type" : "boolean"
             }
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "valuesAsList" : {
             "type" : "array",
             "items" : {
               "type" : "boolean"
             }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
       },
@@ -352,15 +370,15 @@
           "value" : {
             "$ref" : "_any"
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "valuesAsList" : {
             "type" : "array",
             "items" : {
               "type" : "string",
               "format" : "date-time"
             }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
       },
@@ -396,14 +414,14 @@
               "type" : "integer"
             }
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "valuesAsList" : {
             "type" : "array",
             "items" : {
               "type" : "integer"
             }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
       },
@@ -437,17 +455,57 @@
               "format" : "float"
             }
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "valuesAsList" : {
             "type" : "array",
             "items" : {
               "type" : "number",
               "format" : "float"
             }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
+      },
+      "DrivingLicence" : {
+        "id" : "DrivingLicence",
+        "type" : "object",
+        "properties" : {
+          "registerCode" : {
+            "type" : "string"
+          },
+          "agent" : {
+            "$ref" : "Agent"
+          },
+          "category" : {
+            "$ref" : "DrivingCategories"
+          },
+          "hasAcategory" : {
+            "type" : "boolean"
+          },
+          "licenceType" : {
+            "$ref" : "LicenceTypes"
+          },
+          "validUntil" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "DrivingCategories" : {
+        "id" : "DrivingCategories",
+        "type" : "string",
+        "enum" : [ "B", "C", "D", "E" ]
+      },
+      "LicenceTypes" : {
+        "id" : "LicenceTypes",
+        "type" : "string",
+        "enum" : [ "DrivingLicence" ]
+      },
+      "AccountTypes" : {
+        "id" : "AccountTypes",
+        "type" : "string",
+        "enum" : [ "Admin", "Auditor", "Monitor", "SuperUser", "Agent" ]
       },
       "Licence" : {
         "id" : "Licence",
@@ -465,16 +523,6 @@
           }
         }
       },
-      "LicenceTypes" : {
-        "id" : "LicenceTypes",
-        "type" : "string",
-        "enum" : [ "DrivingLicence" ]
-      },
-      "AccountTypes" : {
-        "id" : "AccountTypes",
-        "type" : "string",
-        "enum" : [ "Admin", "Auditor", "Monitor", "SuperUser", "Agent" ]
-      },
       "IAttribute" : {
         "id" : "IAttribute",
         "type" : "object",
@@ -482,31 +530,23 @@
           "value" : {
             "$ref" : "_any"
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "attributeName" : {
             "type" : "string"
-          }
-        }
-      },
-      "CollectionResponse_Agent" : {
-        "id" : "CollectionResponse_Agent",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "Agent"
-            }
           },
-          "nextPageToken" : {
-            "type" : "string"
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
       }
     },
     "methods" : {
+      "epusp.pcs.os.server.endpoint.AgentEndpoint.listAgent" : {
+        "response" : {
+          "$ref" : "CollectionResponse_Agent"
+        }
+      },
+      "epusp.pcs.os.server.endpoint.AgentEndpoint.removeAgent" : {
+      },
       "epusp.pcs.os.server.endpoint.AgentEndpoint.updateAgent" : {
         "request" : {
           "$ref" : "Agent"
@@ -515,16 +555,9 @@
           "$ref" : "Agent"
         }
       },
-      "epusp.pcs.os.server.endpoint.AgentEndpoint.removeAgent" : {
-      },
       "epusp.pcs.os.server.endpoint.AgentEndpoint.getAgent" : {
         "response" : {
           "$ref" : "Agent"
-        }
-      },
-      "epusp.pcs.os.server.endpoint.AgentEndpoint.listAgent" : {
-        "response" : {
-          "$ref" : "CollectionResponse_Agent"
         }
       },
       "epusp.pcs.os.server.endpoint.AgentEndpoint.insertAgent" : {

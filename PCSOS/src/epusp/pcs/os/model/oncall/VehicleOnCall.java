@@ -14,8 +14,6 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import epusp.pcs.os.model.person.user.Agent;
-
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
 @FetchGroup(name="agents", members = {@Persistent(name="agents")})
 public class VehicleOnCall implements Serializable{
@@ -29,10 +27,10 @@ public class VehicleOnCall implements Serializable{
 	private String id;
 	
 	@Persistent
-	private Long vehicleId;
+	private String vehicleId;
 	
 	@Persistent
-	private List<Agent> agents = new ArrayList<Agent>();
+	private List<String> agents = new ArrayList<String>();
 	
 	@Persistent
 	private List<Double> latitudes = new ArrayList<Double>();
@@ -40,31 +38,39 @@ public class VehicleOnCall implements Serializable{
 	@Persistent
 	private List<Double> longitudes = new ArrayList<Double>();
 		
-	public VehicleOnCall(Long vehicleId, Collection<Agent> agents){
+	public VehicleOnCall(String vehicleId, Collection<String> agents){
 		this.vehicleId = vehicleId;
-		agents.addAll(agents);
+		this.agents.addAll(agents);
 	}
 	
 	public String getId(){
 		return id;
 	}
 
-	public Long getVehicleId() {
+	public String getVehicleId() {
 		return vehicleId;
 	}
 	
 	public void addPosition(Position positon){
-		latitudes.add(positon.getLatitude());
-		longitudes.add(positon.getLongitude());
+		if(!positon.isEmpty()){
+			latitudes.add(positon.getLatitude());
+			longitudes.add(positon.getLongitude());
+		}
 	}
 	
 	public Position getPosition(int i){
 		return new Position(latitudes.get(i), longitudes.get(i));
 	}
 	
-	public Position getLastPosition() {
+	public Position getLastPosition(){
 		int i = latitudes.size()-1;
+		if(i < 0)
+			return new Position();
 		return new Position(latitudes.get(i), longitudes.get(i));
+	}
+	
+	public List<String> getAgents(){
+		return agents;
 	}
 	
 	public int getSize(){
