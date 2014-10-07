@@ -55,6 +55,9 @@ public enum EmergencyCallWorkflow {
 	private final ConcurrentHashMap<String, EmergencyCall> vehiclesOnCall =
 			new ConcurrentHashMap<String, EmergencyCall>();
 	
+	private final ConcurrentHashMap<String, AcknowledgmentTracker> ackControl =
+			new ConcurrentHashMap<String, AcknowledgmentTracker>();
+	
 	private EmergencyCallWorkflow(){}
 	
 	public static EmergencyCallWorkflow getInstance(){
@@ -208,7 +211,18 @@ public enum EmergencyCallWorkflow {
 	
 	public void finishCall(String victimEmail){
 		if(activeCalls.containsKey(victimEmail)){
-			activeCalls.get(victimEmail).setEmergencyCallLifecycle(EmergencyCallLifecycle.Finished);
+			EmergencyCall emergencyCall = activeCalls.get(victimEmail);
+			emergencyCall.setEmergencyCallLifecycle(EmergencyCallLifecycle.Finished);
+			List<VehicleOnCall> vehicles = emergencyCall.getVehicles();
+			String monitorId = emergencyCall.getMonitor();
+			AcknowledgmentTracker tracker = new AcknowledgmentTracker();
+			
+			for(VehicleOnCall vehicleOnCall : vehicles)
+				tracker.add(vehicleOnCall.getVehicleId());
+			
+			tracker.add(monitorId);
+			
+			ackControl.put(victimEmail, tracker);
 		}
 	}
 	
@@ -228,7 +242,10 @@ public enum EmergencyCallWorkflow {
 			default:
 				break;
 			}
-			finish(emergencyCall);
+			AcknowledgmentTracker tracker = ackControl.get(emergencyCall.getVictimEmail());
+			tracker.remove(vehicleId);
+			if(tracker.isEmpty())
+				finish(emergencyCall);
 		}
 	}
 	
@@ -239,21 +256,14 @@ public enum EmergencyCallWorkflow {
 			Monitor monitor = activeMonitors.get(monitorId);
 			freeMonitors.add(monitor);
 			finish(emergencyCall);
+			AcknowledgmentTracker tracker = ackControl.get(emergencyCall.getVictimEmail());
+			tracker.remove(monitorId);
+			if(tracker.isEmpty())
+				finish(emergencyCall);
 		}
 	}
 	
-	private void finish(EmergencyCall emergencyCall){
-		List<VehicleOnCall> vehicles = emergencyCall.getVehicles();
-		String monitorId = emergencyCall.getMonitor();
-		
-		if(monitorsOnCall.containsKey(monitorId))
-			return;
-		
-		for(VehicleOnCall vehicleOnCall : vehicles){
-			if(vehiclesOnCall.containsKey(vehicleOnCall.getVehicleId()))
-				return;
-		}
-		
+	private void finish(EmergencyCall emergencyCall){		
 		emergencyCall.setEnd(new Date());
 		PersistenceManager pm = getPersistenceManager();
 		try{
