@@ -74,6 +74,13 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		victim2.setIsActive(true);
 		victim2.setGoogleUserId("0000005");
 		
+		Car carX = new Car("PCS-0507");
+		carX.setPrioraty(Priority.PRIMARY);
+		
+		Agent agentX = new Agent("Mr. Satan", "Jr.", "satan.junior@gmail.com");
+		agentX.setIsActive(true);
+		agentX.setGoogleUserId("0000006");
+		
 		System.out.println("Persisting and detaching objects");
 		Agent detachedAgent1 = null, detachedAgent2 = null, detachedAgent3 = null;
 		Car detachedCar = null, detachedSupportCar = null;
@@ -114,6 +121,8 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 			detachedSupportCar = pm.detachCopy(supportCar);
 			pm.makePersistent(victim2);
 			detachedVictim2 = pm.detachCopy(victim2);
+			pm.makePersistent(carX);
+			pm.makePersistent(agentX);
 			pm.currentTransaction().commit();
 		}catch (Exception e){
 			e.printStackTrace();
@@ -284,6 +293,12 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		
 		System.out.println(workflow.getEmergencyCallLifecycle(detachedVictim.getEmail()));
 		
+		workflow.addWaitingCall(detachedVictim2.getEmail());
+		
+		List<Agent> agents = new ArrayList<Agent>();
+		agents.add(agentX);
+		workflow.addFreeVehicle(carX.getId(), agents);
+		
 		workflow.monitorFinishedCallAcknowledgment(detachedMonitor.getId());
 		System.out.println(workflow.isMonitorOnCall(detachedMonitor.getId()));
 		
@@ -294,15 +309,11 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		System.out.println(workflow.isVehicleOnCall(detachedCar.getId()));
 		
 		System.out.println("--------------------------Finished Phase Completed--------------------------");
-		workflow.addWaitingCall(detachedVictim2.getEmail());
 		
-		workflow.monitorFinishedCallAcknowledgment(detachedMonitor.getId());
 		System.out.println(workflow.isMonitorOnCall(detachedMonitor.getId()));
 		
-		workflow.vehicleFinishedCallAcknowledgment(detachedSupportCar.getId());
 		System.out.println(workflow.isVehicleOnCall(detachedSupportCar.getId()));
 		
-		workflow.vehicleFinishedCallAcknowledgment(detachedCar.getId());
 		System.out.println(workflow.isVehicleOnCall(detachedCar.getId()));
 		
 		System.out.println("--------------------------Restart Phase Completed--------------------------");

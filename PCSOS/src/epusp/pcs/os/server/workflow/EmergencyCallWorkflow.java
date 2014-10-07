@@ -91,21 +91,23 @@ public enum EmergencyCallWorkflow {
 	}
 	
 	public void addFreeMonitor(String monitorId){
-		PersistenceManager mgr = getPersistenceManager();
-		Monitor monitor, detached = null;
-		try {
-			monitor = mgr.getObjectById(Monitor.class, monitorId);
-			detached = mgr.detachCopy(monitor);
-		} finally {
-			mgr.close();
-		}
+		if(!activeMonitors.containsKey(monitorId)){
+			PersistenceManager mgr = getPersistenceManager();
+			Monitor monitor, detached = null;
+			try {
+				monitor = mgr.getObjectById(Monitor.class, monitorId);
+				detached = mgr.detachCopy(monitor);
+			} finally {
+				mgr.close();
+			}
 
-		if(detached != null){
-			if(!freeMonitors.contains(detached)){
-				freeMonitors.addLast(detached);
-				activeMonitors.put(detached.getId(), detached);
-				if(!waitingCalls.isEmpty() && !freePrimaryVehicles.isEmpty())
-					associate();
+			if(detached != null){
+				if(!freeMonitors.contains(detached)){
+					freeMonitors.addLast(detached);
+					activeMonitors.put(detached.getId(), detached);
+					if(!waitingCalls.isEmpty() && !freePrimaryVehicles.isEmpty())
+						associate();
+				}
 			}
 		}
 	}
@@ -156,9 +158,9 @@ public enum EmergencyCallWorkflow {
 			agents.add(agent.getId());
 		emergencyCall.addVehicle(vehicle.getId(), agents);
 		emergencyCall.addVehiclePosition(vehicle.getId(), vehicle.getPosition());
+		emergencyCall.setEmergencyCallLifecycle(EmergencyCallLifecycle.WaitingAcknowledgment);
 		vehiclesOnCall.put(vehicle.getId(), emergencyCall);
 		monitorsOnCall.put(monitor.getId(), emergencyCall);
-		emergencyCall.setEmergencyCallLifecycle(EmergencyCallLifecycle.WaitingAcknowledgment);
 	}
 	
 	/*
@@ -232,9 +234,15 @@ public enum EmergencyCallWorkflow {
 		if(emergencyCall != null && emergencyCall.getEmergencyCallLifecycle().equals(EmergencyCallLifecycle.Finished)){
 			vehiclesOnCall.remove(vehicleId);
 			Vehicle vehicle = activeVehicles.get(vehicleId);
+			AcknowledgmentTracker tracker = ackControl.get(emergencyCall.getVictimEmail());
+			tracker.remove(vehicleId);
+			if(tracker.isEmpty())
+				finish(emergencyCall);
 			switch(vehicle.getPriority()){
 			case PRIMARY:
 				freePrimaryVehicles.add(vehicle);
+				if(!waitingCalls.isEmpty() && !freeMonitors.isEmpty())
+					associate();
 				break;
 			case SUPPORT:
 				freeSupportVehicles.put(vehicle.getId(), vehicle);
@@ -242,10 +250,6 @@ public enum EmergencyCallWorkflow {
 			default:
 				break;
 			}
-			AcknowledgmentTracker tracker = ackControl.get(emergencyCall.getVictimEmail());
-			tracker.remove(vehicleId);
-			if(tracker.isEmpty())
-				finish(emergencyCall);
 		}
 	}
 	
@@ -254,12 +258,15 @@ public enum EmergencyCallWorkflow {
 		if(emergencyCall != null && emergencyCall.getEmergencyCallLifecycle().equals(EmergencyCallLifecycle.Finished)){
 			monitorsOnCall.remove(monitorId);
 			Monitor monitor = activeMonitors.get(monitorId);
-			freeMonitors.add(monitor);
 			finish(emergencyCall);
 			AcknowledgmentTracker tracker = ackControl.get(emergencyCall.getVictimEmail());
 			tracker.remove(monitorId);
 			if(tracker.isEmpty())
 				finish(emergencyCall);
+			
+			freeMonitors.add(monitor);
+			if(!waitingCalls.isEmpty() && !freePrimaryVehicles.isEmpty())
+				associate();
 		}
 	}
 	

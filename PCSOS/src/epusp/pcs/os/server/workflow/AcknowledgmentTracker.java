@@ -19,4 +19,9 @@ public class AcknowledgmentTracker {
 	public Boolean isEmpty(){
 		return waitingAcknowledgment.isEmpty();
 	}
+	
+	@Override
+	public String toString() {
+		return waitingAcknowledgment.toString();
+	}
 }
