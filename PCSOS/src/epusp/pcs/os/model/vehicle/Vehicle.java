@@ -92,6 +92,11 @@ public abstract class Vehicle extends SystemObject implements Serializable {
 		return false;
 	}
 	
+	@Override
+	public String toString() {
+		return getId();
+	}
+	
 	public abstract VehicleTypes getType();
 	
 	public abstract int getMaxNumberOfOccupants();

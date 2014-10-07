@@ -447,11 +447,11 @@
           "value" : {
             "$ref" : "_any"
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "attributeName" : {
             "type" : "string"
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
       },
