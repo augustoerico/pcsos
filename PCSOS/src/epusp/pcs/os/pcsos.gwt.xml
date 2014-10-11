@@ -12,9 +12,9 @@
 
 	<source path="login/client" />
 	<source path="login/exceptions" />
+	<source path="login/shared" />
 	<source path="shared" />
 	<source path="model" />
 
 	<entry-point class="epusp.pcs.os.login.client.Panel" />
-	<entry-point class="epusp.pcs.os.login.client.Panel"></entry-point>
 </module>

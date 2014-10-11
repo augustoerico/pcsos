@@ -73,22 +73,6 @@
         "body" : "empty"
       }
     },
-    "agentendpoint.updateAgent" : {
-      "path" : "agent",
-      "httpMethod" : "PUT",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "epusp.pcs.os.server.endpoint.AgentEndpoint.updateAgent",
-      "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "agentendpoint.getAgent" : {
       "path" : "agent/{email}",
       "httpMethod" : "GET",
@@ -105,6 +89,22 @@
           }
         },
         "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "agentendpoint.updateAgent" : {
+      "path" : "agent",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.AgentEndpoint.updateAgent",
+      "request" : {
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -229,6 +229,9 @@
           "isActive" : {
             "type" : "boolean"
           },
+          "preferedLanguage" : {
+            "$ref" : "AvailableLanguages"
+          },
           "drivingLicence" : {
             "$ref" : "DrivingLicence"
           },
@@ -294,14 +297,14 @@
               "type" : "string"
             }
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "valuesAsList" : {
             "type" : "array",
             "items" : {
               "type" : "string"
             }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
       },
@@ -333,14 +336,14 @@
               "type" : "boolean"
             }
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "valuesAsList" : {
             "type" : "array",
             "items" : {
               "type" : "boolean"
             }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
       },
@@ -370,15 +373,15 @@
           "value" : {
             "$ref" : "_any"
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "valuesAsList" : {
             "type" : "array",
             "items" : {
               "type" : "string",
               "format" : "date-time"
             }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
       },
@@ -414,14 +417,14 @@
               "type" : "integer"
             }
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "valuesAsList" : {
             "type" : "array",
             "items" : {
               "type" : "integer"
             }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
       },
@@ -455,17 +458,22 @@
               "format" : "float"
             }
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "valuesAsList" : {
             "type" : "array",
             "items" : {
               "type" : "number",
               "format" : "float"
             }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
+      },
+      "AvailableLanguages" : {
+        "id" : "AvailableLanguages",
+        "type" : "string",
+        "enum" : [ "PORTUGUES", "INGLES" ]
       },
       "DrivingLicence" : {
         "id" : "DrivingLicence",
@@ -547,15 +555,15 @@
       },
       "epusp.pcs.os.server.endpoint.AgentEndpoint.removeAgent" : {
       },
-      "epusp.pcs.os.server.endpoint.AgentEndpoint.updateAgent" : {
-        "request" : {
-          "$ref" : "Agent"
-        },
+      "epusp.pcs.os.server.endpoint.AgentEndpoint.getAgent" : {
         "response" : {
           "$ref" : "Agent"
         }
       },
-      "epusp.pcs.os.server.endpoint.AgentEndpoint.getAgent" : {
+      "epusp.pcs.os.server.endpoint.AgentEndpoint.updateAgent" : {
+        "request" : {
+          "$ref" : "Agent"
+        },
         "response" : {
           "$ref" : "Agent"
         }

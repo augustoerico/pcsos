@@ -8,16 +8,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
-import javax.servlet.ServletException;
 
 import org.json.JSONObject;
 
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-
 import epusp.pcs.os.login.client.rpc.ILoginService;
+import epusp.pcs.os.login.shared.URLConfig;
 import epusp.pcs.os.model.person.user.Admin;
-import epusp.pcs.os.model.person.user.Agent;
+import epusp.pcs.os.model.person.user.Auditor;
+import epusp.pcs.os.model.person.user.Monitor;
+import epusp.pcs.os.model.person.user.SuperUser;
 import epusp.pcs.os.model.person.user.User;
 import epusp.pcs.os.server.Connection;
 import epusp.pcs.os.server.PMF;
@@ -29,7 +28,7 @@ public class LoginConnection extends Connection implements ILoginService{
 	private static Logger log = Logger.getLogger(LoginConnection.class.getCanonicalName());
 
 	@Override
-	public String login(String token){
+	public URLConfig login(String token){
 		if(token != null){
 			String url = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=" + token;
 
@@ -69,40 +68,98 @@ public class LoginConnection extends Connection implements ILoginService{
 
 			try {
 				final JSONObject obj = new JSONObject(r.toString());
-				userEmail = obj.getString("id");
+				userEmail = obj.getString("email");
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
 			}
 
-			PersistenceManager pm = PMF.get().getPersistenceManager();
-			User user = null;
-			try{
-				Key k = KeyFactory.createKey(Agent.class.getSimpleName(), userEmail);
-				user = pm.getObjectById(Admin.class, k);
-			}finally{
-				pm.close();
-			}
+			if(userEmail != null){
+				PersistenceManager pm = PMF.get().getPersistenceManager();
 
-			getThreadLocalRequest().getSession().setAttribute(userInfo, user);
+				pm = PMF.get().getPersistenceManager();
+				User user = null;
+				try{
+					user = pm.getObjectById(Monitor.class, userEmail);
+				}catch(Exception e){
+				}finally{
+					pm.close();
+				}
 
-			switch(user.getType()){
-			case Admin:
-				return "";
-			case Agent:
-				return "";
-			case Auditor:
-				return "";
-			case Monitor:
-				return "";
-			case SuperUser:
-				return "";
-			default:
-				return null;
-			}
+				pm = PMF.get().getPersistenceManager();
+				if(user == null){
+					try{
+						user = pm.getObjectById(Admin.class, userEmail);
+					}catch(Exception e){
+					}finally{
+						pm.close();
+					}
+				}
 
+				pm = PMF.get().getPersistenceManager();
+				if(user == null){
+					try{
+						user = pm.getObjectById(Auditor.class, userEmail);
+					}catch(Exception e){
+					}finally{
+						pm.close();
+					}
+				}
 
+				pm = PMF.get().getPersistenceManager();
+				if(user == null){
+					try{
+						user = pm.getObjectById(SuperUser.class, userEmail);
+					}catch(Exception e){
+					}finally{
+						pm.close();
+					}
+				}
 
+				if(user != null && user.isActive()){
+
+					getThreadLocalRequest().getSession().setAttribute(userInfo, user);
+
+					URLConfig config = new URLConfig();
+
+					switch (user.getPreferedLanguage()) {
+					case INGLES:
+						config.setLocale("en");
+						break;
+					case PORTUGUES:
+						config.setLocale("pt");
+						break;
+					default:
+						config.setLocale("en");
+						break;
+					}
+
+					switch(user.getType()){
+					case Admin:
+						System.out.println("Admin " + user.getEmail() + " has logged in.");
+						config.setUrlPath("todo");
+						return config;
+					case Auditor:
+						System.out.println("Aditor " + user.getEmail() + " has logged in.");
+						config.setUrlPath("todo");
+						return config;
+					case Monitor:
+						System.out.println("Monitor " + user.getEmail() + " has logged in.");
+						config.setUrlPath("MonitorWorkspace.html");
+						return config;
+					case SuperUser:
+						System.out.println("Super user " + user.getEmail() + " has logged in.");
+						config.setUrlPath("todo");
+						return config;
+					default:
+						System.out.println("Denied access to " + user.getEmail());
+						return null;
+					}
+				}else
+					System.out.println("User not found " + userEmail);
+			}else
+				System.out.println("Google feedback doesn't contain user email");
 		}else
-			return null;
+			System.out.println("Missing access token from client");
+		return null;
 	}
 }
