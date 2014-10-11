@@ -27,7 +27,7 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		monitor.setIsActive(true);
 		monitor.setGoogleUserId("115057125698280242918");
 		monitor.setPictureURL("https://lh5.googleusercontent.com/--PBV1HBWVsc/AAAAAAAAAAI/AAAAAAAAAFQ/O57isBLRtRA/photo.jpg");
-		monitor.setPreferedLanguage(AvailableLanguages.PORTUGUES);
+		monitor.setPreferedLanguage(AvailableLanguages.ENGLISH);
 	
 		try{
 			pm.currentTransaction().begin();

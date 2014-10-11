@@ -122,7 +122,7 @@ public class LoginConnection extends Connection implements ILoginService{
 					URLConfig config = new URLConfig();
 
 					switch (user.getPreferedLanguage()) {
-					case INGLES:
+					case ENGLISH:
 						config.setLocale("en");
 						break;
 					case PORTUGUES:

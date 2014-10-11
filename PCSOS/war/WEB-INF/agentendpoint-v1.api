@@ -473,7 +473,7 @@
       "AvailableLanguages" : {
         "id" : "AvailableLanguages",
         "type" : "string",
-        "enum" : [ "PORTUGUES", "INGLES" ]
+        "enum" : [ "PORTUGUES", "ENGLISH" ]
       },
       "DrivingLicence" : {
         "id" : "DrivingLicence",

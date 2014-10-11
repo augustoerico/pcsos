@@ -13,4 +13,6 @@
 	<source path="model" />
 
 	<entry-point class="epusp.pcs.os.monitor.client.Panel"></entry-point>
+
+	<extend-property name="locale" values="pt" />
 </module>
