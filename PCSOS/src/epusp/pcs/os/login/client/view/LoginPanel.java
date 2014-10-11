@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.login.client.LoginResources;
-import epusp.pcs.os.login.client.presenter.LoginController.Display;
+import epusp.pcs.os.login.client.presenter.LoginPresenter.Display;
 
 public class LoginPanel extends Composite implements Display {
 

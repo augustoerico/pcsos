@@ -15,7 +15,7 @@ import epusp.pcs.os.login.client.rpc.ILoginServiceAsync;
 import epusp.pcs.os.login.shared.URLConfig;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 
-public class LoginController implements Presenter{
+public class LoginPresenter implements Presenter{
 	
 	private final static String AUTH_URL = "https://accounts.google.com/o/oauth2/auth";
 	private final static String CLIENT_ID = "1043837675219-q4pthfju82obio990mn3l5adnuajo97b.apps.googleusercontent.com"; // available from the APIs console
@@ -31,7 +31,7 @@ public class LoginController implements Presenter{
 		void hideUnauthorizedAcess();
 	}
 
-	public LoginController(ILoginServiceAsync loginService, Display view){
+	public LoginPresenter(ILoginServiceAsync loginService, Display view){
 		this.loginService = loginService;
 		this.view = view;
 	}
