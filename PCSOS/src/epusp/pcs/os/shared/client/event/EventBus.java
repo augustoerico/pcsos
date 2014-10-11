@@ -1,4 +1,4 @@
-package epusp.pcs.os.login.client.event;
+package epusp.pcs.os.shared.client.event;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.SimpleEventBus;
