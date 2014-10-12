@@ -12,6 +12,16 @@
 	.tmp {
 		color: white;
 	}
+	
+	.controlPanel {
+		text-align: center;
+	}
+	
+	.controlItem {
+		display: inline-block;
+		padding-left: 10px;
+		padding-right: 10px;
+	}
 	</ui:style>
 
 	<g:AbsolutePanel width="100%" height="100%"
@@ -20,7 +30,7 @@
 			<g:south size="90">
 				<g:DeckLayoutPanel ui:field="deckPanel" width="100%"
 					height="100%">
-					<g:Label styleName="{style.tmp}">view goes here</g:Label>
+					<g:Label styleName="{style.tmp}">map view goes here</g:Label>
 					<g:Label styleName="{style.tmp}">info goes here</g:Label>
 					<g:Label styleName="{style.tmp}">backup goes here</g:Label>
 				</g:DeckLayoutPanel>
@@ -47,44 +57,39 @@
 			</g:east>
 
 			<g:center>
-				<g:VerticalPanel width="100%" height="100%"
-					verticalAlignment="middle" horizontalAlignment="center">
-					<g:cell>
-						<g:Image height="30px" width="auto" ui:field="info" />
-					</g:cell>
-					<g:cell>
-						<g:RadioButton name="control" enabled="true"
-							checked="false" />
-					</g:cell>
-				</g:VerticalPanel>
+				<g:FlowPanel width="100%" height="100%" styleName="{style.controlPanel}">
+					<g:VerticalPanel styleName="{style.controlItem}"
+						verticalAlignment="middle" horizontalAlignment="right">
+						<g:cell>
+							<g:Image height="30px" width="auto" ui:field="map" />
+						</g:cell>
+						<g:cell>
+							<g:RadioButton ui:field="mapRadio" name="control" enabled="true"
+								checked="true" />
+						</g:cell>
+					</g:VerticalPanel>
+					<g:VerticalPanel styleName="{style.controlItem}"
+						verticalAlignment="middle" horizontalAlignment="center">
+						<g:cell>
+							<g:Image height="30px" width="auto" ui:field="info" />
+						</g:cell>
+						<g:cell>
+							<g:RadioButton ui:field="infoRadio" name="control" enabled="true"
+								checked="false" />
+						</g:cell>
+					</g:VerticalPanel>
+					<g:VerticalPanel styleName="{style.controlItem}"
+						verticalAlignment="middle" horizontalAlignment="left">
+						<g:cell>
+							<g:Image height="30px" width="auto" ui:field="reinforcements" />
+						</g:cell>
+						<g:cell>
+							<g:RadioButton ui:field="reinforcementsRadio" name="control" enabled="true"
+								checked="false" />
+						</g:cell>
+					</g:VerticalPanel>
+				</g:FlowPanel>
 			</g:center>
-
-			<g:west size="25">
-				<g:VerticalPanel width="100%" height="100%"
-					verticalAlignment="middle" horizontalAlignment="center">
-					<g:cell>
-						<g:Image height="30px" width="auto" ui:field="map" />
-					</g:cell>
-					<g:cell>
-						<g:RadioButton name="control" enabled="true"
-							checked="true" />
-					</g:cell>
-				</g:VerticalPanel>
-			</g:west>
-
-			<g:east size="25">
-				<g:VerticalPanel width="100%" height="100%"
-					verticalAlignment="middle" horizontalAlignment="center">
-					<g:cell>
-						<g:Image height="30px" width="auto" ui:field="reinforcements" />
-					</g:cell>
-					<g:cell>
-						<g:RadioButton name="control" enabled="true"
-							checked="false" />
-					</g:cell>
-				</g:VerticalPanel>
-			</g:east>
-
 		</g:DockLayoutPanel>
 	</g:AbsolutePanel>
 </ui:UiBinder> 

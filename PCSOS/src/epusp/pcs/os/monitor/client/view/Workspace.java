@@ -6,6 +6,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.monitor.client.MonitorResources;
@@ -22,6 +23,9 @@ public class Workspace extends Composite implements Display{
 	@UiField
 	Image logo, info, map, reinforcements;
 	
+	@UiField
+	RadioButton mapRadio, infoRadio, reinforcementsRadio;
+	
 	private MonitorResources resources = MonitorResources.INSTANCE;
 
 	interface WorkspaceUiBinder extends UiBinder<Widget, Workspace> {
@@ -33,6 +37,37 @@ public class Workspace extends Composite implements Display{
 		info.setResource(resources.info());
 		map.setResource(resources.map());
 		reinforcements.setResource(resources.reinforcements());
+		deckPanel.showWidget(0);
+	}
+	
+	@Override
+	public void showMap(){
+		deckPanel.showWidget(0);
+	}
+	
+	@Override
+	public void showCallInfo(){
+		deckPanel.showWidget(1);
+	}
+	
+	@Override
+	public void showAvailableReinforcements(){
+		deckPanel.showWidget(2);
+	}
+	
+	@Override
+	public RadioButton getMapButton() {
+		return mapRadio;
+	}
+
+	@Override
+	public RadioButton getInfoButton() {
+		return infoRadio;
+	}
+
+	@Override
+	public RadioButton getReinforcementsButton() {
+		return reinforcementsRadio;
 	}
 
 	@Override
