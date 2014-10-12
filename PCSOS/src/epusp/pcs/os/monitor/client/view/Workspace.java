@@ -1,6 +1,7 @@
 package epusp.pcs.os.monitor.client.view;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -78,5 +79,10 @@ public class Workspace extends Composite implements Display{
 	@Override
 	public void setUserImage(String url) {
 		picture.setUrl(url);
+	}
+
+	@Override
+	public void setUserImage(ImageResource resource) {
+		picture.setResource(resource);
 	}
 }

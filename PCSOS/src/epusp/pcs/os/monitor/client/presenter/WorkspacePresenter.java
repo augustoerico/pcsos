@@ -3,12 +3,14 @@ package epusp.pcs.os.monitor.client.presenter;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 
+import epusp.pcs.os.monitor.client.MonitorResources;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 
@@ -19,6 +21,7 @@ public class WorkspacePresenter implements Presenter{
 		void showCallInfo();
 		void showAvailableReinforcements();
 		void setUserImage(String url);
+		void setUserImage(ImageResource resource);
 		RadioButton getMapButton();
 		RadioButton getInfoButton();
 		RadioButton getReinforcementsButton();
@@ -28,6 +31,7 @@ public class WorkspacePresenter implements Presenter{
 	private final IMonitorWorkspaceServiceAsync rpcService;
 	private final HandlerManager eventBus;
 	private final Display display;
+	private final MonitorResources resources = MonitorResources.INSTANCE;
 
 	public WorkspacePresenter(IMonitorWorkspaceServiceAsync rpcService, HandlerManager eventBus, Display view) {
 		this.rpcService = rpcService;
@@ -45,10 +49,10 @@ public class WorkspacePresenter implements Presenter{
 			@Override
 			public void onSuccess(String result) {
 				if(result != null){
-					System.out.println(result);
 					display.setUserImage(result);
-				}else
-					System.out.println("null");
+				}else{
+					display.setUserImage(resources.user());
+				}
 			}
 			
 			@Override
