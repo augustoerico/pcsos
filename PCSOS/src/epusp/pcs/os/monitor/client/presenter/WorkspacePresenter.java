@@ -3,6 +3,7 @@ package epusp.pcs.os.monitor.client.presenter;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RadioButton;
@@ -39,13 +40,12 @@ public class WorkspacePresenter implements Presenter{
 	    bind();
 	    container.clear();
 	    container.add(display.asWidget());
-	    
-	    rpcService.getUserPictureUrl(new AsyncCallback<String>() {
+	    rpcService.getUserPictureUrl(Cookies.getCookie("pcs.os-login"), new AsyncCallback<String>() {
 			
 			@Override
 			public void onSuccess(String result) {
-				System.out.println(result);
 				if(result != null){
+					System.out.println(result);
 					display.setUserImage(result);
 				}else
 					System.out.println("null");

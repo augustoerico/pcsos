@@ -6,6 +6,6 @@ import epusp.pcs.os.shared.client.rpc.IConnectionServiceAsync;
 
 public interface IMonitorWorkspaceServiceAsync extends IConnectionServiceAsync {
 
-	void getUserPictureUrl(AsyncCallback<String> callback);
+	void getUserPictureUrl(String key, AsyncCallback<String> callback);
 
 }

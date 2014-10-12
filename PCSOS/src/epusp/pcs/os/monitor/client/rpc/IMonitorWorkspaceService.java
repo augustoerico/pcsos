@@ -7,6 +7,6 @@ import epusp.pcs.os.shared.client.rpc.IConnectionService;
 @RemoteServiceRelativePath("monitorWorkspaceService")
 public interface IMonitorWorkspaceService extends IConnectionService {
 
-	String getUserPictureUrl();
+	String getUserPictureUrl(String key);
 	
 }

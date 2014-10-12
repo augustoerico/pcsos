@@ -7,6 +7,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import epusp.pcs.os.model.person.user.AvailableLanguages;
 import epusp.pcs.os.model.person.user.Monitor;
+import epusp.pcs.os.server.login.AuthenticationManager;
 import epusp.pcs.os.server.workflow.EmergencyCallWorkflow;
 import epusp.pcs.os.shared.client.rpc.IConnectionService;
 
@@ -14,9 +15,9 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 
 	private static final long serialVersionUID = 1L;
 	
-	EmergencyCallWorkflow workflow = EmergencyCallWorkflow.getInstance();
+	protected EmergencyCallWorkflow workflow = EmergencyCallWorkflow.getInstance();
 	
-	protected static final String userInfo = "userInfo";
+	protected AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
 	
 	public void init() throws ServletException
 	{
@@ -324,8 +325,8 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 	
 	
 	
-	protected Boolean isLoggedIn(){
-		return getThreadLocalRequest().getSession().getAttribute(userInfo) != null; 
+	protected Boolean isLoggedIn(String key){
+		return authenticationManager.isLoggedIn(key);
 	}
 
 }
