@@ -21,7 +21,7 @@ public class Workspace extends Composite implements Display{
 	DeckLayoutPanel deckPanel;
 	
 	@UiField
-	Image logo, info, map, reinforcements;
+	Image logo, info, map, reinforcements, picture;
 	
 	@UiField
 	RadioButton mapRadio, infoRadio, reinforcementsRadio;
@@ -73,5 +73,10 @@ public class Workspace extends Composite implements Display{
 	@Override
 	public Widget asWidget(){
 		return this;
+	}
+
+	@Override
+	public void setUserImage(String url) {
+		picture.setUrl(url);
 	}
 }

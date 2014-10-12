@@ -53,7 +53,7 @@
 			</g:west>
 
 			<g:east size="12.5">
-				<g:Label styleName="{style.tmp}">user</g:Label>
+				<g:Image height="30px" width="auto" ui:field="picture"/>
 			</g:east>
 
 			<g:center>

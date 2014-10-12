@@ -26,11 +26,11 @@
 	
 	<servlet>
 		<servlet-name>monitorWorkspaceService</servlet-name>
-		<servlet-class>epusp.pcs.os.server.monitor.MonitorWorkspaceService</servlet-class>
+		<servlet-class>epusp.pcs.os.server.monitor.MonitorWorkspaceConnection</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>monitorWorkspaceService</servlet-name>
-		<url-pattern>/pcsos/monitorWorkspaceService</url-pattern>
+		<url-pattern>/monitor/monitorWorkspaceService</url-pattern>
 	</servlet-mapping>
 
   <servlet>
