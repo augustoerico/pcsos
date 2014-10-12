@@ -117,6 +117,53 @@ public class LoginConnection extends Connection implements ILoginService{
 				}
 
 				if(user != null && user.isActive()){
+					
+					if(!userPicture.equals(user.getPictureURL())){
+						user.setPictureURL(userPicture);
+						
+						Admin admin = null;
+						Monitor monitor = null;
+						Auditor auditor = null;
+						SuperUser superUser = null;
+						switch (user.getType()) {
+						case Admin:
+							admin = (Admin) user;
+							break;
+						case Auditor:
+							auditor = (Auditor) user;
+							break;
+						case Monitor:
+							monitor = (Monitor) user;
+							break;
+						case SuperUser:
+							superUser = (SuperUser) user;
+							break;
+						default:
+							System.out.println("Denied access to " + user.getEmail());
+							return null;
+						}
+						
+						pm = PMF.get().getPersistenceManager();
+						try{
+							pm.currentTransaction().begin();
+							if(admin != null)
+								pm.makePersistent(admin);
+							else if(monitor != null)
+								pm.makePersistent(monitor);
+							else if(auditor != null)
+								pm.makePersistent(auditor);
+							else if(superUser != null)
+								pm.makePersistent(superUser);
+							pm.currentTransaction().commit();
+						}catch (Exception e){
+							e.printStackTrace();
+							if(pm.currentTransaction().isActive())
+								pm.currentTransaction().rollback();
+						}finally{
+							pm.close();
+						}
+						
+					}
 
 					LoginConfig config = new LoginConfig();
 
