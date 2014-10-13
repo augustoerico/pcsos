@@ -10,18 +10,9 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public String getUserPictureUrl(String key) {
-		if(isLoggedIn(key)){
-			User user = super.authenticationManager.getUser(key);
-			return user.getPictureURL();
-		}
-		return null;
-	}
-
-	@Override
-	protected Boolean isLoggedIn(String key) {
-		if(super.isLoggedIn(key)){
-			User user = super.authenticationManager.getUser(key);
+	protected Boolean isLoggedIn() {
+		if(super.isLoggedIn()){
+			User user = (User) getSessionAttibute(userSessionAttribute);
 			if(user.getType().equals(AccountTypes.Monitor)){
 				return true;
 			}

@@ -10,8 +10,10 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 
+import epusp.pcs.os.model.person.user.User;
 import epusp.pcs.os.monitor.client.MonitorResources;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
+import epusp.pcs.os.server.login.UserLogin;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 
 public class WorkspacePresenter implements Presenter{
@@ -31,6 +33,7 @@ public class WorkspacePresenter implements Presenter{
 	private final IMonitorWorkspaceServiceAsync rpcService;
 	private final HandlerManager eventBus;
 	private final Display display;
+	
 	private final MonitorResources resources = MonitorResources.INSTANCE;
 
 	public WorkspacePresenter(IMonitorWorkspaceServiceAsync rpcService, HandlerManager eventBus, Display view) {
@@ -44,12 +47,12 @@ public class WorkspacePresenter implements Presenter{
 	    bind();
 	    container.clear();
 	    container.add(display.asWidget());
-	    rpcService.getUserPictureUrl(Cookies.getCookie("pcs.os-login"), new AsyncCallback<String>() {
+	    rpcService.getUserInfo(new AsyncCallback<User>() {
 			
 			@Override
-			public void onSuccess(String result) {
+			public void onSuccess(User result) {
 				if(result != null){
-					display.setUserImage(result);
+					display.setUserImage(result.getPictureURL());
 				}else{
 					display.setUserImage(resources.user());
 				}
@@ -60,7 +63,6 @@ public class WorkspacePresenter implements Presenter{
 				System.out.println(caught.getMessage());
 			}
 		});
-	    
 	}
 
 	public void bind() {

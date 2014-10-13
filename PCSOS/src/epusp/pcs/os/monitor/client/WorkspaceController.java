@@ -28,8 +28,8 @@ public class WorkspaceController implements Presenter {
 	}
 
 	@Override
-	public void go(final HasWidgets container) {
-		this.container = container;
+	public void go(final HasWidgets container) {		
+		this.container = container;		
 		Presenter workspacePresenter = new WorkspacePresenter(monitorService, eventBus, new Workspace());
 		workspacePresenter.go(container);
 	}

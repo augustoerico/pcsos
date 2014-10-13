@@ -27,7 +27,7 @@ public enum AuthenticationManager {
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
-		calendar.add(Calendar.HOUR_OF_DAY, +8);
+		calendar.add(Calendar.SECOND, 10);
 		Date expireDate = calendar.getTime();
 
 		userLogin = new UserLogin(user, loginDate, expireDate);
@@ -64,16 +64,9 @@ public enum AuthenticationManager {
 	}
 
 	public User getUser(String key){
-		return authenticatedUsers.get(key).getUser();
-	}
-
-	public UserLogin getUserLogin(String key){
-		return authenticatedUsers.get(key);
-	}
-
-	public void logout(String key){
-		if(authenticatedUsers.containsKey(key))
-			authenticatedUsers.remove(key);
+		User user = authenticatedUsers.get(key).getUser();
+		authenticatedUsers.remove(key);
+		return user;
 	}
 
 	public static AuthenticationManager getInstance(){
@@ -85,13 +78,15 @@ public enum AuthenticationManager {
 
 			@Override
 			public void run() {
-				Date currentDate = new Date();
-				for(Entry<String, UserLogin> entry : authenticatedUsers.entrySet()){
-					if(currentDate.after(entry.getValue().getExpireDate())){
-						authenticatedUsers.remove(entry.getKey());
+				if(!authenticatedUsers.isEmpty()){
+					Date currentDate = new Date();
+					for(Entry<String, UserLogin> entry : authenticatedUsers.entrySet()){
+						if(currentDate.after(entry.getValue().getExpireDate())){
+							authenticatedUsers.remove(entry.getKey());
+						}
 					}
 				}
 			}
-		}, 60*1000, 60*1000);
+		}, 30*1000, 30*1000);
 	}
 }
