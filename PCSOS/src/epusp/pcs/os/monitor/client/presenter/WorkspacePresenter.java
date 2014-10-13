@@ -4,7 +4,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RadioButton;
@@ -12,11 +11,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.model.person.user.User;
 import epusp.pcs.os.monitor.client.MonitorResources;
+import epusp.pcs.os.monitor.client.WorkspaceController.WorkspaceLayoutPanel;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
-import epusp.pcs.os.server.login.UserLogin;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 
-public class WorkspacePresenter implements Presenter{
+public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 
 	public interface Display {
 		void showMap();
@@ -28,6 +27,7 @@ public class WorkspacePresenter implements Presenter{
 		RadioButton getInfoButton();
 		RadioButton getReinforcementsButton();
 		Widget asWidget();
+		HasWidgets getMapsArea();
 	}
 
 	private final IMonitorWorkspaceServiceAsync rpcService;
@@ -86,6 +86,11 @@ public class WorkspacePresenter implements Presenter{
 				display.showAvailableReinforcements();
 			}
 		});
+	}
+
+	@Override
+	public HasWidgets getMapsArea() {
+		return display.getMapsArea();
 	}
 
 }

@@ -4,8 +4,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
@@ -26,6 +28,9 @@ public class Workspace extends Composite implements Display{
 	
 	@UiField
 	RadioButton mapRadio, infoRadio, reinforcementsRadio;
+	
+	@UiField
+	AbsolutePanel mapsArea;
 	
 	private MonitorResources resources = MonitorResources.INSTANCE;
 
@@ -84,5 +89,10 @@ public class Workspace extends Composite implements Display{
 	@Override
 	public void setUserImage(ImageResource resource) {
 		picture.setResource(resource);
+	}
+
+	@Override
+	public HasWidgets getMapsArea() {
+		return mapsArea;
 	}
 }
