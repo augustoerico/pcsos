@@ -1,12 +1,10 @@
 package epusp.pcs.os.monitor.client.presenter;
 
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.Maps;
-import com.google.gwt.maps.client.control.LargeMapControl;
+import com.google.gwt.maps.client.control.LargeMapControl3D;
 import com.google.gwt.maps.client.geom.LatLng;
-import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.ui.HasWidgets;
 
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
@@ -30,19 +28,20 @@ public class GoogleMapsPresenter implements Presenter {
 		this.monitorService = monitorService;
 		this.eventBus = eventBus;
 		this.constants = constants;
-		Maps.loadMapsApi(mapsAPIKey, mapsVersion, false, new Runnable() {
-			@Override
-			public void run() {
-				buildUi();
-			}
-		});
 	}
 	
 	@Override
 	public void go(final HasWidgets container) {
 		this.container = container;
 		container.clear();
-		bind();
+		Maps.loadMapsApi(mapsAPIKey, mapsVersion, false, new Runnable() {
+			@Override
+			public void run() {
+				buildUi();
+				container.add(view);
+				bind();
+			}
+		});
 	}
 	
 	private void bind(){
@@ -50,21 +49,10 @@ public class GoogleMapsPresenter implements Presenter {
 	}
 	
 	private void buildUi(){
-		 // Open a map centered on Cawker City, KS USA
-	    LatLng cawkerCity = LatLng.newInstance(39.509, -98.434);
-
-	    view = new MapWidget(cawkerCity, 2);
-	    container.add(view);
+	    LatLng brazil = LatLng.newInstance(-14.2400732, -53.1805017);
+	    view = new MapWidget(brazil, 4);
 	    view.setSize("100%", "100%");
-	    // Add some controls for the zoom level
-	    view.addControl(new LargeMapControl());
-
-	    // Add a marker
-	    view.addOverlay(new Marker(cawkerCity));
-
-	    // Add an info window to highlight a point of interest
-	    view.getInfoWindow().open(view.getCenter(),
-	        new InfoWindowContent("World's Largest Ball of Sisal Twine"));
+	    view.addControl(new LargeMapControl3D());
 	}
 
 }

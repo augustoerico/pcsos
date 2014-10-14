@@ -220,16 +220,16 @@
           "pictureURL" : {
             "type" : "string"
           },
-          "allAttributes" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "IAttribute"
-            }
-          },
           "allAttributeKeys" : {
             "type" : "array",
             "items" : {
               "type" : "string"
+            }
+          },
+          "allAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "IAttribute"
             }
           }
         }
@@ -267,14 +267,14 @@
               "type" : "string"
             }
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "valuesAsList" : {
             "type" : "array",
             "items" : {
               "type" : "string"
             }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
       },
@@ -306,14 +306,14 @@
               "type" : "boolean"
             }
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "valuesAsList" : {
             "type" : "array",
             "items" : {
               "type" : "boolean"
             }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
       },
@@ -343,15 +343,15 @@
           "value" : {
             "$ref" : "_any"
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "valuesAsList" : {
             "type" : "array",
             "items" : {
               "type" : "string",
               "format" : "date-time"
             }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
       },
@@ -387,14 +387,14 @@
               "type" : "integer"
             }
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "valuesAsList" : {
             "type" : "array",
             "items" : {
               "type" : "integer"
             }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
       },
@@ -428,15 +428,15 @@
               "format" : "float"
             }
           },
-          "dataType" : {
-            "$ref" : "DataType"
-          },
           "valuesAsList" : {
             "type" : "array",
             "items" : {
               "type" : "number",
               "format" : "float"
             }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
           }
         }
       },
