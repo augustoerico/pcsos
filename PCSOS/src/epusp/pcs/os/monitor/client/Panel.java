@@ -7,7 +7,7 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
-import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceContants;
+import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceService;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
 
@@ -15,7 +15,7 @@ public class Panel implements EntryPoint {
 
 	@Override
 	public void onModuleLoad() {
-		MonitorWorkspaceContants constants = GWT.create(MonitorWorkspaceContants.class);
+		MonitorWorkspaceConstants constants = GWT.create(MonitorWorkspaceConstants.class);
 		IMonitorWorkspaceServiceAsync monitorService = GWT.create(IMonitorWorkspaceService.class);
 		HandlerManager eventBus = new HandlerManager(null);
 		final WorkspaceController workspaceController = new WorkspaceController(monitorService, eventBus, constants);

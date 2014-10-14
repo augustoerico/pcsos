@@ -9,6 +9,7 @@ import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.ui.HasWidgets;
 
+import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 
@@ -23,9 +24,12 @@ public class GoogleMapsPresenter implements Presenter {
 	
 	private HasWidgets container;
 	
-	public GoogleMapsPresenter(IMonitorWorkspaceServiceAsync monitorService, HandlerManager eventBus){
+	private MonitorWorkspaceConstants constants;
+	
+	public GoogleMapsPresenter(IMonitorWorkspaceServiceAsync monitorService, HandlerManager eventBus, MonitorWorkspaceConstants constants){
 		this.monitorService = monitorService;
 		this.eventBus = eventBus;
+		this.constants = constants;
 		Maps.loadMapsApi(mapsAPIKey, mapsVersion, false, new Runnable() {
 			@Override
 			public void run() {
