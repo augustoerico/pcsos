@@ -1,9 +1,12 @@
 package epusp.pcs.os.monitor.client.view;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
@@ -44,6 +47,23 @@ public class Workspace extends Composite implements Display{
 		map.setResource(resources.map());
 		reinforcements.setResource(resources.reinforcements());
 		deckPanel.showWidget(0);
+		
+		int height = Window.getClientHeight();
+		int width = Window.getClientWidth();
+		
+		mapsArea.setWidth(width-40 + "px");
+		mapsArea.setHeight(0.9*height-20 + "px");
+		
+		Window.addResizeHandler(new ResizeHandler() {
+			@Override
+			public void onResize(ResizeEvent event) {
+				int height = Window.getClientHeight();
+				int width = Window.getClientWidth();
+				
+				mapsArea.setWidth(width-40 + "px");
+				mapsArea.setHeight(0.9*height-20 + "px");
+			}
+		});
 	}
 	
 	@Override

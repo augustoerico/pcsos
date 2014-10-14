@@ -23,6 +23,11 @@
 		padding-right: 10px;
 	}
 	
+	.maps{
+		padding-top: 10px;
+		padding-left: 20px;
+	}
+	
 	.picture{
 		border-radius: 50%
 	}
@@ -34,7 +39,7 @@
 			<g:south size="90">
 				<g:DeckLayoutPanel ui:field="deckPanel" width="100%"
 					height="100%">
-					<g:AbsolutePanel width="100%" height="100%" title="Google Maps View" ui:field="mapsArea" />
+					<g:AbsolutePanel title="Google Maps View" ui:field="mapsArea" styleName="{style.maps}" />
 					<g:Label styleName="{style.tmp}">info goes here</g:Label>
 					<g:Label styleName="{style.tmp}">backup goes here</g:Label>
 				</g:DeckLayoutPanel>
