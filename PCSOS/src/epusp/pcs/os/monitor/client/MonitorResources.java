@@ -18,4 +18,7 @@ public interface MonitorResources extends SharedResources {
 	@Source("images/reinforcements-ico.png")
 	ImageResource reinforcements();
 	
+	@Source("images/victim-marker.png")
+	ImageResource victimMarker();
+	
 }

@@ -1,31 +1,35 @@
 package epusp.pcs.os.monitor.client.presenter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.Maps;
 import com.google.gwt.maps.client.control.LargeMapControl3D;
+import com.google.gwt.maps.client.event.PolylineMouseOutHandler;
+import com.google.gwt.maps.client.event.PolylineMouseOverHandler;
+import com.google.gwt.maps.client.event.PolylineMouseOutHandler.PolylineMouseOutEvent;
 import com.google.gwt.maps.client.geocode.DirectionQueryOptions;
 import com.google.gwt.maps.client.geocode.DirectionQueryOptions.TravelMode;
 import com.google.gwt.maps.client.geocode.DirectionResults;
 import com.google.gwt.maps.client.geocode.Directions;
 import com.google.gwt.maps.client.geocode.DirectionsCallback;
-import com.google.gwt.maps.client.geocode.Placemark;
-import com.google.gwt.maps.client.geocode.Route;
 import com.google.gwt.maps.client.geocode.StatusCodes;
 import com.google.gwt.maps.client.geocode.Waypoint;
 import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.geom.Size;
+import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.Marker;
+import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.maps.client.overlay.PolyStyleOptions;
-import com.google.gwt.maps.client.overlay.Polygon;
 import com.google.gwt.maps.client.overlay.Polyline;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 
 import epusp.pcs.os.model.oncall.Position;
+import epusp.pcs.os.model.vehicle.Vehicle;
+import epusp.pcs.os.monitor.client.MonitorResources;
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
@@ -36,24 +40,23 @@ public class GoogleMapsPresenter implements Presenter {
 	private static final String mapsVersion = "2";
 	private MapWidget view;
 
-	private String color = "#FF0000";
-	private double opacity = 1.0;
-	private int weight = 1;
-	private boolean fillFlag = false;
-	private Polygon poly;
-	
 	private DirectionQueryOptions options;
-	
+
 	private IMonitorWorkspaceServiceAsync monitorService; 
 	private HandlerManager eventBus;
-
-	private HasWidgets container;
 
 	private MonitorWorkspaceConstants constants;
 
 	private List<Position> victimPositions = new ArrayList<Position>();
 	private Marker victim;
-
+	private List<Polyline> victimRoute = new ArrayList<Polyline>();
+	
+	private HashMap<String, List<Position>> vehiclesPosition = new HashMap<String, List<Position>>();
+	private HashMap<String, Marker> vehiclesMarker =  new HashMap<String, Marker>(); 
+	private HashMap<String, Vehicle> vehicles = new HashMap<String, Vehicle>();
+	
+	private MonitorResources resources = MonitorResources.INSTANCE;
+	
 	public GoogleMapsPresenter(IMonitorWorkspaceServiceAsync monitorService, HandlerManager eventBus, MonitorWorkspaceConstants constants){
 		this.monitorService = monitorService;
 		this.eventBus = eventBus;
@@ -62,7 +65,6 @@ public class GoogleMapsPresenter implements Presenter {
 
 	@Override
 	public void go(final HasWidgets container) {
-		this.container = container;
 		container.clear();
 		Maps.loadMapsApi(mapsAPIKey, mapsVersion, false, new Runnable() {
 			@Override
@@ -76,8 +78,36 @@ public class GoogleMapsPresenter implements Presenter {
 
 	private void bind(){
 		LatLng ATLANTA = LatLng.newInstance(33.7814790,
-			      -84.3880580);
+				-84.3880580);
+
+		// Points of interest along the map.
+		LatLng STONE_MOUNTAIN_PARK = LatLng.newInstance(
+				33.80653802509606, -84.15252685546875);
+		// Cyclorama
+		LatLng CYCLORAMA = LatLng.newInstance(
+				33.741185330333956, -84.35834884643555);
+		// Georgia Aquarium
+		LatLng GEORGIA_AQUARIUM = LatLng.newInstance(
+				33.761443931868925, -84.39432263374329);
+		// Underground Atlanta
+		LatLng UNDERGROUND_ATLANTA = LatLng.newInstance(
+				33.75134645137294, -84.39026713371277);
+
+
+		List<Position> p = new ArrayList<Position>();
+		p.add(new Position(ATLANTA.getLatitude(), ATLANTA.getLongitude()));
 		addVictimCall(new Position(ATLANTA.getLatitude(), ATLANTA.getLongitude()));
+
+		p.add(new Position(STONE_MOUNTAIN_PARK.getLatitude(), STONE_MOUNTAIN_PARK.getLongitude()));
+		updateVictimPosition(p);
+
+
+		p.add(new Position(CYCLORAMA.getLatitude(), CYCLORAMA.getLongitude()));
+		p.add(new Position(GEORGIA_AQUARIUM.getLatitude(), GEORGIA_AQUARIUM.getLongitude()));
+		updateVictimPosition(p);
+
+		p.add(new Position(UNDERGROUND_ATLANTA.getLatitude(), UNDERGROUND_ATLANTA.getLongitude()));
+		updateVictimPosition(p);
 	}
 
 	private void buildUi(){
@@ -95,95 +125,96 @@ public class GoogleMapsPresenter implements Presenter {
 
 	public void addVictimCall(Position begin){
 		victimPositions.add(begin);
+		Icon icon = Icon.newInstance(resources.victimMarker().getSafeUri().asString());
+		icon.setIconSize(Size.newInstance(45, 45));
+		MarkerOptions options = MarkerOptions.newInstance();
+		options.setIcon(icon);
+		
 		LatLng latLng = LatLng.newInstance(begin.getLatitude(), begin.getLongitude());
-		victim = new Marker(latLng);
+		victim = new Marker(latLng, options);
 		victim.setDraggingEnabled(false);
+		
 		view.addOverlay(victim);
 		view.setCenter(latLng, 15);
-		
-		
-			  // Points of interest along the map.
-		LatLng STONE_MOUNTAIN_PARK = LatLng.newInstance(
-			      33.80653802509606, -84.15252685546875);
-			  // Cyclorama
-		LatLng CYCLORAMA = LatLng.newInstance(
-			      33.741185330333956, -84.35834884643555);
-			  // Georgia Aquarium
-	     LatLng GEORGIA_AQUARIUM = LatLng.newInstance(
-			      33.761443931868925, -84.39432263374329);
-			  // Underground Atlanta
-	     LatLng UNDERGROUND_ATLANTA = LatLng.newInstance(
-			      33.75134645137294, -84.39026713371277);
-			  
-	     String DWARF_HOUSE = "461 N Central Ave Hapeville, GA";
-		
-		Waypoint waypoints[] = {
-			      new Waypoint("10 10th St NE, Atlanta, GA 30309"), // Midtown Atlanta
-			      new Waypoint(GEORGIA_AQUARIUM), //
-			      new Waypoint(UNDERGROUND_ATLANTA)
-			  };
-		
-		Directions.loadFromWaypoints(waypoints, options, new DirectionsCallback() {
-
-			public void onFailure(int statusCode) {
-				Window.alert("Failed to load directions: Status "
-						+ StatusCodes.getName(statusCode) + " " + statusCode);
-			}
-
-			public void onSuccess(DirectionResults result) {
-				GWT.log("Successfully loaded directions.", null);
-
-				// A little exercise of the route API
-				Polyline polyline = result.getPolyline();
-				view.addOverlay(polyline);
-			}
-		});
-		
-		Waypoint waypoints2[] = {
-		 new Waypoint(CYCLORAMA), //
-	      new Waypoint(STONE_MOUNTAIN_PARK), //
-	      new Waypoint(DWARF_HOUSE), //
-	      new Waypoint("N Terminal Pkwy, Atlanta, GA 30320") // The Airport
-		  };
-		
-		Directions.loadFromWaypoints(waypoints2, options, new DirectionsCallback() {
-
-			public void onFailure(int statusCode) {
-				Window.alert("Failed to load directions: Status "
-						+ StatusCodes.getName(statusCode) + " " + statusCode);
-			}
-
-			public void onSuccess(DirectionResults result) {
-				GWT.log("Successfully loaded directions.", null);
-
-				// A little exercise of the route API
-				Polyline polyline = result.getPolyline();
-				view.addOverlay(polyline);
-			}
-		});
-		
-		
-//		PolyStyleOptions style = PolyStyleOptions.newInstance(color, weight, opacity);
-//		
-//		LatLng[] latLngV = new LatLng[] {LatLng.newInstance(begin.getLatitude(), begin.getLongitude()), LatLng.newInstance(-23.5683157, -46.7093514)};
-//		
-//		poly = new Polygon(latLngV, color, weight, opacity, color, fillFlag ? .7 : 0.0);
-//		view.addOverlay(poly);
-//		poly.insertVertex(0, latLng);
+		victimPositions.add(begin);
 	}
 
-	public void updateVictimPosition(List<Position> p){
-		if(victimPositions.size() < p.size()){
-			int j = victimPositions.size()-1;
-			for(int i = victimPositions.size()-1; i < p.size(); i++){
-				victimPositions.add(p.get(i));
+	public void updateVictimPosition(List<Position> positions){
+		if(victimPositions.size() < positions.size()){
+			Waypoint waypoints[] = new Waypoint[positions.size()-victimPositions.size()+1];
+			waypoints[0] = new Waypoint(LatLng.newInstance(victimPositions.get(victimPositions.size()-1).getLatitude(), 
+					victimPositions.get(victimPositions.size()-1).getLongitude()));
+			int j = 1;
+			for(int i = victimPositions.size(); i < positions.size(); i++){
+				victimPositions.add(positions.get(i));
+				waypoints[j++] = new Waypoint(LatLng.newInstance(positions.get(i).getLatitude(), positions.get(i).getLongitude()));
 			}
 
-			for(; j < p.size(); j++){
-				Position position = p.get(j);
-				poly.insertVertex(j, LatLng.newInstance(position.getLatitude(), position.getLongitude()));
-			}
+			victim.setLatLng(LatLng.newInstance(positions.get(positions.size()-1).getLatitude(), positions.get(positions.size()-1).getLongitude()));
+			
+			Directions.loadFromWaypoints(waypoints, options, new DirectionsCallback() {
 
+				public void onFailure(int statusCode) {
+					System.out.println("Failed to load directions: Status "
+							+ StatusCodes.getName(statusCode) + " " + statusCode);
+				}
+
+				public void onSuccess(DirectionResults result) {
+					final Polyline polyline = result.getPolyline();
+					PolyStyleOptions style = PolyStyleOptions.newInstance("#FF0000", 3, 0.5);
+					polyline.setStrokeStyle(style);
+					polyline.addPolylineMouseOverHandler(new PolylineMouseOverHandler() {
+						@Override
+						public void onMouseOver(PolylineMouseOverEvent event) {
+							PolyStyleOptions style = PolyStyleOptions.newInstance("#FF0000", 5, 0.9);
+							for(Polyline polyline : victimRoute){
+								polyline.setStrokeStyle(style);
+							}
+						}
+					});
+					polyline.addPolylineMouseOutHandler(new PolylineMouseOutHandler() {
+						
+						@Override
+						public void onMouseOut(PolylineMouseOutEvent event) {
+							PolyStyleOptions style = PolyStyleOptions.newInstance("#FF0000", 3, 0.5);
+							for(Polyline polyline : victimRoute){
+								polyline.setStrokeStyle(style);
+							}
+						}
+					});
+					victimRoute.add(polyline);
+					view.addOverlay(polyline);
+				}
+			});
+		}
+	}
+	
+	public void addVehicle(Vehicle vehicle, Position begin){
+		if(!vehicles.containsKey(vehicle.getId())){
+			ArrayList<Position> positions = new ArrayList<Position>();
+			positions.add(begin);
+			vehiclesPosition.put(vehicle.getId(), positions);
+			vehicles.put(vehicle.getId(), vehicle);
+			
+			Icon icon = Icon.newInstance(resources.victimMarker().getSafeUri().asString());
+			icon.setIconSize(Size.newInstance(45, 45));
+			MarkerOptions options = MarkerOptions.newInstance();
+			options.setIcon(icon);
+			
+			LatLng latLng = LatLng.newInstance(begin.getLatitude(), begin.getLongitude());
+			
+			Marker vehicleMarker = new Marker(latLng, options);
+			vehicleMarker.setDraggingEnabled(false);
+			vehiclesMarker.put(vehicle.getId(), vehicleMarker);
+			
+			view.addOverlay(victim);
+			view.setCenter(latLng, 15);
+		}
+	}
+	
+	public void updateVehiclePosition(Vehicle vehicle, List<Position> positions){
+		if(!vehicles.containsKey(vehicle.getId())){
+			
 		}
 	}
 
