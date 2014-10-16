@@ -3,6 +3,7 @@ package epusp.pcs.os.server.login;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,7 +33,7 @@ public enum AuthenticationManager {
 
 		userLogin = new UserLogin(user, loginDate, expireDate);
 
-		String key = String.valueOf(loginDate.toString().concat(email).hashCode());
+		String key = String.valueOf(loginDate.toString().concat(email).hashCode() + (new Random()).nextInt());
 		
 		System.out.println("Storing user info @ " + key);
 		
