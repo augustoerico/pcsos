@@ -250,16 +250,16 @@
           "pictureURL" : {
             "type" : "string"
           },
-          "allAttributeKeys" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          },
           "allAttributes" : {
             "type" : "array",
             "items" : {
               "$ref" : "IAttribute"
+            }
+          },
+          "allAttributeKeys" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
             }
           }
         }
@@ -522,12 +522,12 @@
           "registerCode" : {
             "type" : "string"
           },
+          "licenceType" : {
+            "$ref" : "LicenceTypes"
+          },
           "validUntil" : {
             "type" : "string",
             "format" : "date-time"
-          },
-          "licenceType" : {
-            "$ref" : "LicenceTypes"
           }
         }
       },

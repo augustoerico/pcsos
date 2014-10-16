@@ -12,8 +12,10 @@
 	<source path="monitor/client" />
 	<source path="shared" />
 	<source path="model" />
+	
+	<stylesheet src="MonitorStyles.css" />
 
-	<entry-point class="epusp.pcs.os.monitor.client.Panel"></entry-point>
+	<entry-point class="epusp.pcs.os.monitor.client.Panel" />
 
 	<extend-property name="locale" values="pt" />
 </module>
