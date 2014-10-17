@@ -24,4 +24,7 @@ public interface MonitorResources extends SharedResources {
 	@Source("images/police-car-marker.png")
 	ImageResource carMarker();
 	
+	@Source("images/helicpter-marker.png")
+	ImageResource helicopterMarker();
+	
 }

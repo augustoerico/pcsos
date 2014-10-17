@@ -12,4 +12,7 @@ public interface MonitorWorkspaceConstants extends Constants {
 
 	@DefaultStringValue("Car")
 	String car();
+	
+	@DefaultStringValue("Helicopter")
+	String helicopter();
 }

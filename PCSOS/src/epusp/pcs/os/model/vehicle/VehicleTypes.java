@@ -3,7 +3,7 @@ package epusp.pcs.os.model.vehicle;
 import java.io.Serializable;
 
 public enum VehicleTypes implements Serializable {
-	Car;
+	Car, Helicopter;
 	
 	/*
 	 * Seen by IsSerializable

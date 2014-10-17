@@ -1,0 +1,46 @@
+package epusp.pcs.os.model.vehicle;
+
+import java.io.Serializable;
+
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.NotPersistent;
+import javax.jdo.annotations.PersistenceCapable;
+
+import epusp.pcs.os.model.person.user.Agent;
+
+@PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
+public class Helicopter extends Vehicle implements Serializable{
+	
+	@NotPersistent
+	private static final long serialVersionUID = 1L;
+	
+	@NotPersistent
+	public static int maxCarOccupants = 5;
+	
+	@NotPersistent
+	private Agent pilot;
+	
+	public Helicopter(){
+		//Todo
+	}
+	
+	public Agent getPilot() {
+		return pilot;
+	}
+
+	public void setPilot(Agent pilot) {
+		this.pilot = pilot;
+	}
+
+	@Override
+	public VehicleTypes getType() {
+		return VehicleTypes.Helicopter;
+	}
+
+	@Override
+	public int getMaxNumberOfOccupants() {
+		return 0;
+	}
+
+
+}
