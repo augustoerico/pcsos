@@ -10,7 +10,6 @@ import com.google.gwt.maps.client.Maps;
 import com.google.gwt.maps.client.control.LargeMapControl3D;
 import com.google.gwt.maps.client.event.PolylineMouseOutHandler;
 import com.google.gwt.maps.client.event.PolylineMouseOverHandler;
-import com.google.gwt.maps.client.event.PolylineMouseOutHandler.PolylineMouseOutEvent;
 import com.google.gwt.maps.client.geocode.DirectionQueryOptions;
 import com.google.gwt.maps.client.geocode.DirectionQueryOptions.TravelMode;
 import com.google.gwt.maps.client.geocode.DirectionResults;
@@ -19,6 +18,7 @@ import com.google.gwt.maps.client.geocode.DirectionsCallback;
 import com.google.gwt.maps.client.geocode.StatusCodes;
 import com.google.gwt.maps.client.geocode.Waypoint;
 import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.geom.Point;
 import com.google.gwt.maps.client.geom.Size;
 import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.Marker;
@@ -47,13 +47,14 @@ public class GoogleMapsPresenter implements Presenter {
 
 	private MonitorWorkspaceConstants constants;
 
-	private List<Position> victimPositions = new ArrayList<Position>();
+	private Position victimPosition;
 	private Marker victim;
 	private List<Polyline> victimRoute = new ArrayList<Polyline>();
 	
-	private HashMap<String, List<Position>> vehiclesPosition = new HashMap<String, List<Position>>();
+	private HashMap<String, Position> vehiclesPosition = new HashMap<String, Position>();
 	private HashMap<String, Marker> vehiclesMarker =  new HashMap<String, Marker>(); 
 	private HashMap<String, Vehicle> vehicles = new HashMap<String, Vehicle>();
+	private HashMap<String, List<Polyline>> vehicleRoute = new HashMap<String, List<Polyline>>();
 	
 	private MonitorResources resources = MonitorResources.INSTANCE;
 	
@@ -96,16 +97,18 @@ public class GoogleMapsPresenter implements Presenter {
 
 		List<Position> p = new ArrayList<Position>();
 		p.add(new Position(ATLANTA.getLatitude(), ATLANTA.getLongitude()));
-		addVictimCall(new Position(ATLANTA.getLatitude(), ATLANTA.getLongitude()));
-
+		addVictim(new Position(ATLANTA.getLatitude(), ATLANTA.getLongitude()));
+		p.clear();
+		
 		p.add(new Position(STONE_MOUNTAIN_PARK.getLatitude(), STONE_MOUNTAIN_PARK.getLongitude()));
 		updateVictimPosition(p);
-
+		p.clear();
 
 		p.add(new Position(CYCLORAMA.getLatitude(), CYCLORAMA.getLongitude()));
 		p.add(new Position(GEORGIA_AQUARIUM.getLatitude(), GEORGIA_AQUARIUM.getLongitude()));
 		updateVictimPosition(p);
-
+		p.clear();
+		
 		p.add(new Position(UNDERGROUND_ATLANTA.getLatitude(), UNDERGROUND_ATLANTA.getLongitude()));
 		updateVictimPosition(p);
 	}
@@ -123,12 +126,15 @@ public class GoogleMapsPresenter implements Presenter {
 		options.setTravelMode(TravelMode.DRIVING);
 	}
 
-	public void addVictimCall(Position begin){
-		victimPositions.add(begin);
+	public void addVictim(Position begin){
+		victimPosition = begin;
 		Icon icon = Icon.newInstance(resources.victimMarker().getSafeUri().asString());
 		icon.setIconSize(Size.newInstance(45, 45));
+		icon.setIconAnchor(Point.newInstance(6, 20));
+		icon.setInfoWindowAnchor(Point.newInstance(5, 1));
 		MarkerOptions options = MarkerOptions.newInstance();
 		options.setIcon(icon);
+		options.setTitle(constants.victim());
 		
 		LatLng latLng = LatLng.newInstance(begin.getLatitude(), begin.getLongitude());
 		victim = new Marker(latLng, options);
@@ -136,19 +142,15 @@ public class GoogleMapsPresenter implements Presenter {
 		
 		view.addOverlay(victim);
 		view.setCenter(latLng, 15);
-		victimPositions.add(begin);
 	}
 
 	public void updateVictimPosition(List<Position> positions){
-		if(victimPositions.size() < positions.size()){
-			Waypoint waypoints[] = new Waypoint[positions.size()-victimPositions.size()+1];
-			waypoints[0] = new Waypoint(LatLng.newInstance(victimPositions.get(victimPositions.size()-1).getLatitude(), 
-					victimPositions.get(victimPositions.size()-1).getLongitude()));
+			Waypoint waypoints[] = new Waypoint[positions.size()+1];
+			
+			waypoints[0] = new Waypoint(LatLng.newInstance(victimPosition.getLatitude(), victimPosition.getLongitude()));
 			int j = 1;
-			for(int i = victimPositions.size(); i < positions.size(); i++){
-				victimPositions.add(positions.get(i));
-				waypoints[j++] = new Waypoint(LatLng.newInstance(positions.get(i).getLatitude(), positions.get(i).getLongitude()));
-			}
+			for(Position position : positions)
+				waypoints[j++] = new Waypoint(LatLng.newInstance(position.getLatitude(), position.getLongitude()));
 
 			victim.setLatLng(LatLng.newInstance(positions.get(positions.size()-1).getLatitude(), positions.get(positions.size()-1).getLongitude()));
 			
@@ -186,19 +188,28 @@ public class GoogleMapsPresenter implements Presenter {
 					view.addOverlay(polyline);
 				}
 			});
-		}
+			
+			victimPosition = positions.get(positions.size()-1);
 	}
 	
 	public void addVehicle(Vehicle vehicle, Position begin){
 		if(!vehicles.containsKey(vehicle.getId())){
-			ArrayList<Position> positions = new ArrayList<Position>();
-			positions.add(begin);
-			vehiclesPosition.put(vehicle.getId(), positions);
+			vehiclesPosition.put(vehicle.getId(), begin);
 			vehicles.put(vehicle.getId(), vehicle);
-			
-			Icon icon = Icon.newInstance(resources.victimMarker().getSafeUri().asString());
-			icon.setIconSize(Size.newInstance(45, 45));
+
+			Icon icon = null;
 			MarkerOptions options = MarkerOptions.newInstance();
+			
+			switch (vehicle.getType()) {
+			case Car:
+				icon = Icon.newInstance(resources.carMarker().getSafeUri().asString());
+				options.setTitle(constants.car());
+				break;
+			default:
+				break;
+			}
+			
+			icon.setIconSize(Size.newInstance(45, 45));
 			options.setIcon(icon);
 			
 			LatLng latLng = LatLng.newInstance(begin.getLatitude(), begin.getLongitude());
@@ -207,14 +218,73 @@ public class GoogleMapsPresenter implements Presenter {
 			vehicleMarker.setDraggingEnabled(false);
 			vehiclesMarker.put(vehicle.getId(), vehicleMarker);
 			
-			view.addOverlay(victim);
-			view.setCenter(latLng, 15);
+			view.addOverlay(vehicleMarker);
 		}
 	}
 	
-	public void updateVehiclePosition(Vehicle vehicle, List<Position> positions){
-		if(!vehicles.containsKey(vehicle.getId())){
+	public void updateVehiclePosition(String id, List<Position> positions){
+		if(!vehicles.containsKey(id)){
+			Vehicle vehicle = vehicles.get(id);
+			Position vehiclePosition = vehiclesPosition.get(id);
+			Marker vehicleMarker = vehiclesMarker.get(id);
+			if(!vehicleRoute.containsKey(id)){
+				vehicleRoute.put(id, new ArrayList<Polyline>());
+			}
 			
+			final List<Polyline> route = vehicleRoute.get(id);
+			
+			switch (vehicle.getType()) {
+			case Car:
+				Waypoint waypoints[] = new Waypoint[positions.size()+1];
+
+				waypoints[0] = new Waypoint(LatLng.newInstance(vehiclePosition.getLatitude(), vehiclePosition.getLongitude()));
+				int j = 1;
+				for(Position position : positions)
+					waypoints[j++] = new Waypoint(LatLng.newInstance(position.getLatitude(), position.getLongitude()));
+
+				vehicleMarker.setLatLng(LatLng.newInstance(positions.get(positions.size()-1).getLatitude(), positions.get(positions.size()-1).getLongitude()));
+
+				Directions.loadFromWaypoints(waypoints, options, new DirectionsCallback() {
+
+					public void onFailure(int statusCode) {
+						System.out.println("Failed to load directions: Status "
+								+ StatusCodes.getName(statusCode) + " " + statusCode);
+					}
+
+					public void onSuccess(DirectionResults result) {
+						final Polyline polyline = result.getPolyline();
+						PolyStyleOptions style = PolyStyleOptions.newInstance("##0000FF", 3, 0.5);
+						polyline.setStrokeStyle(style);
+						polyline.addPolylineMouseOverHandler(new PolylineMouseOverHandler() {
+							@Override
+							public void onMouseOver(PolylineMouseOverEvent event) {
+								PolyStyleOptions style = PolyStyleOptions.newInstance("##0000FF", 5, 0.9);
+								for(Polyline polyline : route){
+									polyline.setStrokeStyle(style);
+								}
+							}
+						});
+						polyline.addPolylineMouseOutHandler(new PolylineMouseOutHandler() {
+
+							@Override
+							public void onMouseOut(PolylineMouseOutEvent event) {
+								PolyStyleOptions style = PolyStyleOptions.newInstance("##0000FF", 3, 0.5);
+								for(Polyline polyline : route){
+									polyline.setStrokeStyle(style);
+								}
+							}
+						});
+						route.add(polyline);
+						view.addOverlay(polyline);
+					}
+				});
+
+				vehiclesPosition.put(id, positions.get(positions.size()-1));
+				break;
+			default:
+				//Todo
+				break;
+			}
 		}
 	}
 
