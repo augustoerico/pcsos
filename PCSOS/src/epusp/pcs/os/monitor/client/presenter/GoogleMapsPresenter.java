@@ -1,6 +1,7 @@
 package epusp.pcs.os.monitor.client.presenter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import com.google.gwt.maps.client.Maps;
 import com.google.gwt.maps.client.control.LargeMapControl3D;
 import com.google.gwt.maps.client.event.PolylineMouseOutHandler;
 import com.google.gwt.maps.client.event.PolylineMouseOverHandler;
+import com.google.gwt.maps.client.event.TrafficOverlayChangedHandler;
 import com.google.gwt.maps.client.geocode.DirectionQueryOptions;
 import com.google.gwt.maps.client.geocode.DirectionQueryOptions.TravelMode;
 import com.google.gwt.maps.client.geocode.DirectionResults;
@@ -26,6 +28,7 @@ import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.maps.client.overlay.PolyStyleOptions;
 import com.google.gwt.maps.client.overlay.Polyline;
 import com.google.gwt.maps.client.overlay.MarkerOptions.ZIndexProcess;
+import com.google.gwt.maps.client.overlay.TrafficOverlay;
 import com.google.gwt.user.client.ui.HasWidgets;
 
 import epusp.pcs.os.model.oncall.Position;
@@ -57,6 +60,8 @@ public class GoogleMapsPresenter implements Presenter {
 	private HashMap<String, Marker> vehiclesMarker =  new HashMap<String, Marker>(); 
 	private HashMap<String, Vehicle> vehicles = new HashMap<String, Vehicle>();
 	private HashMap<String, List<Polyline>> vehicleRoute = new HashMap<String, List<Polyline>>();
+	
+	  private TrafficOverlay trafficInfo;
 	
 	private MonitorResources resources = MonitorResources.INSTANCE;
 	
@@ -160,6 +165,10 @@ public class GoogleMapsPresenter implements Presenter {
 		options.setPreserveViewport(false);
 		options.setRetrieveSteps(false);
 		options.setTravelMode(TravelMode.DRIVING);
+		
+		trafficInfo = new TrafficOverlay();
+		
+		view.addOverlay(trafficInfo);
 	}
 
 	public void addVictim(Position begin){
@@ -198,12 +207,12 @@ public class GoogleMapsPresenter implements Presenter {
 
 			public void onSuccess(DirectionResults result) {
 				final Polyline polyline = result.getPolyline();
-				PolyStyleOptions style = PolyStyleOptions.newInstance("#FF0000", 3, 0.5);
+				PolyStyleOptions style = PolyStyleOptions.newInstance("#480000", 4, 0.7);
 				polyline.setStrokeStyle(style);
 				polyline.addPolylineMouseOverHandler(new PolylineMouseOverHandler() {
 					@Override
 					public void onMouseOver(PolylineMouseOverEvent event) {
-						PolyStyleOptions style = PolyStyleOptions.newInstance("#FF0000", 5, 0.9);
+						PolyStyleOptions style = PolyStyleOptions.newInstance("#480000", 6, 1.0);
 						for(Polyline polyline : victimRoute){
 							polyline.setStrokeStyle(style);
 						}
@@ -213,7 +222,7 @@ public class GoogleMapsPresenter implements Presenter {
 
 					@Override
 					public void onMouseOut(PolylineMouseOutEvent event) {
-						PolyStyleOptions style = PolyStyleOptions.newInstance("#FF0000", 3, 0.5);
+						PolyStyleOptions style = PolyStyleOptions.newInstance("#480000", 4, 0.7);
 						for(Polyline polyline : victimRoute){
 							polyline.setStrokeStyle(style);
 						}
@@ -285,12 +294,12 @@ public class GoogleMapsPresenter implements Presenter {
 					public void onSuccess(DirectionResults result) {
 						final List<Polyline> route = vehicleRoute.get(id);
 						final Polyline polyline = result.getPolyline();
-						PolyStyleOptions style = PolyStyleOptions.newInstance("#0000FF", 3, 0.5);
+						PolyStyleOptions style = PolyStyleOptions.newInstance("#0000FF", 4, 0.6);
 						polyline.setStrokeStyle(style);
 						polyline.addPolylineMouseOverHandler(new PolylineMouseOverHandler() {
 							@Override
 							public void onMouseOver(PolylineMouseOverEvent event) {
-								PolyStyleOptions style = PolyStyleOptions.newInstance("#0000FF", 5, 0.9);
+								PolyStyleOptions style = PolyStyleOptions.newInstance("#0000FF", 6, 1.0);
 								for(Polyline polyline : route){
 									polyline.setStrokeStyle(style);
 								}
@@ -300,7 +309,7 @@ public class GoogleMapsPresenter implements Presenter {
 
 							@Override
 							public void onMouseOut(PolylineMouseOutEvent event) {
-								PolyStyleOptions style = PolyStyleOptions.newInstance("#0000FF", 3, 0.5);
+								PolyStyleOptions style = PolyStyleOptions.newInstance("#0000FF", 4, 0.6);
 								for(Polyline polyline : route){
 									polyline.setStrokeStyle(style);
 								}
@@ -321,12 +330,12 @@ public class GoogleMapsPresenter implements Presenter {
 				
 				final List<Polyline> route = vehicleRoute.get(id);
 				final Polyline polyline = new Polyline(points);
-				PolyStyleOptions style = PolyStyleOptions.newInstance("#00FF00", 3, 0.5);
+				PolyStyleOptions style = PolyStyleOptions.newInstance("#DAA520", 4, 0.7);
 				polyline.setStrokeStyle(style);
 				polyline.addPolylineMouseOverHandler(new PolylineMouseOverHandler() {
 					@Override
 					public void onMouseOver(PolylineMouseOverEvent event) {
-						PolyStyleOptions style = PolyStyleOptions.newInstance("#00FF00", 5, 0.9);
+						PolyStyleOptions style = PolyStyleOptions.newInstance("#DAA520", 6, 1.0);
 						for(Polyline polyline : route){
 							polyline.setStrokeStyle(style);
 						}
@@ -336,7 +345,7 @@ public class GoogleMapsPresenter implements Presenter {
 
 					@Override
 					public void onMouseOut(PolylineMouseOutEvent event) {
-						PolyStyleOptions style = PolyStyleOptions.newInstance("#00FF00", 3, 0.5);
+						PolyStyleOptions style = PolyStyleOptions.newInstance("#DAA520", 4, 0.7);
 						for(Polyline polyline : route){
 							polyline.setStrokeStyle(style);
 						}
