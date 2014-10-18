@@ -4,7 +4,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -37,14 +36,12 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 	}
 
 	private final IMonitorWorkspaceServiceAsync rpcService;
-	private final HandlerManager eventBus;
 	private final Display display;
 	
 	private final MonitorResources resources = MonitorResources.INSTANCE;
 
-	public WorkspacePresenter(IMonitorWorkspaceServiceAsync rpcService, HandlerManager eventBus, Display view) {
+	public WorkspacePresenter(IMonitorWorkspaceServiceAsync rpcService, Display view) {
 		this.rpcService = rpcService;
-		this.eventBus = eventBus;
 		this.display = view;
 	}
 

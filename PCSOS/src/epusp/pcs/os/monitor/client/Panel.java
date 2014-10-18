@@ -2,7 +2,6 @@ package epusp.pcs.os.monitor.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -17,8 +16,7 @@ public class Panel implements EntryPoint {
 	public void onModuleLoad() {
 		MonitorWorkspaceConstants constants = GWT.create(MonitorWorkspaceConstants.class);
 		IMonitorWorkspaceServiceAsync monitorService = GWT.create(IMonitorWorkspaceService.class);
-		HandlerManager eventBus = new HandlerManager(null);
-		final WorkspaceController workspaceController = new WorkspaceController(monitorService, eventBus, constants);
+		final WorkspaceController workspaceController = new WorkspaceController(monitorService, constants);
 		
 		monitorService.identifySession(Cookies.getCookie("pcs.os-login"), new AsyncCallback<Void>() {
 			

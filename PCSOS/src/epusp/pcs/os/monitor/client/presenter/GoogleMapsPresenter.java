@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.Maps;
 import com.google.gwt.maps.client.control.LargeMapControl3D;
@@ -46,9 +45,8 @@ public class GoogleMapsPresenter implements Presenter {
 
 	private DirectionQueryOptions options;
 
-	private IMonitorWorkspaceServiceAsync monitorService; 
-	private HandlerManager eventBus;
-
+	private IMonitorWorkspaceServiceAsync monitorService;
+	
 	private MonitorWorkspaceConstants constants;
 
 	private Marker victim;
@@ -62,9 +60,8 @@ public class GoogleMapsPresenter implements Presenter {
 	
 	private MonitorResources resources = MonitorResources.INSTANCE;
 	
-	public GoogleMapsPresenter(IMonitorWorkspaceServiceAsync monitorService, HandlerManager eventBus, MonitorWorkspaceConstants constants){
+	public GoogleMapsPresenter(IMonitorWorkspaceServiceAsync monitorService, MonitorWorkspaceConstants constants){
 		this.monitorService = monitorService;
-		this.eventBus = eventBus;
 		this.constants = constants;
 	}
 
