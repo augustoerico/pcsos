@@ -54,6 +54,9 @@
 					<g:cell>
 						<g:Label styleName="{style.tmp}">PCS.O.S</g:Label>
 					</g:cell>
+					<g:cell>
+						<g:Image height="30px" width="auto" ui:field="picture" styleName="{style.picture}"/>
+					</g:cell>
 				</g:HorizontalPanel>
 			</g:north>
 
@@ -62,7 +65,7 @@
 			</g:west>
 
 			<g:east size="12.5">
-				<g:Image height="30px" width="auto" ui:field="picture" styleName="{style.picture}"/>
+				<g:ToggleButton ui:field="trafficButton" />
 			</g:east>
 
 			<g:center>

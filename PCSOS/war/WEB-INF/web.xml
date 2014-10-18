@@ -38,7 +38,7 @@
     <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
     <init-param>
       <param-name>services</param-name>
-      <param-value>epusp.pcs.os.server.endpoint.AgentEndpoint,epusp.pcs.os.server.endpoint.VictimEndpoint</param-value>
+      <param-value>epusp.pcs.os.server.endpoint.AgentEndpoint,epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint,epusp.pcs.os.server.endpoint.VictimEndpoint</param-value>
     </init-param>
   </servlet>
 

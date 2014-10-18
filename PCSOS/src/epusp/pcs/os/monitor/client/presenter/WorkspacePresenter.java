@@ -2,17 +2,22 @@ package epusp.pcs.os.monitor.client.presenter;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.model.person.user.User;
 import epusp.pcs.os.monitor.client.MonitorResources;
 import epusp.pcs.os.monitor.client.WorkspaceController.WorkspaceLayoutPanel;
+import epusp.pcs.os.monitor.client.event.HideShowTrafficEvent;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
+import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 
 public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
@@ -28,6 +33,7 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 		RadioButton getReinforcementsButton();
 		Widget asWidget();
 		HasWidgets getMapsArea();
+		ToggleButton getTrafficButton();
 	}
 
 	private final IMonitorWorkspaceServiceAsync rpcService;
@@ -84,6 +90,14 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 			@Override
 			public void onClick(ClickEvent event) {
 				display.showAvailableReinforcements();
+			}
+		});
+		
+		display.getTrafficButton().addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+			
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				EventBus.get().fireEvent(new HideShowTrafficEvent(event.getValue()));
 			}
 		});
 	}

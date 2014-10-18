@@ -30,6 +30,7 @@ import com.google.gwt.maps.client.overlay.Polyline;
 import com.google.gwt.maps.client.overlay.MarkerOptions.ZIndexProcess;
 import com.google.gwt.maps.client.overlay.TrafficOverlay;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.web.bindery.event.shared.Event;
 
 import epusp.pcs.os.model.oncall.Position;
 import epusp.pcs.os.model.vehicle.Car;
@@ -38,7 +39,10 @@ import epusp.pcs.os.model.vehicle.Priority;
 import epusp.pcs.os.model.vehicle.Vehicle;
 import epusp.pcs.os.monitor.client.MonitorResources;
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
+import epusp.pcs.os.monitor.client.event.HideShowTrafficEvent;
+import epusp.pcs.os.monitor.client.event.HideShowTrafficEvent.HideShowTrafficHandler;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
+import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 
 public class GoogleMapsPresenter implements Presenter {
@@ -85,6 +89,21 @@ public class GoogleMapsPresenter implements Presenter {
 	}
 
 	private void bind(){
+		
+		EventBus.get().addHandler(HideShowTrafficEvent.TYPE, new HideShowTrafficHandler() {
+			
+			@Override
+			public void onHideShowRequest(HideShowTrafficEvent hideShowTrafficEvent) {
+				if(hideShowTrafficEvent.hide()){
+					view.addOverlay(trafficInfo);
+				}else{
+					view.removeOverlay(trafficInfo);
+				}
+			}
+		});
+		
+		/***************/
+		
 		LatLng ATLANTA = LatLng.newInstance(33.7814790,
 				-84.3880580);
 
@@ -167,8 +186,6 @@ public class GoogleMapsPresenter implements Presenter {
 		options.setTravelMode(TravelMode.DRIVING);
 		
 		trafficInfo = new TrafficOverlay();
-		
-		view.addOverlay(trafficInfo);
 	}
 
 	public void addVictim(Position begin){

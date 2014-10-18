@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.monitor.client.MonitorResources;
@@ -34,6 +35,9 @@ public class Workspace extends Composite implements Display{
 	
 	@UiField
 	AbsolutePanel mapsArea;
+	
+	@UiField
+	ToggleButton trafficButton;
 	
 	private MonitorResources resources = MonitorResources.INSTANCE;
 
@@ -94,6 +98,11 @@ public class Workspace extends Composite implements Display{
 	@Override
 	public RadioButton getReinforcementsButton() {
 		return reinforcementsRadio;
+	}
+	
+	@Override
+	public ToggleButton getTrafficButton() {
+		return trafficButton;
 	}
 
 	@Override
