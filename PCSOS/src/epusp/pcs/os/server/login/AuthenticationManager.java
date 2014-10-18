@@ -3,7 +3,6 @@ package epusp.pcs.os.server.login;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map.Entry;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,14 +14,14 @@ public enum AuthenticationManager {
 
 	private final ConcurrentHashMap<String, UserLogin> authenticatedUsers =
 			new ConcurrentHashMap<String, UserLogin>();
+	
+	TokenGenerator generator = new TokenGenerator("pcsos-2#9$d=nru!94jc,+");
 
 	private final Timer timer = new Timer();
 
 	public String login(User user){
 		UserLogin userLogin = new UserLogin();
 		userLogin.setUser(user);
-
-		String email = user.getEmail();
 
 		Date loginDate = new Date();
 
@@ -32,8 +31,9 @@ public enum AuthenticationManager {
 		Date expireDate = calendar.getTime();
 
 		userLogin = new UserLogin(user, loginDate, expireDate);
-
-		String key = String.valueOf(loginDate.toString().concat(email).hashCode() + (new Random()).nextInt());
+		
+		
+		String key = generator.createToken(user);
 		
 		System.out.println("Storing user info @ " + key);
 		
