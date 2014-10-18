@@ -1,7 +1,6 @@
 package epusp.pcs.os.server.workflow;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
@@ -112,7 +111,7 @@ public enum EmergencyCallWorkflow {
 		}
 	}
 	
-	public void addFreeVehicle(String vehicleId, Collection<Agent> agents){
+	public void addFreeVehicle(String vehicleId, List<Agent> agents){
 		if(!activeVehicles.containsKey(vehicleId)){
 			PersistenceManager mgr = getPersistenceManager();
 			Vehicle vehicle, detached = null;
