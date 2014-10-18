@@ -1,7 +1,6 @@
 package epusp.pcs.os.monitor.client.presenter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,7 +10,6 @@ import com.google.gwt.maps.client.Maps;
 import com.google.gwt.maps.client.control.LargeMapControl3D;
 import com.google.gwt.maps.client.event.PolylineMouseOutHandler;
 import com.google.gwt.maps.client.event.PolylineMouseOverHandler;
-import com.google.gwt.maps.client.event.TrafficOverlayChangedHandler;
 import com.google.gwt.maps.client.geocode.DirectionQueryOptions;
 import com.google.gwt.maps.client.geocode.DirectionQueryOptions.TravelMode;
 import com.google.gwt.maps.client.geocode.DirectionResults;
@@ -27,15 +25,10 @@ import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.maps.client.overlay.PolyStyleOptions;
 import com.google.gwt.maps.client.overlay.Polyline;
-import com.google.gwt.maps.client.overlay.MarkerOptions.ZIndexProcess;
 import com.google.gwt.maps.client.overlay.TrafficOverlay;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.web.bindery.event.shared.Event;
 
 import epusp.pcs.os.model.oncall.Position;
-import epusp.pcs.os.model.vehicle.Car;
-import epusp.pcs.os.model.vehicle.Helicopter;
-import epusp.pcs.os.model.vehicle.Priority;
 import epusp.pcs.os.model.vehicle.Vehicle;
 import epusp.pcs.os.monitor.client.MonitorResources;
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
@@ -101,76 +94,6 @@ public class GoogleMapsPresenter implements Presenter {
 				}
 			}
 		});
-		
-		/***************/
-		
-		LatLng ATLANTA = LatLng.newInstance(33.7814790,
-				-84.3880580);
-
-		// Points of interest along the map.
-		LatLng STONE_MOUNTAIN_PARK = LatLng.newInstance(
-				33.80653802509606, -84.15252685546875);
-		// Cyclorama
-		LatLng CYCLORAMA = LatLng.newInstance(
-				33.741185330333956, -84.35834884643555);
-		// Georgia Aquarium
-		LatLng GEORGIA_AQUARIUM = LatLng.newInstance(
-				33.761443931868925, -84.39432263374329);
-		// Underground Atlanta
-		LatLng UNDERGROUND_ATLANTA = LatLng.newInstance(
-				33.75134645137294, -84.39026713371277);
-
-
-		List<Position> p = new ArrayList<Position>();
-		p.add(new Position(ATLANTA.getLatitude(), ATLANTA.getLongitude()));
-		addVictim(new Position(ATLANTA.getLatitude(), ATLANTA.getLongitude()));
-		p.clear();
-		
-		p.add(new Position(STONE_MOUNTAIN_PARK.getLatitude(), STONE_MOUNTAIN_PARK.getLongitude()));
-		updateVictimPosition(p);
-		p.clear();
-
-		p.add(new Position(CYCLORAMA.getLatitude(), CYCLORAMA.getLongitude()));
-		p.add(new Position(GEORGIA_AQUARIUM.getLatitude(), GEORGIA_AQUARIUM.getLongitude()));
-		updateVictimPosition(p);
-		p.clear();
-		
-		p.add(new Position(UNDERGROUND_ATLANTA.getLatitude(), UNDERGROUND_ATLANTA.getLongitude()));
-		updateVictimPosition(p);
-		
-		
-		Vehicle vehicle = new Car("2143 XMS");
-		vehicle.setPrioraty(Priority.PRIMARY);
-		vehicle.setStatus(true);
-		vehicle.setId("231290841");
-		addVehicle(vehicle, new Position(UNDERGROUND_ATLANTA.getLatitude(), UNDERGROUND_ATLANTA.getLongitude()));
-		
-		Vehicle vehicle2 = new Car("2143 XKS");
-		vehicle2.setPrioraty(Priority.SUPPORT);
-		vehicle2.setStatus(true);
-		vehicle2.setId("314345454");
-		addVehicle(vehicle2, new Position(STONE_MOUNTAIN_PARK.getLatitude(), STONE_MOUNTAIN_PARK.getLongitude()));
-		
-		p.clear();
-		p.add(new Position(CYCLORAMA.getLatitude(), CYCLORAMA.getLongitude()));
-		p.add(new Position(ATLANTA.getLatitude(), ATLANTA.getLongitude()));
-		updateVehiclePosition(vehicle.getId(), p);
-		
-		p.clear();
-		p.add(new Position(CYCLORAMA.getLatitude(), CYCLORAMA.getLongitude()));
-		p.add(new Position(UNDERGROUND_ATLANTA.getLatitude(), UNDERGROUND_ATLANTA.getLongitude()));
-		updateVehiclePosition(vehicle2.getId(), p);
-		
-		Vehicle vehicle3 = new Helicopter();
-		vehicle3.setPrioraty(Priority.SUPPORT);
-		vehicle3.setStatus(true);
-		vehicle3.setId("3021840983");
-		addVehicle(vehicle3, new Position(STONE_MOUNTAIN_PARK.getLatitude(), STONE_MOUNTAIN_PARK.getLongitude()));
-		
-		p.clear();
-		p.add(new Position(ATLANTA.getLatitude(), ATLANTA.getLongitude()));
-		p.add(new Position(GEORGIA_AQUARIUM.getLatitude(), GEORGIA_AQUARIUM.getLongitude()));
-		updateVehiclePosition(vehicle3.getId(), p);
 	}
 
 	private void buildUi(){

@@ -250,16 +250,16 @@
           "pictureURL" : {
             "type" : "string"
           },
-          "allAttributes" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "IAttribute"
-            }
-          },
           "allAttributeKeys" : {
             "type" : "array",
             "items" : {
               "type" : "string"
+            }
+          },
+          "allAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "IAttribute"
             }
           }
         }
