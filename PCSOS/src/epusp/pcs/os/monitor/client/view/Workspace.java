@@ -1,8 +1,11 @@
 package epusp.pcs.os.monitor.client.view;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -35,9 +38,17 @@ public class Workspace extends Composite implements Display{
 	
 	@UiField
 	AbsolutePanel mapsArea;
-	
+
 	@UiField
 	ToggleButton trafficButton;
+
+	public interface TrafficSytle extends CssResource {
+		String up();
+		String down();
+	}
+
+	@UiField 
+	TrafficSytle style;
 	
 	private MonitorResources resources = MonitorResources.INSTANCE;
 
@@ -66,6 +77,20 @@ public class Workspace extends Composite implements Display{
 				
 				mapsArea.setWidth(width-40 + "px");
 				mapsArea.setHeight(0.9*height-20 + "px");
+			}
+		});
+		
+		trafficButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if(trafficButton.isDown()){
+					trafficButton.removeStyleName(style.up());
+					trafficButton.addStyleName(style.down());
+				}else{
+					trafficButton.removeStyleName(style.down());
+					trafficButton.addStyleName(style.up());
+				}
 			}
 		});
 	}
@@ -123,5 +148,20 @@ public class Workspace extends Composite implements Display{
 	@Override
 	public HasWidgets getMapsArea() {
 		return mapsArea;
+	}
+
+	@Override
+	public void setMapTitle(String title) {
+		map.setTitle(title);
+	}
+
+	@Override
+	public void setInfoTitle(String title) {
+		info.setTitle(title);
+	}
+
+	@Override
+	public void setReinforcements(String title) {
+		reinforcements.setTitle(title);
 	}
 }

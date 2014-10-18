@@ -3,10 +3,29 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
 	<ui:image field='backgroundPicture' src='../images/monitor-background.jpg' />
+	
+	<ui:image field='trafficPictureOn' src='../images/traffic-alert-on.png' />
+	<ui:image field='trafficPictureOff' src='../images/traffic-alert-off.png' />
 
-	<ui:style>
+	<ui:style type="epusp.pcs.os.monitor.client.view.Workspace.TrafficSytle">
 	@sprite .backgroundPicture {
 		gwt-image: 'backgroundPicture';
+	}
+	
+	@sprite .down{
+		gwt-image: 'trafficPictureOn';
+	}
+	
+	@sprite .up{
+		gwt-image: 'trafficPictureOff';
+	}
+	
+	.trafficButton{
+		height: 45px;
+		width:	45px;
+		background-size: 45px auto;
+		cursor: pointer;
+		margin-right: 20px;
 	}
 	
 	.tmp {
@@ -29,7 +48,8 @@
 	}
 	
 	.picture{
-		border-radius: 50%
+		border-radius: 50%;
+		margin-right: 150px;
 	}
 	</ui:style>
 
@@ -54,7 +74,7 @@
 					<g:cell>
 						<g:Label styleName="{style.tmp}">PCS.O.S</g:Label>
 					</g:cell>
-					<g:cell>
+					<g:cell horizontalAlignment="right" verticalAlignment="middle">
 						<g:Image height="30px" width="auto" ui:field="picture" styleName="{style.picture}"/>
 					</g:cell>
 				</g:HorizontalPanel>
@@ -65,7 +85,11 @@
 			</g:west>
 
 			<g:east size="12.5">
-				<g:ToggleButton ui:field="trafficButton" />
+				<g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="right"
+					width="100%" height="100%">
+					<g:ToggleButton ui:field="trafficButton"
+						styleName="{style.trafficButton} {style.up}" />
+				</g:HorizontalPanel>
 			</g:east>
 
 			<g:center>

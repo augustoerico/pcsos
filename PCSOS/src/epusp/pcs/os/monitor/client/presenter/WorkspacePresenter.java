@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
 import epusp.pcs.os.model.person.user.User;
 import epusp.pcs.os.monitor.client.MonitorResources;
 import epusp.pcs.os.monitor.client.WorkspaceController.WorkspaceLayoutPanel;
+import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
 import epusp.pcs.os.monitor.client.event.HideShowTrafficEvent;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.event.EventBus;
@@ -27,6 +28,9 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 		void showAvailableReinforcements();
 		void setUserImage(String url);
 		void setUserImage(ImageResource resource);
+		void setMapTitle(String title);
+		void setInfoTitle(String title);
+		void setReinforcements(String title);
 		RadioButton getMapButton();
 		RadioButton getInfoButton();
 		RadioButton getReinforcementsButton();
@@ -37,10 +41,12 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 
 	private final IMonitorWorkspaceServiceAsync rpcService;
 	private final Display display;
+	private final MonitorWorkspaceConstants constants;
 	
 	private final MonitorResources resources = MonitorResources.INSTANCE;
 
-	public WorkspacePresenter(IMonitorWorkspaceServiceAsync rpcService, Display view) {
+	public WorkspacePresenter(IMonitorWorkspaceServiceAsync rpcService, Display view, MonitorWorkspaceConstants constants) {
+		this.constants = constants;
 		this.rpcService = rpcService;
 		this.display = view;
 	}
@@ -73,6 +79,7 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 			@Override
 			public void onClick(ClickEvent event) {
 				display.showMap();
+				display.getTrafficButton().setVisible(true);
 			}
 		});
 		
@@ -80,6 +87,7 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 			@Override
 			public void onClick(ClickEvent event) {
 				display.showCallInfo();
+				display.getTrafficButton().setVisible(false);
 			}
 		});
 		
@@ -87,6 +95,7 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 			@Override
 			public void onClick(ClickEvent event) {
 				display.showAvailableReinforcements();
+				display.getTrafficButton().setVisible(false);
 			}
 		});
 		
@@ -97,6 +106,11 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 				EventBus.get().fireEvent(new HideShowTrafficEvent(event.getValue()));
 			}
 		});
+		
+		display.getTrafficButton().setTitle(constants.showHideTraffic());
+		display.setInfoTitle(constants.info());
+		display.setMapTitle(constants.map());
+		display.setReinforcements(constants.reinforcements());
 	}
 
 	@Override

@@ -15,6 +15,9 @@ public class WorkspaceController implements Presenter {
 	private MonitorWorkspaceConstants constants;
 	private HasWidgets container;
 	
+	private WorkspaceLayoutPanel workspacePresenter;
+	private GoogleMapsPresenter googleMapsPresenter;
+	
 	public interface WorkspaceLayoutPanel extends Presenter {
 		HasWidgets getMapsArea();
 	}
@@ -31,9 +34,9 @@ public class WorkspaceController implements Presenter {
 	@Override
 	public void go(final HasWidgets container) {		
 		this.container = container;
-		WorkspaceLayoutPanel workspacePresenter = new WorkspacePresenter(monitorService, new Workspace());
+		workspacePresenter = new WorkspacePresenter(monitorService, new Workspace(), constants);
 		workspacePresenter.go(container);
-		Presenter googleMapsPresenter = new GoogleMapsPresenter(monitorService, constants);
+		googleMapsPresenter = new GoogleMapsPresenter(monitorService, constants);
 		googleMapsPresenter.go(workspacePresenter.getMapsArea());
 		bind();
 	}

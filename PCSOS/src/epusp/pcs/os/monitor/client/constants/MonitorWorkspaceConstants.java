@@ -15,4 +15,16 @@ public interface MonitorWorkspaceConstants extends Constants {
 	
 	@DefaultStringValue("Helicopter")
 	String helicopter();
+	
+	@DefaultStringValue("Show or hide traffic details")
+	String showHideTraffic();
+	
+	@DefaultStringValue("Reinforcements request")
+	String reinforcements();
+	
+	@DefaultStringValue("Map")
+	String map();
+	
+	@DefaultStringValue("Emergency call info")
+	String info();
 }

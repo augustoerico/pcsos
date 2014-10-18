@@ -32,6 +32,9 @@ public enum AuthenticationManager {
 
 		userLogin = new UserLogin(user, loginDate, expireDate);
 		
+		TokenOptions options = new TokenOptions();
+		options.setExpires(expireDate);
+		
 		String key = generator.createToken(user);
 		
 		System.out.println("Storing user info @ " + key);

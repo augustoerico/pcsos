@@ -329,11 +329,13 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 	
 	@Override
 	public void identifySession(String key) throws LoginException{
-		if(authenticationManager.isLoggedIn(key)){
-			User user = authenticationManager.getUser(key);
-			setSessionAttribute(userSessionAttribute, user);
-		}else
-			throw new LoginException();
+		if(!isLoggedIn()){
+			if(authenticationManager.isLoggedIn(key)){
+				User user = authenticationManager.getUser(key);
+				setSessionAttribute(userSessionAttribute, user);
+			}else
+				throw new LoginException();
+		}
 	}
 	
 	@Override
