@@ -1,6 +1,6 @@
 /gwt-unitCache
-/endpoint-libs
-/war
+endpoint-libs/
+war/
 
 *.class
 *.jar

@@ -2,7 +2,6 @@ package epusp.pcs.os.model.vehicle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.jdo.annotations.IdentityType;
@@ -66,7 +65,7 @@ public abstract class Vehicle extends SystemObject implements Serializable {
 		agents.remove(agent);
 	}
 	
-	public void addAgents(Collection<Agent> agents){
+	public void addAgents(List<Agent> agents){
 		this.agents.addAll(agents);
 	}
 	
