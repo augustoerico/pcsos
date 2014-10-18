@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.Widget;
 import epusp.pcs.os.login.client.rpc.ILoginServiceAsync;
 import epusp.pcs.os.login.shared.LoginConfig;
 import epusp.pcs.os.shared.client.presenter.Presenter;
+import epusp.pcs.os.shared.exception.DeniedAccess;
 
 public class LoginPresenter implements Presenter{
 	
@@ -71,13 +72,15 @@ public class LoginPresenter implements Presenter{
 
 					@Override
 					public void onFailure(Throwable caught) {
-						//to do
+						if(caught instanceof DeniedAccess){
+							view.showUnauthorizedAcess();
+						}
 					}
 				});
 			}
 			@Override
 			public void onFailure(Throwable caught) {
-				// The authentication process failed for some reason, see caught.getMessage()
+				
 			}
 		});
 	}

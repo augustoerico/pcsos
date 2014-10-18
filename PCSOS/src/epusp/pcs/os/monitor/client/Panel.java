@@ -3,12 +3,14 @@ package epusp.pcs.os.monitor.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceService;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
+import epusp.pcs.os.shared.exception.LoginException;
 
 public class Panel implements EntryPoint {
 
@@ -27,8 +29,11 @@ public class Panel implements EntryPoint {
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
+				if(caught instanceof LoginException){
+					String path = Window.Location.getProtocol().concat("//").concat(Window.Location.getHost()).concat("/")
+							.concat("PCSOS.html").concat(Window.Location.getQueryString());
+					Window.Location.replace(path);
+				}
 			}
 		});
 	}

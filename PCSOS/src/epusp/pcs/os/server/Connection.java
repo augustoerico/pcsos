@@ -11,6 +11,7 @@ import epusp.pcs.os.model.person.user.User;
 import epusp.pcs.os.server.login.AuthenticationManager;
 import epusp.pcs.os.server.workflow.EmergencyCallWorkflow;
 import epusp.pcs.os.shared.client.rpc.IConnectionService;
+import epusp.pcs.os.shared.exception.LoginException;
 
 public class Connection extends RemoteServiceServlet implements IConnectionService{
 
@@ -327,11 +328,12 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 	}
 	
 	@Override
-	public void identifySession(String key){
+	public void identifySession(String key) throws LoginException{
 		if(authenticationManager.isLoggedIn(key)){
 			User user = authenticationManager.getUser(key);
 			setSessionAttribute(userSessionAttribute, user);
-		}
+		}else
+			throw new LoginException();
 	}
 	
 	@Override

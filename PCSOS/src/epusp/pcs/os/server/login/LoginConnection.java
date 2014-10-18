@@ -20,6 +20,7 @@ import epusp.pcs.os.model.person.user.SuperUser;
 import epusp.pcs.os.model.person.user.User;
 import epusp.pcs.os.server.Connection;
 import epusp.pcs.os.server.PMF;
+import epusp.pcs.os.shared.exception.DeniedAccess;
 
 public class LoginConnection extends Connection implements ILoginService{
 
@@ -28,7 +29,7 @@ public class LoginConnection extends Connection implements ILoginService{
 	private static Logger log = Logger.getLogger(LoginConnection.class.getCanonicalName());
 
 	@Override
-	public LoginConfig login(String token){
+	public LoginConfig login(String token) throws DeniedAccess{
 		if(token != null){
 			String url = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=" + token;
 
@@ -201,7 +202,7 @@ public class LoginConnection extends Connection implements ILoginService{
 						return config;
 					default:
 						System.out.println("Denied access to " + user.getEmail());
-						return null;
+						throw new DeniedAccess();
 					}
 				}else
 					System.out.println("User not found " + userEmail);
@@ -209,6 +210,6 @@ public class LoginConnection extends Connection implements ILoginService{
 				System.out.println("Google feedback doesn't contain user email");
 		}else
 			System.out.println("Missing access token from client");
-		return null;
+		throw new DeniedAccess();
 	}
 }
