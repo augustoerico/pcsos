@@ -12,7 +12,7 @@ import javax.jdo.PersistenceManager;
 import org.json.JSONObject;
 
 import epusp.pcs.os.login.client.rpc.ILoginService;
-import epusp.pcs.os.login.shared.URLConfig;
+import epusp.pcs.os.login.shared.LoginConfig;
 import epusp.pcs.os.model.person.user.Admin;
 import epusp.pcs.os.model.person.user.Auditor;
 import epusp.pcs.os.model.person.user.Monitor;
@@ -28,7 +28,7 @@ public class LoginConnection extends Connection implements ILoginService{
 	private static Logger log = Logger.getLogger(LoginConnection.class.getCanonicalName());
 
 	@Override
-	public URLConfig login(String token){
+	public LoginConfig login(String token){
 		if(token != null){
 			String url = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=" + token;
 
@@ -65,10 +65,11 @@ public class LoginConnection extends Connection implements ILoginService{
 			System.out.println(r.toString());
 
 			String userEmail = null;
-
+			String userPicture = null;
 			try {
 				final JSONObject obj = new JSONObject(r.toString());
 				userEmail = obj.getString("email");
+				userPicture = obj.getString("picture");
 			} catch (Exception e) {
 				log.log(Level.SEVERE, e.getMessage());
 			}
@@ -81,7 +82,7 @@ public class LoginConnection extends Connection implements ILoginService{
 				try{
 					user = pm.getObjectById(Monitor.class, userEmail);
 				}catch(Exception e){
-				}finally{
+				}finally{				
 					pm.close();
 				}
 
@@ -116,10 +117,55 @@ public class LoginConnection extends Connection implements ILoginService{
 				}
 
 				if(user != null && user.isActive()){
+					
+					if(!userPicture.equals(user.getPictureURL())){
+						user.setPictureURL(userPicture);
+						
+						Admin admin = null;
+						Monitor monitor = null;
+						Auditor auditor = null;
+						SuperUser superUser = null;
+						switch (user.getType()) {
+						case Admin:
+							admin = (Admin) user;
+							break;
+						case Auditor:
+							auditor = (Auditor) user;
+							break;
+						case Monitor:
+							monitor = (Monitor) user;
+							break;
+						case SuperUser:
+							superUser = (SuperUser) user;
+							break;
+						default:
+							System.out.println("Denied access to " + user.getEmail());
+							return null;
+						}
+						
+						pm = PMF.get().getPersistenceManager();
+						try{
+							pm.currentTransaction().begin();
+							if(admin != null)
+								pm.makePersistent(admin);
+							else if(monitor != null)
+								pm.makePersistent(monitor);
+							else if(auditor != null)
+								pm.makePersistent(auditor);
+							else if(superUser != null)
+								pm.makePersistent(superUser);
+							pm.currentTransaction().commit();
+						}catch (Exception e){
+							e.printStackTrace();
+							if(pm.currentTransaction().isActive())
+								pm.currentTransaction().rollback();
+						}finally{
+							pm.close();
+						}
+						
+					}
 
-					getThreadLocalRequest().getSession().setAttribute(userInfo, user);
-
-					URLConfig config = new URLConfig();
+					LoginConfig config = new LoginConfig();
 
 					switch (user.getPreferedLanguage()) {
 					case ENGLISH:
@@ -132,6 +178,9 @@ public class LoginConnection extends Connection implements ILoginService{
 						config.setLocale("en");
 						break;
 					}
+					
+					String key = super.authenticationManager.login(user);
+					config.setKey(key);
 
 					switch(user.getType()){
 					case Admin:

@@ -7,6 +7,8 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import epusp.pcs.os.model.person.user.AvailableLanguages;
 import epusp.pcs.os.model.person.user.Monitor;
+import epusp.pcs.os.model.person.user.User;
+import epusp.pcs.os.server.login.AuthenticationManager;
 import epusp.pcs.os.server.workflow.EmergencyCallWorkflow;
 import epusp.pcs.os.shared.client.rpc.IConnectionService;
 
@@ -14,9 +16,11 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 
 	private static final long serialVersionUID = 1L;
 	
-	EmergencyCallWorkflow workflow = EmergencyCallWorkflow.getInstance();
+	protected EmergencyCallWorkflow workflow = EmergencyCallWorkflow.getInstance();
 	
-	protected static final String userInfo = "userInfo";
+	protected AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
+	
+	protected String userSessionAttribute = "userSessionAttribute";
 	
 	public void init() throws ServletException
 	{
@@ -322,10 +326,32 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 //		System.out.println(workflow.getAvailableSupportVehicles());
 	}
 	
+	@Override
+	public void identifySession(String key){
+		if(authenticationManager.isLoggedIn(key)){
+			User user = authenticationManager.getUser(key);
+			setSessionAttribute(userSessionAttribute, user);
+		}
+	}
 	
+	@Override
+	public User getUserInfo(){
+		if(isLoggedIn()){
+			return (User) getSessionAttibute(userSessionAttribute);
+		}
+		return null;
+	}
 	
 	protected Boolean isLoggedIn(){
-		return getThreadLocalRequest().getSession().getAttribute(userInfo) != null; 
+		return getSessionAttibute(userSessionAttribute) != null;
+	}
+	
+	protected void setSessionAttribute(String attribute, Object value){
+		this.getThreadLocalRequest().getSession(true).setAttribute(attribute, value);
+	}
+	
+	protected Object getSessionAttibute(String attribute){
+		return this.getThreadLocalRequest().getSession(true).getAttribute(userSessionAttribute);
 	}
 
 }

@@ -3,6 +3,7 @@
 <module rename-to="monitor">
 	<inherits name="com.google.gwt.user.User" />
 	<inherits name="com.google.gwt.user.theme.clean.Clean" />
+	<inherits name='com.google.gwt.maps.GoogleMaps' />
 
 	<inherits name="com.google.gwt.logging.Logging" />
 	<set-property name="gwt.logging.logLevel" value="ALL" />
@@ -11,8 +12,10 @@
 	<source path="monitor/client" />
 	<source path="shared" />
 	<source path="model" />
+	
+	<stylesheet src="MonitorStyles.css" />
 
-	<entry-point class="epusp.pcs.os.monitor.client.Panel"></entry-point>
+	<entry-point class="epusp.pcs.os.monitor.client.Panel" />
 
 	<extend-property name="locale" values="pt" />
 </module>

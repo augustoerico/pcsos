@@ -9,9 +9,6 @@ public interface LoginResources extends SharedResources {
 	
 	public static final LoginResources INSTANCE = GWT.create(LoginResources.class);
 	
-	@Source("images/logo.jpg")
-	ImageResource logo();
-	
 	@Source("images/sign-in-with-google.png")
 	ImageResource signIn();
 	

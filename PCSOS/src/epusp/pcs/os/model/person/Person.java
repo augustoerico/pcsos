@@ -98,7 +98,7 @@ public abstract class Person extends SystemObject implements Serializable {
 	public boolean equals(Object obj) {
 		if(obj instanceof Person){
 			Person person = (Person) obj;
-			return getId().equals(person.getId());
+			return getEmail().equals(person.getEmail());
 		}
 		return false;
 	}

@@ -20,8 +20,4 @@ public class Panel implements EntryPoint {
 		LoginPresenter loginController = new LoginPresenter(loginService, new LoginPanel());
 		loginController.go(RootLayoutPanel.get());
 	}
-
-
-
-
 }

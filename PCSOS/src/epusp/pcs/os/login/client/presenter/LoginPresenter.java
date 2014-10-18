@@ -6,13 +6,14 @@ import com.google.gwt.core.client.Callback;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.login.client.rpc.ILoginServiceAsync;
-import epusp.pcs.os.login.shared.URLConfig;
+import epusp.pcs.os.login.shared.LoginConfig;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 
 public class LoginPresenter implements Presenter{
@@ -60,10 +61,11 @@ public class LoginPresenter implements Presenter{
 		Auth.get().login(req, new Callback<String, Throwable>() {
 			@Override
 			public void onSuccess(String token) {
-				loginService.login(token, new AsyncCallback<URLConfig>() {
+				loginService.login(token, new AsyncCallback<LoginConfig>() {
 
 					@Override
-					public void onSuccess(URLConfig result) {
+					public void onSuccess(LoginConfig result) {
+						Cookies.setCookie("pcs.os-login", result.getKey());
 						redirect(result);
 					}
 
@@ -80,7 +82,7 @@ public class LoginPresenter implements Presenter{
 		});
 	}
 	
-	private void redirect(URLConfig url){
+	private void redirect(LoginConfig url){
 		if(url == null)
 			view.showUnauthorizedAcess();
 		else{
