@@ -2,6 +2,7 @@ package epusp.pcs.os.server.monitor;
 
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceService;
 import epusp.pcs.os.server.Connection;
+import epusp.pcs.os.shared.model.oncall.EmergencyCall;
 import epusp.pcs.os.shared.model.person.user.AccountTypes;
 import epusp.pcs.os.shared.model.person.user.User;
 
@@ -18,6 +19,11 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 			}
 		}
 		return false;
+	}
+	
+	public EmergencyCall getEmergencyCallDetails(){
+//		return super.workflow
+		return null;
 	}
 
 }

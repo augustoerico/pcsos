@@ -2,9 +2,7 @@ package epusp.pcs.os.server.login;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map.Entry;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import epusp.pcs.os.shared.model.person.user.User;
@@ -16,8 +14,6 @@ public enum AuthenticationManager {
 			new ConcurrentHashMap<String, UserLogin>();
 	
 	TokenGenerator generator = new TokenGenerator("pcsos-2#9$d=nru!94jc,+");
-
-	private final Timer timer = new Timer();
 
 	public String login(User user){
 		UserLogin userLogin = new UserLogin();
@@ -43,7 +39,7 @@ public enum AuthenticationManager {
 			authenticatedUsers.put(key, userLogin);
 			return key;
 		}else{
-			for(Entry<String, UserLogin> entry : authenticatedUsers.entrySet()){
+			for(Map.Entry<String, UserLogin> entry : authenticatedUsers.entrySet()){
 				if(entry.getValue().getUser().equals(user)){
 					authenticatedUsers.remove(entry.getKey());
 					authenticatedUsers.put(key, userLogin);
@@ -51,12 +47,14 @@ public enum AuthenticationManager {
 				}
 			}
 		}
+		clean();
 		return null;
 	}
 
 	public Boolean isLoggedIn(String key){
 		if(authenticatedUsers.containsKey(key)){
 			UserLogin userLogin = authenticatedUsers.get(key);
+			clean();
 			if(userLogin.getExpireDate().after(new Date())){
 				return true;
 			}else{
@@ -69,7 +67,19 @@ public enum AuthenticationManager {
 	public User getUser(String key){
 		User user = authenticatedUsers.get(key).getUser();
 		authenticatedUsers.remove(key);
+		clean();
 		return user;
+	}
+	
+	private void clean(){
+		if(!authenticatedUsers.isEmpty()){
+			Date currentDate = new Date();
+			for(Map.Entry<String, UserLogin> entry : authenticatedUsers.entrySet()){
+				if(currentDate.after(entry.getValue().getExpireDate())){
+					authenticatedUsers.remove(entry.getKey());
+				}
+			}
+		}
 	}
 
 	public static AuthenticationManager getInstance(){
@@ -77,19 +87,5 @@ public enum AuthenticationManager {
 	}
 
 	AuthenticationManager(){
-		timer.scheduleAtFixedRate(new TimerTask() {
-
-			@Override
-			public void run() {
-				if(!authenticatedUsers.isEmpty()){
-					Date currentDate = new Date();
-					for(Entry<String, UserLogin> entry : authenticatedUsers.entrySet()){
-						if(currentDate.after(entry.getValue().getExpireDate())){
-							authenticatedUsers.remove(entry.getKey());
-						}
-					}
-				}
-			}
-		}, 30*1000, 30*1000);
 	}
 }

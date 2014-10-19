@@ -9,11 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Firebase JWT token generator.
- *
- * @author vikrum
- */
 public class TokenGenerator {
 
     private static final int TOKEN_VERSION = 1;
