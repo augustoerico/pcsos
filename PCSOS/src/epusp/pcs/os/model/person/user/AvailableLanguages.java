@@ -1,5 +1,10 @@
 package epusp.pcs.os.model.person.user;
 
-public enum AvailableLanguages {
+import java.io.Serializable;
+
+public enum AvailableLanguages implements Serializable{
 	PORTUGUES, ENGLISH;
+	
+	AvailableLanguages(){
+	}
 }

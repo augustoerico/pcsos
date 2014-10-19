@@ -27,4 +27,13 @@ public interface MonitorWorkspaceConstants extends Constants {
 	
 	@DefaultStringValue("Emergency call info")
 	String info();
+	
+	@DefaultStringValue("Preferred language")
+	String preferredLanguage();
+	
+	@DefaultStringValue("Cancel")
+	String cancel();
+	
+	@DefaultStringValue("Save")
+	String save();
 }

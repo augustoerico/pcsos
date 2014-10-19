@@ -3,26 +3,45 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
 	<ui:image field='backgroundPicture' src='../images/monitor-background.jpg' />
-	
+
 	<ui:image field='trafficPictureOn' src='../images/traffic-alert-on.png' />
 	<ui:image field='trafficPictureOff' src='../images/traffic-alert-off.png' />
+
+	<ui:image field='phoneOn' src='../images/accepting-calls.png' />
+	<ui:image field='phoneOff' src='../images/denying-calls.png' />
 
 	<ui:style type="epusp.pcs.os.monitor.client.view.Workspace.TrafficSytle">
 	@sprite .backgroundPicture {
 		gwt-image: 'backgroundPicture';
 	}
 	
-	@sprite .down{
+	@sprite .showTraffic {
 		gwt-image: 'trafficPictureOn';
 	}
 	
-	@sprite .up{
+	@sprite .hideTraffic {
 		gwt-image: 'trafficPictureOff';
 	}
 	
-	.trafficButton{
+	@sprite .phoneOn {
+		gwt-image: 'phoneOn';
+	}
+	
+	@sprite .phoneOff {
+		gwt-image: 'phoneOff';
+	}
+	
+	.phone {
 		height: 45px;
-		width:	45px;
+		width: 45px;
+		background-size: 45px auto;
+		cursor: pointer;
+		margin-left: 20px;
+	}
+	
+	.trafficButton {
+		height: 45px;
+		width: 45px;
 		background-size: 45px auto;
 		cursor: pointer;
 		margin-right: 20px;
@@ -42,14 +61,109 @@
 		padding-right: 10px;
 	}
 	
-	.maps{
+	.maps {
 		padding-top: 10px;
 		padding-left: 20px;
 	}
 	
-	.picture{
+	.picture {
 		border-radius: 50%;
+	}
+	
+	.control-items{
+		padding-left: 10px;
+		cursor: pointer;
+	}
+	
+	.control-items:HOVER{
+		opacity: 0.8;
+	}
+	
+	.taskbar {
+		/* FF3.6+ */
+		background: -moz-linear-gradient(top, rgba(39, 39, 39, 1) 0%,
+			rgba(41, 41, 41, 1) 1%, rgba(45, 45, 45, 1) 3%, rgba(52, 52, 52, 0.99)
+			6%, rgba(36, 36, 36, 0.98) 11%, rgba(22, 22, 22, 0.97) 15%,
+			rgba(0, 0, 0, 0.96) 19%, rgba(9, 9, 9, 0.83) 83%,
+			rgba(22, 22, 22, 0.82) 87%, rgba(43, 43, 43, 0.81) 91%,
+			rgba(10, 10, 10, 0.8) 97%, rgba(91, 90, 89, 0.8) 99%,
+			rgba(10, 10, 10, 0.8) 100%, rgba(10, 10, 10, 0.8) 101%);
+		/* Chrome,Safari4+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(39,
+			39, 39, 1)), color-stop(1%, rgba(41, 41, 41, 1)),
+			color-stop(3%, rgba(45, 45, 45, 1)),
+			color-stop(6%, rgba(52, 52, 52, 0.99)),
+			color-stop(11%, rgba(36, 36, 36, 0.98)),
+			color-stop(15%, rgba(22, 22, 22, 0.97)),
+			color-stop(19%, rgba(0, 0, 0, 0.96)),
+			color-stop(83%, rgba(9, 9, 9, 0.83)),
+			color-stop(87%, rgba(22, 22, 22, 0.82)),
+			color-stop(91%, rgba(43, 43, 43, 0.81)),
+			color-stop(97%, rgba(10, 10, 10, 0.8)),
+			color-stop(99%, rgba(91, 90, 89, 0.8)),
+			color-stop(100%, rgba(10, 10, 10, 0.8)),
+			color-stop(101%, rgba(10, 10, 10, 0.8)));
+		/* Chrome10+,Safari5.1+ */
+		background: -webkit-linear-gradient(top, rgba(39, 39, 39, 1) 0%,
+			rgba(41, 41, 41, 1) 1%, rgba(45, 45, 45, 1) 3%, rgba(52, 52, 52, 0.99)
+			6%, rgba(36, 36, 36, 0.98) 11%, rgba(22, 22, 22, 0.97) 15%,
+			rgba(0, 0, 0, 0.96) 19%, rgba(9, 9, 9, 0.83) 83%,
+			rgba(22, 22, 22, 0.82) 87%, rgba(43, 43, 43, 0.81) 91%,
+			rgba(10, 10, 10, 0.8) 97%, rgba(91, 90, 89, 0.8) 99%,
+			rgba(10, 10, 10, 0.8) 100%, rgba(10, 10, 10, 0.8) 101%);
+		/* Opera 11.10+ */
+		background: -o-linear-gradient(top, rgba(39, 39, 39, 1) 0%,
+			rgba(41, 41, 41, 1) 1%, rgba(45, 45, 45, 1) 3%, rgba(52, 52, 52, 0.99)
+			6%, rgba(36, 36, 36, 0.98) 11%, rgba(22, 22, 22, 0.97) 15%,
+			rgba(0, 0, 0, 0.96) 19%, rgba(9, 9, 9, 0.83) 83%,
+			rgba(22, 22, 22, 0.82) 87%, rgba(43, 43, 43, 0.81) 91%,
+			rgba(10, 10, 10, 0.8) 97%, rgba(91, 90, 89, 0.8) 99%,
+			rgba(10, 10, 10, 0.8) 100%, rgba(10, 10, 10, 0.8) 101%);
+		/* IE10+ */
+		background: -ms-linear-gradient(top, rgba(39, 39, 39, 1) 0%,
+			rgba(41, 41, 41, 1) 1%, rgba(45, 45, 45, 1) 3%, rgba(52, 52, 52, 0.99)
+			6%, rgba(36, 36, 36, 0.98) 11%, rgba(22, 22, 22, 0.97) 15%,
+			rgba(0, 0, 0, 0.96) 19%, rgba(9, 9, 9, 0.83) 83%,
+			rgba(22, 22, 22, 0.82) 87%, rgba(43, 43, 43, 0.81) 91%,
+			rgba(10, 10, 10, 0.8) 97%, rgba(91, 90, 89, 0.8) 99%,
+			rgba(10, 10, 10, 0.8) 100%, rgba(10, 10, 10, 0.8) 101%);
+		/* W3C */
+		background: linear-gradient(to bottom, rgba(39, 39, 39, 1) 0%,
+			rgba(41, 41, 41, 1) 1%, rgba(45, 45, 45, 1) 3%, rgba(52, 52, 52, 0.99)
+			6%, rgba(36, 36, 36, 0.98) 11%, rgba(22, 22, 22, 0.97) 15%,
+			rgba(0, 0, 0, 0.96) 19%, rgba(9, 9, 9, 0.83) 83%,
+			rgba(22, 22, 22, 0.82) 87%, rgba(43, 43, 43, 0.81) 91%,
+			rgba(10, 10, 10, 0.8) 97%, rgba(91, 90, 89, 0.8) 99%,
+			rgba(10, 10, 10, 0.8) 100%, rgba(10, 10, 10, 0.8) 101%);
+		/* IE6-9 */
+		filter: progid:DXImageTransform.Microsoft.gradient(    startColorstr='#272727',
+			endColorstr='#cc0a0a0a', GradientType=0);
+	}
+	
+	.usernamePanel{
+		display: inline-table;
 		margin-right: 150px;
+	}
+	
+	.usernamePanel:HOVER{
+		cursor: default;
+	}
+	
+	.username{
+		vertical-align: middle;
+		display: table-cell;
+		color: white;
+		padding-right: 10px;
+		font: bold 12px/1 Georgia, serif;
+		-o-text-overflow: ellipsis;
+		text-overflow: ellipsis;
+		text-shadow: 4px 0 9px rgba(118,124,130,0.9) , 2px 2px 2px rgba(0,0,0,0.5) ;
+		-webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+		-moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+		-o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+		transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+		-webkit-transform-origin: 50% 50% 0;
+		transform-origin: 50% 50% 0;
 	}
 	</ui:style>
 
@@ -59,36 +173,51 @@
 			<g:south size="90">
 				<g:DeckLayoutPanel ui:field="deckPanel" width="100%"
 					height="100%">
-					<g:AbsolutePanel title="Google Maps View" ui:field="mapsArea" styleName="{style.maps}" />
+					<g:AbsolutePanel title="Google Maps View" ui:field="mapsArea"
+						styleName="{style.maps}" />
 					<g:Label styleName="{style.tmp}">info goes here</g:Label>
 					<g:Label styleName="{style.tmp}">backup goes here</g:Label>
 				</g:DeckLayoutPanel>
 			</g:south>
 
 			<g:north size="5">
-				<g:HorizontalPanel width="100%" height="100%"
-					verticalAlignment="middle" horizontalAlignment="left">
-					<g:cell width="40px">
-						<g:Image width="35px" height="auto" ui:field="logo" />
-					</g:cell>
-					<g:cell>
-						<g:Label styleName="{style.tmp}">PCS.O.S</g:Label>
-					</g:cell>
-					<g:cell horizontalAlignment="right" verticalAlignment="middle">
-						<g:Image height="30px" width="auto" ui:field="picture" styleName="{style.picture}"/>
-					</g:cell>
-				</g:HorizontalPanel>
+				<g:AbsolutePanel height="40px">
+					<g:HorizontalPanel width="100%" height="100%"
+						verticalAlignment="middle" horizontalAlignment="left" styleName="{style.taskbar}">
+						<g:cell width="40px">
+							<g:Image width="35px" height="auto" ui:field="logo" />
+						</g:cell>
+						<g:cell>
+							<g:Label styleName="{style.tmp}">PCS.O.S</g:Label>
+						</g:cell>
+						<g:cell horizontalAlignment="right" verticalAlignment="middle">
+							<g:FlowPanel styleName="{style.usernamePanel}">
+								<g:Label ui:field="username" styleName="{style.username}" />
+								<g:Image height="30px" width="auto" ui:field="picture"
+									styleName="{style.picture}" />
+								<g:Image height="30px" width="auto" ui:field="preferences"
+									styleName="{style.control-items}" />
+								<g:Image height="30px" width="auto" ui:field="logout"
+									styleName="{style.control-items}" />
+							</g:FlowPanel>
+						</g:cell>
+					</g:HorizontalPanel>
+				</g:AbsolutePanel>
 			</g:north>
 
 			<g:west size="12.5">
-				<g:Label styleName="{style.tmp}">phone</g:Label>
+				<g:HorizontalPanel verticalAlignment="middle"
+					horizontalAlignment="left" width="100%" height="100%">
+					<g:ToggleButton ui:field="phoneButton"
+						styleName="{style.phone} {style.phoneOff}" />
+				</g:HorizontalPanel>
 			</g:west>
 
 			<g:east size="12.5">
-				<g:HorizontalPanel verticalAlignment="middle" horizontalAlignment="right"
-					width="100%" height="100%">
+				<g:HorizontalPanel verticalAlignment="middle"
+					horizontalAlignment="right" width="100%" height="100%">
 					<g:ToggleButton ui:field="trafficButton"
-						styleName="{style.trafficButton} {style.up}" />
+						styleName="{style.trafficButton} {style.hideTraffic}" />
 				</g:HorizontalPanel>
 			</g:east>
 
@@ -100,8 +229,8 @@
 							<g:Image height="30px" width="auto" ui:field="map" />
 						</g:cell>
 						<g:cell>
-							<g:RadioButton ui:field="mapRadio" name="control" enabled="true"
-								checked="true" />
+							<g:RadioButton ui:field="mapRadio" name="control"
+								enabled="true" checked="true" />
 						</g:cell>
 					</g:VerticalPanel>
 					<g:VerticalPanel styleName="{style.controlItem}"
@@ -110,8 +239,8 @@
 							<g:Image height="30px" width="auto" ui:field="info" />
 						</g:cell>
 						<g:cell>
-							<g:RadioButton ui:field="infoRadio" name="control" enabled="true"
-								checked="false" />
+							<g:RadioButton ui:field="infoRadio" name="control"
+								enabled="true" checked="false" />
 						</g:cell>
 					</g:VerticalPanel>
 					<g:VerticalPanel styleName="{style.controlItem}"
@@ -120,8 +249,8 @@
 							<g:Image height="30px" width="auto" ui:field="reinforcements" />
 						</g:cell>
 						<g:cell>
-							<g:RadioButton ui:field="reinforcementsRadio" name="control" enabled="true"
-								checked="false" />
+							<g:RadioButton ui:field="reinforcementsRadio" name="control"
+								enabled="true" checked="false" />
 						</g:cell>
 					</g:VerticalPanel>
 				</g:FlowPanel>

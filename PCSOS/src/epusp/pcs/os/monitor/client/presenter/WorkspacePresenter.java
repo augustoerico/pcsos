@@ -5,8 +5,10 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.Widget;
@@ -31,12 +33,15 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 		void setMapTitle(String title);
 		void setInfoTitle(String title);
 		void setReinforcements(String title);
+		void setUsername(String username);
 		RadioButton getMapButton();
 		RadioButton getInfoButton();
 		RadioButton getReinforcementsButton();
 		Widget asWidget();
 		HasWidgets getMapsArea();
 		ToggleButton getTrafficButton();
+		Image getLogout();
+		Image getPreferences();
 	}
 
 	private final IMonitorWorkspaceServiceAsync rpcService;
@@ -53,7 +58,6 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 
 	@Override
 	public void go(HasWidgets container) {
-	    bind();
 	    container.clear();
 	    container.add(display.asWidget());
 	    rpcService.getUserInfo(new AsyncCallback<User>() {
@@ -62,6 +66,7 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 			public void onSuccess(User result) {
 				if(result != null){
 					display.setUserImage(result.getPictureURL());
+					display.setUsername(result.getName());
 				}else{
 					display.setUserImage(resources.user());
 				}
@@ -72,6 +77,7 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 				System.out.println(caught.getMessage());
 			}
 		});
+	    bind();
 	}
 
 	public void bind() {
@@ -107,6 +113,26 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 			}
 		});
 		
+		display.getLogout().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				rpcService.logout(new AsyncCallback<Void>() {
+					
+					@Override
+					public void onSuccess(Void result) {
+						String path = Window.Location.getProtocol().concat("//").concat(Window.Location.getHost()).concat("/")
+								.concat("PCSOS.html").concat(Window.Location.getQueryString());
+						Window.Location.replace(path);
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {	
+					}
+				});
+			}
+		});
+		
 		display.getTrafficButton().setTitle(constants.showHideTraffic());
 		display.setInfoTitle(constants.info());
 		display.setMapTitle(constants.map());
@@ -116,6 +142,11 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 	@Override
 	public HasWidgets getMapsArea() {
 		return display.getMapsArea();
+	}
+
+	@Override
+	public Image getPreferencesButton() {
+		return display.getPreferences();
 	}
 
 }

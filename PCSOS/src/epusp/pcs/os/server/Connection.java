@@ -1,7 +1,11 @@
 package epusp.pcs.os.server;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpSession;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -342,6 +346,48 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 	public User getUserInfo(){
 		if(isLoggedIn()){
 			return (User) getSessionAttibute(userSessionAttribute);
+		}
+		return null;
+	}
+	
+	@Override
+	public void logout(){
+		if(isLoggedIn()){
+			HttpSession session = this.getThreadLocalRequest().getSession(false);
+			if (session == null)
+				return;
+			
+			System.out.println(getUserInfo().getEmail() + " has logout @ " + DateFormat.getDateInstance().format(new Date()));
+			session.invalidate();
+		}
+	}
+	
+	@Override
+	public void setPreferredLanguage(AvailableLanguages language){
+		if(isLoggedIn()){
+			User user = getUserInfo();
+			user.setPreferedLanguage(language);
+			
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+		
+			try{
+				pm.currentTransaction().begin();
+				pm.makePersistent(user);
+				pm.currentTransaction().commit();
+			}catch (Exception e){
+				e.printStackTrace();
+				if(pm.currentTransaction().isActive())
+					pm.currentTransaction().rollback();
+			}finally{
+				pm.close();
+			}
+		}
+	}
+	
+	@Override
+	public AvailableLanguages getUserLanguage(){
+		if(isLoggedIn()){
+			return getUserInfo().getPreferedLanguage();
 		}
 		return null;
 	}

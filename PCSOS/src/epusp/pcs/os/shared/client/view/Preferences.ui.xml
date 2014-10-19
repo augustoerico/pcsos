@@ -1,0 +1,105 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	
+	.panel{
+		margin-top: 5px;
+		margin-left: 5px;
+	}
+	
+	.itemPanel{
+		padding-top: 10px;
+		vertical-align: middle;
+		display: inline-flex;
+	}
+	
+	.item {
+		display: inline-block;
+		width: 95px;
+		padding-left: 5px;
+		font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+		color: #124700;
+		font-size: 13px;
+		font-weight: bold;
+		text-shadow: 1px 1px 1px #78C298;
+	}
+		
+	.buttonPanel{
+		text-align: right;
+	}
+	
+	.preferenceButton {
+		width: 100px;
+		font: 12px tahoma, arial, verdana, helvetica bold;
+		font-weight: bold;
+		min-width: 100px;
+		min-height: 22px;
+		box-shadow: 0 0 1px rgba(0, 0, 0, 0.40) inset;
+		background-attachment: scroll;
+		background-clip: border-box;
+		background-color: rgb(0, 126, 122);
+		background-image: none;
+		background-origin: padding-box;
+		background-size: auto;
+		border-bottom-color: rgb(255, 255, 255);
+		border-bottom-style: none;
+		border-bottom-width: 0px;
+		border-collapse: separate;
+		border-left-color: rgb(255, 255, 255);
+		border-left-style: none;
+		border-left-width: 0px;
+		border-right-color: rgb(255, 255, 255);
+		border-right-style: none;
+		border-right-width: 0px;
+		border-top-color: rgb(255, 255, 255);
+		border-top-style: none;
+		border-top-width: 0px;
+		box-sizing: border-box;
+		color: rgb(255, 255, 255);
+		cursor: pointer;
+		border-radius: 0px;
+		vertical-align: middle;
+	}
+	
+	.preferenceButton:hover {
+		opacity: 0.6;
+		-moz-opacity: 0.6;
+		filter: alpha(opacity =  60); /* For IE8 and earlier */
+	}
+	
+	.preferenceButton[disabled] {
+		background-color: lightgray;
+		opacity: 1.0;
+		-moz-opacity: 1.0;
+		filter: alpha(opacity =  100); /* For IE8 and earlier */
+	}
+	
+	.buttonItem{
+		margin-right: 5px;
+	}
+	</ui:style>
+
+	<g:AbsolutePanel width="410px" height="560px" styleName="{style.panel}">
+		<g:DecoratorPanel>
+			<g:AbsolutePanel width="395px" height="545px">
+				<g:FlowPanel width="100%" height="515px">
+					<g:HorizontalPanel width="100%" height="100%">
+						<g:cell>
+							<g:FlowPanel styleName="{style.itemPanel}">
+								<g:Label ui:field="languageLabel" styleName="{style.item}" />
+								<g:ListBox ui:field="languages" width="290px" multipleSelect="false" enabled="true"
+									visibleItemCount="1" />
+							</g:FlowPanel>
+						</g:cell>
+					</g:HorizontalPanel>
+					<g:FlowPanel styleName="{style.buttonPanel}">
+						<g:Button ui:field="cancel" styleName="{style.buttonItem} {style.preferenceButton}" />
+						<g:Button ui:field="ok" styleName="{style.preferenceButton}" />
+					</g:FlowPanel>
+				</g:FlowPanel>
+			</g:AbsolutePanel>
+		</g:DecoratorPanel>
+	</g:AbsolutePanel>
+
+</ui:UiBinder> 
