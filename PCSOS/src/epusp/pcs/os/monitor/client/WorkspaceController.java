@@ -6,8 +6,8 @@ import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
@@ -15,30 +15,33 @@ import epusp.pcs.os.monitor.client.presenter.GoogleMapsPresenter;
 import epusp.pcs.os.monitor.client.presenter.WorkspacePresenter;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
 import epusp.pcs.os.monitor.client.view.Workspace;
+import epusp.pcs.os.monitor.shared.EmergencyCallSpecs;
 import epusp.pcs.os.shared.client.presenter.PreferencesPresenter;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.client.view.Preferences;
+import epusp.pcs.os.shared.model.oncall.EmergencyCall;
+import epusp.pcs.os.shared.model.oncall.VehicleOnCall;
 
 public class WorkspaceController implements Presenter {
 	
 	private IMonitorWorkspaceServiceAsync monitorService;
 	private MonitorWorkspaceConstants constants;
 	
-	private WorkspaceLayoutPanel workspacePresenter;
+	private WorkspacePresenter workspacePresenter;
 	private GoogleMapsPresenter googleMapsPresenter;
 	private PreferencesPresenter preferencesPresenter;
 	
 	PopupPanel preferencesPopup = new PopupPanel(true);
 	
-	public interface WorkspaceLayoutPanel extends Presenter {
-		HasWidgets getMapsArea();
-		Image getPreferencesButton();
-	}
+	private MonitorStatusLifecycle monitorStatus = MonitorStatusLifecycle.Begin;
 	
-	Timer udpatePosition = new Timer() {
+	private EmergencyCallSpecs emergencyCallSpecs = new EmergencyCallSpecs();
+	
+	private Timer timer = new Timer() {
+		
 		@Override
 		public void run() {
-			updatePosition();
+			updateMonitorStatus();
 		}
 	};
 	
@@ -83,11 +86,80 @@ public class WorkspaceController implements Presenter {
 		googleMapsPresenter.go(workspacePresenter.getMapsArea());
 		preferencesPresenter = new PreferencesPresenter(monitorService, new Preferences(), constants);
 		preferencesPresenter.go(preferencesPopup);
+		timer.scheduleRepeating(5_000);
 		bind();
 	}
 	
-	private void updatePosition(){
-		udpatePosition.schedule(10*1000);
+	private void updateMonitorStatus(){
+		switch (monitorStatus) {
+		case Begin:
+			monitorService.addFreeMonitor(new AsyncCallback<Void>() {
+
+				@Override
+				public void onSuccess(Void result) {
+					monitorStatus = MonitorStatusLifecycle.WaitingCall;
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+				}
+			});
+			break;
+		case WaitingCall:
+			monitorService.isMonitorOnCall(new AsyncCallback<Boolean>() {
+				
+				@Override
+				public void onSuccess(Boolean result) {
+					if(result){
+						monitorStatus = MonitorStatusLifecycle.OnCall;
+					}
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+				}
+			});			
+			break;
+		case StartingCall:
+			monitorService.getEmergencyCallDetails(emergencyCallSpecs, new AsyncCallback<EmergencyCall>() {
+
+				@Override
+				public void onSuccess(EmergencyCall result) {
+					emergencyCallSpecs.setVictimLastPositionIndex(result.getVictimPositionSize()-1);
+					for(VehicleOnCall vehicle : result.getVehicles()){
+						emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getId(), vehicle.getPositions().size()-1);
+					}
+					googleMapsPresenter.addVictim(result.getVictimPositions().get(0));
+//					for(VehicleOnCall vehicle : result.getVehicles())
+//						googleMapsPresenter.addVehicle(vehicle, result.getVehiclePosition(vehicle.getId(), 0));
+					monitorStatus = MonitorStatusLifecycle.OnCall;
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+				}
+			});
+			break;
+		case OnCall:			
+			monitorService.getEmergencyCallDetails(emergencyCallSpecs, new AsyncCallback<EmergencyCall>() {
+
+				@Override
+				public void onSuccess(EmergencyCall result) {
+					emergencyCallSpecs.setVictimLastPositionIndex(result.getVictimPositionSize()-1);
+					for(VehicleOnCall vehicle : result.getVehicles()){
+						emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getId(), vehicle.getPositions().size()-1);
+					}
+					googleMapsPresenter.updateVictimPosition(result.getVictimPositions());
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+				}
+			});
+			break;
+		default:
+			break;
+		}
 	}
 
 }

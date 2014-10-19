@@ -296,5 +296,4 @@ public class GoogleMapsPresenter implements Presenter {
 			vehicleMarker.setLatLng(LatLng.newInstance(positions.get(positions.size()-1).getLatitude(), positions.get(positions.size()-1).getLongitude()));
 		}
 	}
-
 }

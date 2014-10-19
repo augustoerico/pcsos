@@ -1,9 +1,11 @@
 package epusp.pcs.os.server.monitor;
 
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceService;
+import epusp.pcs.os.monitor.shared.EmergencyCallSpecs;
 import epusp.pcs.os.server.Connection;
 import epusp.pcs.os.shared.model.oncall.EmergencyCall;
 import epusp.pcs.os.shared.model.person.user.AccountTypes;
+import epusp.pcs.os.shared.model.person.user.Monitor;
 import epusp.pcs.os.shared.model.person.user.User;
 
 public class MonitorWorkspaceConnection extends Connection implements IMonitorWorkspaceService{
@@ -20,10 +22,36 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 		}
 		return false;
 	}
-	
-	public EmergencyCall getEmergencyCallDetails(){
-//		return super.workflow
+
+	@Override
+	public EmergencyCall getEmergencyCallDetails(EmergencyCallSpecs specs){
+		if(isLoggedIn()){
+			Monitor monitor = (Monitor) getSessionAttibute(userSessionAttribute);
+			if(specs.getVictimLastPositionIndex() == -1 && specs.getVehiclesLastPositionIndex().isEmpty())
+				return workflow.getMonitorEmergencyCall(monitor.getId());
+			else
+				return workflow.getMonitorEmergencyCall(monitor.getId(), specs.getVehiclesLastPositionIndex(), specs.getVictimLastPositionIndex());
+		}
 		return null;
 	}
 
+	@Override
+	public void addFreeMonitor(){
+		if(isLoggedIn()){
+			Monitor monitor = (Monitor) getSessionAttibute(userSessionAttribute);
+			workflow.addFreeMonitor(monitor.getId());
+		}
+	}
+
+	@Override
+	public Boolean isMonitorOnCall(){
+		if(isLoggedIn()){
+			Monitor monitor = (Monitor) getSessionAttibute(userSessionAttribute);
+			Boolean onCall = workflow.isMonitorOnCall(monitor.getId());
+			if(onCall)
+				workflow.monitorOnCallAcknowledgment(monitor.getId());
+			return onCall;
+		}
+		return null;
+	}
 }

@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.monitor.client.MonitorResources;
-import epusp.pcs.os.monitor.client.WorkspaceController.WorkspaceLayoutPanel;
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
 import epusp.pcs.os.monitor.client.event.HideShowTrafficEvent;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
@@ -22,7 +21,7 @@ import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.model.person.user.User;
 
-public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
+public class WorkspacePresenter implements Presenter {
 
 	public interface Display {
 		void showMap();
@@ -139,12 +138,10 @@ public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 		display.setReinforcements(constants.reinforcements());
 	}
 
-	@Override
 	public HasWidgets getMapsArea() {
 		return display.getMapsArea();
 	}
 
-	@Override
 	public Image getPreferencesButton() {
 		return display.getPreferences();
 	}
