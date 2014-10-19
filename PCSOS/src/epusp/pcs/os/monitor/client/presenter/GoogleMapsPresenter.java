@@ -27,8 +27,6 @@ import com.google.gwt.maps.client.overlay.Polyline;
 import com.google.gwt.maps.client.overlay.TrafficOverlay;
 import com.google.gwt.user.client.ui.HasWidgets;
 
-import epusp.pcs.os.model.oncall.Position;
-import epusp.pcs.os.model.vehicle.Vehicle;
 import epusp.pcs.os.monitor.client.MonitorResources;
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
 import epusp.pcs.os.monitor.client.event.HideShowTrafficEvent;
@@ -36,6 +34,8 @@ import epusp.pcs.os.monitor.client.event.HideShowTrafficEvent.HideShowTrafficHan
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.Presenter;
+import epusp.pcs.os.shared.model.oncall.Position;
+import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 public class GoogleMapsPresenter implements Presenter {
 

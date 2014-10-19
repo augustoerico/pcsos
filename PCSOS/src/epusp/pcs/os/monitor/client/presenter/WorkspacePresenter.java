@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.Widget;
 
-import epusp.pcs.os.model.person.user.User;
 import epusp.pcs.os.monitor.client.MonitorResources;
 import epusp.pcs.os.monitor.client.WorkspaceController.WorkspaceLayoutPanel;
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
@@ -21,6 +20,7 @@ import epusp.pcs.os.monitor.client.event.HideShowTrafficEvent;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.Presenter;
+import epusp.pcs.os.shared.model.person.user.User;
 
 public class WorkspacePresenter implements Presenter, WorkspaceLayoutPanel {
 

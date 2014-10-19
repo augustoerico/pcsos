@@ -14,7 +14,6 @@
 	<source path="login/exceptions" />
 	<source path="login/shared" />
 	<source path="shared" />
-	<source path="model" />
 
 	<entry-point class="epusp.pcs.os.login.client.Panel" />
 </module>

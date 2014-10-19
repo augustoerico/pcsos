@@ -6,11 +6,11 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 
-import epusp.pcs.os.model.AgentCollection;
-import epusp.pcs.os.model.oncall.EmergencyCall;
-import epusp.pcs.os.model.oncall.Position;
-import epusp.pcs.os.model.person.user.Agent;
 import epusp.pcs.os.server.workflow.EmergencyCallWorkflow;
+import epusp.pcs.os.shared.model.AgentCollection;
+import epusp.pcs.os.shared.model.oncall.EmergencyCall;
+import epusp.pcs.os.shared.model.oncall.Position;
+import epusp.pcs.os.shared.model.person.user.Agent;
 
 @Api(name = "emcallworkflowendpoint", namespace = @ApiNamespace(ownerDomain = "pcs.epusp", ownerName = "pcs.epusp", packagePath = "os.workflow"))
 public class EmergencyCallWorkflowEndpoint {

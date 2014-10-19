@@ -3,7 +3,7 @@ package epusp.pcs.os.server.login;
 import java.io.Serializable;
 import java.util.Date;
 
-import epusp.pcs.os.model.person.user.User;
+import epusp.pcs.os.shared.model.person.user.User;
 
 public class UserLogin implements Serializable{
 	

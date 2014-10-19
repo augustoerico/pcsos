@@ -7,7 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 
-import epusp.pcs.os.model.person.user.User;
+import epusp.pcs.os.shared.model.person.user.User;
 
 public enum AuthenticationManager {
 	INSTANCE;

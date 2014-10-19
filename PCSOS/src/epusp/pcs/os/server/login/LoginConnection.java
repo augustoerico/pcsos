@@ -13,14 +13,14 @@ import org.json.JSONObject;
 
 import epusp.pcs.os.login.client.rpc.ILoginService;
 import epusp.pcs.os.login.shared.LoginConfig;
-import epusp.pcs.os.model.person.user.Admin;
-import epusp.pcs.os.model.person.user.Auditor;
-import epusp.pcs.os.model.person.user.Monitor;
-import epusp.pcs.os.model.person.user.SuperUser;
-import epusp.pcs.os.model.person.user.User;
 import epusp.pcs.os.server.Connection;
 import epusp.pcs.os.server.PMF;
 import epusp.pcs.os.shared.exception.DeniedAccess;
+import epusp.pcs.os.shared.model.person.user.Admin;
+import epusp.pcs.os.shared.model.person.user.Auditor;
+import epusp.pcs.os.shared.model.person.user.Monitor;
+import epusp.pcs.os.shared.model.person.user.SuperUser;
+import epusp.pcs.os.shared.model.person.user.User;
 
 public class LoginConnection extends Connection implements ILoginService{
 

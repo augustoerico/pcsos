@@ -12,9 +12,9 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-import epusp.pcs.os.model.person.user.AvailableLanguages;
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
+import epusp.pcs.os.shared.model.person.user.AvailableLanguages;
 
 public class PreferencesPresenter implements Presenter{
 

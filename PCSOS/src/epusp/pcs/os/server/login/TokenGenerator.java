@@ -3,7 +3,7 @@ package epusp.pcs.os.server.login;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import epusp.pcs.os.model.person.user.User;
+import epusp.pcs.os.shared.model.person.user.User;
 
 import java.util.Date;
 import java.util.HashMap;

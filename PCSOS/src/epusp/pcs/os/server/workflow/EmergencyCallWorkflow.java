@@ -10,16 +10,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.jdo.PersistenceManager;
 
-import epusp.pcs.os.model.oncall.EmergencyCall;
-import epusp.pcs.os.model.oncall.EmergencyCallLifecycle;
-import epusp.pcs.os.model.oncall.Position;
-import epusp.pcs.os.model.oncall.VehicleOnCall;
-import epusp.pcs.os.model.person.Victim;
-import epusp.pcs.os.model.person.user.Agent;
-import epusp.pcs.os.model.person.user.Monitor;
-import epusp.pcs.os.model.vehicle.Car;
-import epusp.pcs.os.model.vehicle.Vehicle;
 import epusp.pcs.os.server.PMF;
+import epusp.pcs.os.shared.model.oncall.EmergencyCall;
+import epusp.pcs.os.shared.model.oncall.EmergencyCallLifecycle;
+import epusp.pcs.os.shared.model.oncall.Position;
+import epusp.pcs.os.shared.model.oncall.VehicleOnCall;
+import epusp.pcs.os.shared.model.person.Victim;
+import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.person.user.Monitor;
+import epusp.pcs.os.shared.model.vehicle.Car;
+import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 public enum EmergencyCallWorkflow {
 	INSTANCE;

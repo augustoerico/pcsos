@@ -9,13 +9,13 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import epusp.pcs.os.model.person.user.AvailableLanguages;
-import epusp.pcs.os.model.person.user.Monitor;
-import epusp.pcs.os.model.person.user.User;
 import epusp.pcs.os.server.login.AuthenticationManager;
 import epusp.pcs.os.server.workflow.EmergencyCallWorkflow;
 import epusp.pcs.os.shared.client.rpc.IConnectionService;
 import epusp.pcs.os.shared.exception.LoginException;
+import epusp.pcs.os.shared.model.person.user.AvailableLanguages;
+import epusp.pcs.os.shared.model.person.user.Monitor;
+import epusp.pcs.os.shared.model.person.user.User;
 
 public class Connection extends RemoteServiceServlet implements IConnectionService{
 
