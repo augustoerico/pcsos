@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
@@ -24,7 +25,11 @@ public abstract class Vehicle extends SystemObject implements Serializable {
 	
 	@NotPersistent
 	private static final long serialVersionUID = 1L;
-
+	
+	@Persistent
+    @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
+	private String idTag;
+	
 	@NotPersistent
 	private List<Agent> agents = new ArrayList<Agent>();
 	
@@ -44,6 +49,15 @@ public abstract class Vehicle extends SystemObject implements Serializable {
 	public void setPrioraty(Priority prioraty){
 		this.prioraty = prioraty;
 	}
+	
+	public String getIdTag() {
+		return idTag;
+	}
+
+	public void setIdTag(String idTag) {
+		this.idTag = idTag;
+	}
+
 	
 	public Boolean isAvailable() {
 		return status;
