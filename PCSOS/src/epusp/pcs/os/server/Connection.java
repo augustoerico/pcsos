@@ -1,7 +1,9 @@
 package epusp.pcs.os.server;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
@@ -13,9 +15,19 @@ import epusp.pcs.os.server.login.AuthenticationManager;
 import epusp.pcs.os.server.workflow.EmergencyCallWorkflow;
 import epusp.pcs.os.shared.client.rpc.IConnectionService;
 import epusp.pcs.os.shared.exception.LoginException;
+import epusp.pcs.os.shared.model.oncall.Position;
+import epusp.pcs.os.shared.model.person.Victim;
+import epusp.pcs.os.shared.model.person.user.Admin;
+import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.person.user.Auditor;
 import epusp.pcs.os.shared.model.person.user.AvailableLanguages;
 import epusp.pcs.os.shared.model.person.user.Monitor;
+import epusp.pcs.os.shared.model.person.user.SuperUser;
 import epusp.pcs.os.shared.model.person.user.User;
+import epusp.pcs.os.shared.model.vehicle.Car;
+import epusp.pcs.os.shared.model.vehicle.Helicopter;
+import epusp.pcs.os.shared.model.vehicle.Priority;
+import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 public class Connection extends RemoteServiceServlet implements IConnectionService{
 
@@ -55,17 +67,18 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 //		monitor.setIsActive(true);
 //		monitor.setGoogleUserId("0000001");
 //		
-//		System.out.println("Create Cars...");
-//		Car car = new Car("PCS-0505");
-//		car.setPrioraty(Priority.PRIMARY);
+		pm = PMF.get().getPersistenceManager();
+		System.out.println("Create Cars...");
+		Car car = new Car("TAG001", "PCS-0505");
+		car.setPrioraty(Priority.PRIMARY);
 //
 //		Car supportCar = new Car("PCS-0506");
 //		supportCar.setPrioraty(Priority.SUPPORT);
 //		
-//		System.out.println("Create Agents...");
-//		Agent agent1 = new Agent("David", "Starsky", "david.starsk@gmail.com");
-//		agent1.setIsActive(true);
-//		agent1.setGoogleUserId("0000002");
+		System.out.println("Create Agents...");
+		Agent agent1 = new Agent("Maria", "Emilia Midori", "Hirami", "stmidori@gmail.com");
+		agent1.setIsActive(true);
+		agent1.setGoogleUserId("0000002");
 //		
 //		Agent agent2 = new Agent("Ken", "Hutchinson", "ken.hutchinson@gmail.com");
 //		agent2.setIsActive(true);
@@ -76,9 +89,9 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 //		agent3.setGoogleUserId("0000004");
 //		
 //		System.out.println("Create Victim");
-//		Victim victim = new Victim("Zezinho", "da Silva", "zezinho.silva@gmail.com");
-//		victim.setIsActive(true);
-//		victim.setGoogleUserId("0000004");
+		Victim victim = new Victim("Erico", "da Silva", "augusto.ericosilva@gmail.com");
+		victim.setIsActive(true);
+		victim.setGoogleUserId("0000004");
 //		
 //		Victim victim2 = new Victim("Luizinho", "da Silva", "luizinho.silva@gmail.com");
 //		victim2.setIsActive(true);
@@ -92,36 +105,48 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 //		agentX.setGoogleUserId("0000006");
 //		
 //		System.out.println("Persisting and detaching objects");
-//		Agent detachedAgent1 = null, detachedAgent2 = null, detachedAgent3 = null;
-//		Car detachedCar = null, detachedSupportCar = null;
+		Agent detachedAgent1 = null, detachedAgent2 = null, detachedAgent3 = null;
+		Car detachedCar = null, detachedSupportCar = null;
 //		Monitor detachedMonitor = null;
-//		Victim detachedVictim = null, detachedVictim2 = null;
+		Victim detachedVictim = null, detachedVictim2 = null;
 //		
-//		try{
-//			pm.currentTransaction().begin();
+		try{
+			pm.currentTransaction().begin();
 //			
 ////			pm.makePersistent(admin);
 //			pm.makePersistent(monitor);
 //			detachedMonitor = pm.detachCopy(monitor);
-//			pm.makePersistent(car);
-//			detachedCar = pm.detachCopy(car);
-//			pm.makePersistent(agent1);
-//			detachedAgent1 = pm.detachCopy(agent1);
+			pm.makePersistent(car);
+			detachedCar = pm.detachCopy(car);
+			pm.makePersistent(agent1);
+			detachedAgent1 = pm.detachCopy(agent1);
 //			pm.makePersistent(agent2);
 //			detachedAgent2 = pm.detachCopy(agent2);
 //			pm.makePersistent(agent3);
 //			detachedAgent3 = pm.detachCopy(agent3);
-//			pm.makePersistent(victim);
-//			detachedVictim = pm.detachCopy(victim);
+			pm.makePersistent(victim);
+			detachedVictim = pm.detachCopy(victim);
 //			
-//			pm.currentTransaction().commit();
-//		}catch (Exception e){
-//			e.printStackTrace();
-//			if(pm.currentTransaction().isActive())
-//				pm.currentTransaction().rollback();
-//		}finally{
-//			pm.close();
-//		}
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+
+		
+		/*************************************************************************************************************************/
+		List<Agent> l = new ArrayList<Agent>();
+		l.clear();
+		l.add(detachedAgent1);
+		workflow.addFreeVehicle(detachedCar.getId(), l);
+		workflow.addWaitingCall(detachedVictim.getEmail());
+		workflow.addVictimPosition(victim.getEmail(), new Position(43.0578914, -87.96743));
+		/*************************************************************************************************************************/
+		
+		
 //		
 //		pm = PMF.get().getPersistenceManager();
 //		
@@ -389,6 +414,37 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		if(isLoggedIn()){
 			return getUserInfo().getPreferedLanguage();
 		}
+		return null;
+	}
+	
+	@Override
+	public Vehicle getVehicle(String vehicleId){
+		if(isLoggedIn()){
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			
+			pm = PMF.get().getPersistenceManager();
+			Vehicle vehicle = null;
+			System.out.println(vehicleId);
+			try{
+				vehicle = pm.getObjectById(Car.class, vehicleId);
+			}catch(Exception e){
+			}finally{				
+				pm.close();
+			}
+			
+			pm = PMF.get().getPersistenceManager();
+			if(vehicle == null){
+				try{
+					vehicle = pm.getObjectById(Helicopter.class, vehicleId);
+				}catch(Exception e){
+				}finally{
+					pm.close();
+				}
+			}
+			System.out.println(vehicle.getId());
+			return vehicle;
+		}
+		
 		return null;
 	}
 	

@@ -10,6 +10,7 @@
 	<set-property name="gwt.logging.popupHandler" value="DISABLED" />
 
 	<source path="monitor/client" />
+	<source path="monitor/shared" />
 	<source path="shared" />
 	
 	<stylesheet src="MonitorStyles.css" />

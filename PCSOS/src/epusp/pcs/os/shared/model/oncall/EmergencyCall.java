@@ -41,10 +41,10 @@ public class EmergencyCall implements Serializable {
 	private List<VehicleOnCall> vehicles = new ArrayList<VehicleOnCall>();
 	
 	@Persistent
-	private final List<Double> latitudes = new ArrayList<Double>(); 
+	private List<Double> latitudes = new ArrayList<Double>(); 
 
 	@Persistent
-	private final List<Double> longitudes = new ArrayList<Double>();
+	private List<Double> longitudes = new ArrayList<Double>();
 
 	public EmergencyCall(Date begin, String victimEmail){
 		this.begin = begin;

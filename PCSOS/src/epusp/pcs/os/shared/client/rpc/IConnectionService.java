@@ -6,6 +6,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import epusp.pcs.os.shared.exception.LoginException;
 import epusp.pcs.os.shared.model.person.user.AvailableLanguages;
 import epusp.pcs.os.shared.model.person.user.User;
+import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 @RemoteServiceRelativePath("connectionService")
 public interface IConnectionService extends RemoteService {
@@ -19,5 +20,7 @@ public interface IConnectionService extends RemoteService {
 	void setPreferredLanguage(AvailableLanguages language);
 
 	AvailableLanguages getUserLanguage();
+
+	Vehicle getVehicle(String vehicleId);
 	
 }

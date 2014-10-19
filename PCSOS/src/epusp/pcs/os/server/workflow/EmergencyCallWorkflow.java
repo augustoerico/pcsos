@@ -352,6 +352,7 @@ public enum EmergencyCallWorkflow {
 	 * Other methods
 	 */
 	public EmergencyCall getMonitorEmergencyCall(String monitorId){
+		System.out.println(monitorsOnCall.get(monitorId));
 		return monitorsOnCall.get(monitorId);
 	}
 	

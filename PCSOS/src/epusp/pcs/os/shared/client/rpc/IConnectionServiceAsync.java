@@ -4,6 +4,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import epusp.pcs.os.shared.model.person.user.AvailableLanguages;
 import epusp.pcs.os.shared.model.person.user.User;
+import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 
 public interface IConnectionServiceAsync {
@@ -18,4 +19,6 @@ public interface IConnectionServiceAsync {
 			AsyncCallback<Void> callback);
 
 	void getUserLanguage(AsyncCallback<AvailableLanguages> callback);
+
+	void getVehicle(String vehicleId, AsyncCallback<Vehicle> callback);
 }
