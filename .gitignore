@@ -10,7 +10,6 @@ local.properties
 .settings/
 .loadpath
 endpoint-libs/
-war/
 *.class
 *.jar
 *.war
