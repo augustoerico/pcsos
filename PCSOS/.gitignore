@@ -1,9 +1,7 @@
 /gwt-unitCache
 endpoint-libs/
-war/
 
 *.class
-*.jar
 *.war
 *.ear
 *.api
