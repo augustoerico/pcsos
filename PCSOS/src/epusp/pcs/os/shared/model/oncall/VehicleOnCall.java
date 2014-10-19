@@ -58,6 +58,29 @@ public class VehicleOnCall implements Serializable{
 		}
 	}
 	
+	public List<Position> getPositions(){
+		List<Position> positions = new ArrayList<Position>();
+		for(int i = 0; i < latitudes.size(); i++){
+			positions.add(new Position(latitudes.get(i), longitudes.get(i)));
+		}
+		return positions;
+	}
+	
+	public List<Position> getPositions(int i){
+		List<Position> positions = new ArrayList<Position>();
+		for(; i < latitudes.size(); i++){
+			positions.add(new Position(latitudes.get(i), longitudes.get(i)));
+		}
+		return positions;
+	}
+	
+	public void addPositions(List<Position> positions){
+		for(Position position : positions){
+			latitudes.add(position.getLatitude());
+			longitudes.add(position.getLongitude());
+		}
+	}
+	
 	public Position getPosition(int i){
 		return new Position(latitudes.get(i), longitudes.get(i));
 	}

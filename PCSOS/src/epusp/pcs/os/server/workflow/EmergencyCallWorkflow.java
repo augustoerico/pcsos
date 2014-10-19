@@ -3,7 +3,10 @@ package epusp.pcs.os.server.workflow;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -354,6 +357,28 @@ public enum EmergencyCallWorkflow {
 	
 	public EmergencyCall getVehicleEmergencyCall(String vehicleId){
 		return vehiclesOnCall.get(vehicleId);
+	}
+	
+	public EmergencyCall getMonitorEmergencyCall(String monitorId, HashMap<String, Integer> vehicleLastPositions, int victimLastPosition){
+		EmergencyCall call = monitorsOnCall.get(monitorId);
+		EmergencyCall emergencyCall = new EmergencyCall(call.getBegin(), call.getVictimEmail());
+		
+		emergencyCall.setEmergencyCallLifecycle(call.getEmergencyCallLifecycle());
+		emergencyCall.setMonitor(monitorId);
+
+		for(VehicleOnCall vehicle : call.getVehicles()){
+			int i = 0;
+			if(vehicleLastPositions.containsKey(vehicle.getId())){
+				i = vehicleLastPositions.get(vehicle.getId());
+			}
+			emergencyCall.addVehicle(vehicle.getId(), vehicle.getAgents());
+			emergencyCall.addVehiclePositions(vehicle.getId(),  vehicle.getPositions(i));
+		}
+		
+		List<Position> positions = emergencyCall.getVictimPositions(victimLastPosition);
+		emergencyCall.addVictimPositions(positions);
+		
+		return emergencyCall;
 	}
 	
 	public void addAgentsToVehicle(String vehicleId, List<Agent> agents){

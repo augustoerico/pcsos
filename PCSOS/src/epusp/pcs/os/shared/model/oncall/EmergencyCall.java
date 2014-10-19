@@ -85,6 +85,29 @@ public class EmergencyCall implements Serializable {
 			longitudes.add(position.getLongitude());
 		}
 	}
+	
+	public void addVictimPositions(List<Position> positions){
+		for(Position position : positions){
+			latitudes.add(position.getLatitude());
+			longitudes.add(position.getLongitude());
+		}
+	}
+	
+	public List<Position> getVictimPositions(){
+		List<Position> positions = new ArrayList<Position>();
+		for(int i = 0; i < latitudes.size(); i++){
+			positions.add(new Position(latitudes.get(i), longitudes.get(i)));
+		}
+		return positions;
+	}
+	
+	public List<Position> getVictimPositions(int i){
+		List<Position> positions = new ArrayList<Position>();
+		for(; i < latitudes.size(); i++){
+			positions.add(new Position(latitudes.get(i), longitudes.get(i)));
+		}
+		return positions;
+	}
 
 	public Position getVictimPosition(int i){
 		return new Position(latitudes.get(i), longitudes.get(i));
@@ -123,6 +146,14 @@ public class EmergencyCall implements Serializable {
 			}
 		}
 		return new Position();
+	}
+	
+	public void addVehiclePositions(String vehicleId, List<Position> positions){
+		for(VehicleOnCall vehicle : vehicles){
+			if(vehicle.getVehicleId().equals(vehicleId)){
+				vehicle.addPositions(positions);
+			}
+		}
 	}
 	
 	public int getVehiclePositionSize(String vehicleId){

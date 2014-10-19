@@ -4,8 +4,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -23,7 +23,6 @@ public class WorkspaceController implements Presenter {
 	
 	private IMonitorWorkspaceServiceAsync monitorService;
 	private MonitorWorkspaceConstants constants;
-	private HasWidgets container;
 	
 	private WorkspaceLayoutPanel workspacePresenter;
 	private GoogleMapsPresenter googleMapsPresenter;
@@ -35,6 +34,13 @@ public class WorkspaceController implements Presenter {
 		HasWidgets getMapsArea();
 		Image getPreferencesButton();
 	}
+	
+	Timer udpatePosition = new Timer() {
+		@Override
+		public void run() {
+			updatePosition();
+		}
+	};
 	
 	public WorkspaceController(IMonitorWorkspaceServiceAsync monitorService, MonitorWorkspaceConstants constants){
 		this.monitorService = monitorService;
@@ -70,8 +76,7 @@ public class WorkspaceController implements Presenter {
 	}
 
 	@Override
-	public void go(final HasWidgets container) {		
-		this.container = container;
+	public void go(final HasWidgets container) {
 		workspacePresenter = new WorkspacePresenter(monitorService, new Workspace(), constants);
 		workspacePresenter.go(container);
 		googleMapsPresenter = new GoogleMapsPresenter(monitorService, constants);
@@ -79,6 +84,10 @@ public class WorkspaceController implements Presenter {
 		preferencesPresenter = new PreferencesPresenter(monitorService, new Preferences(), constants);
 		preferencesPresenter.go(preferencesPopup);
 		bind();
+	}
+	
+	private void updatePosition(){
+		udpatePosition.schedule(10*1000);
 	}
 
 }
