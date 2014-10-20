@@ -8,7 +8,7 @@ public class Position implements Serializable{
 
 	private Double latitude, longitude;
 	
-	public Position(double latitude, double longitude){
+	public Position(Double latitude, Double longitude){
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}

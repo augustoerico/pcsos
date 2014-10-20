@@ -135,12 +135,13 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 
 		
 		/*************************************************************************************************************************/
-		List<Agent> l = new ArrayList<Agent>();
-		l.clear();
-		l.add(detachedAgent1);
-		workflow.addFreeVehicle(detachedCar.getId(), l);
-		workflow.addWaitingCall(detachedVictim.getEmail());
-		workflow.addVictimPosition(victim.getEmail(), new Position(43.0578914, -87.96743));
+//		List<Agent> l = new ArrayList<Agent>();
+//		l.clear();
+//		l.add(detachedAgent1);
+//		workflow.addFreeVehicle(detachedCar.getId(), l);
+//		workflow.addWaitingCall(detachedVictim.getEmail());
+//		workflow.addVictimPosition(victim.getEmail(), new Position(43.0578914, -87.96743));
+//		workflow.addVehiclePosition(detachedCar.getId(), new Position(43.0578900, -87.967435));
 		/*************************************************************************************************************************/
 		
 		

@@ -37,10 +37,10 @@ public abstract class Vehicle extends SystemObject implements Serializable {
 	private Boolean status;
 	
 	@NotPersistent
-	private double latitude;
+	private Double latitude;
 	
 	@NotPersistent
-	private double longitude;
+	private Double longitude;
 	
 	public Vehicle(String idTag){
 		this.idTag = idTag;

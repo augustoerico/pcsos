@@ -259,7 +259,7 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 		for(VehicleOnCall vehicle : emergencyCall.getVehicles()){
 			
 			List<Position> vehiclePositions = emergencyCall.getVehiclePositions(vehicle.getVehicleId());
-			
+			System.out.println(vehiclePositions.size());
 			if(!vehiclePositions.isEmpty()){				
 				if(!googleMapsPresenter.hasVehicle(vehicle.getVehicleId())){
 					googleMapsPresenter.addVehicle(vehicles.get(vehicle.getVehicleId()), vehiclePositions.remove(0));

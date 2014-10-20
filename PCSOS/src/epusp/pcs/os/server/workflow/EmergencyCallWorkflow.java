@@ -122,7 +122,7 @@ public enum EmergencyCallWorkflow {
 					detached = mgr.detachCopy(vehicle);
 			} finally {
 				mgr.close();
-			}			
+			}
 
 			if(detached != null){
 				switch(detached.getPriority()){
@@ -156,6 +156,7 @@ public enum EmergencyCallWorkflow {
 		List<String> agents = new ArrayList<String>();
 		for(Agent agent : vehicle.getAgents())
 			agents.add(agent.getId());
+		
 		emergencyCall.addVehicle(vehicle.getId(), agents);
 		emergencyCall.addVehiclePosition(vehicle.getId(), vehicle.getPosition());
 		emergencyCall.setEmergencyCallLifecycle(EmergencyCallLifecycle.WaitingAcknowledgment);
