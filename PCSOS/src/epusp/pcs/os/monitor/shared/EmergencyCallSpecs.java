@@ -9,7 +9,7 @@ public class EmergencyCallSpecs implements Serializable{
 
 	private int victimLastPosition = -1;
 	private HashMap<String, Integer> vehiclesLastPosition = new HashMap<String, Integer>();
-	
+
 	public int getVictimLastPositionIndex() {
 		return victimLastPosition;
 	}
@@ -17,15 +17,19 @@ public class EmergencyCallSpecs implements Serializable{
 	public void setVictimLastPositionIndex(int victimLastPosition) {
 		this.victimLastPosition = victimLastPosition;
 	}
-	
+
 	public void putVehiclesLastPositionIndex(String vehicleId, int i){
 		vehiclesLastPosition.put(vehicleId, i);
 	}
 
-	public HashMap<String, Integer> getVehiclesLastPositionIndex(){
+	public HashMap<String, Integer> getVehiclesLastPositionsIndex(){
 		return vehiclesLastPosition;
 	}
-	
+
+	public Integer getVehicleLastPositionIndex(String id){
+		return vehiclesLastPosition.get(id);
+	}
+
 	public EmergencyCallSpecs(){
 		super();
 	}

@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
+import javax.servlet.ServletException;
 
 import org.json.JSONObject;
 
@@ -27,6 +28,9 @@ public class LoginConnection extends Connection implements ILoginService{
 	private static final long serialVersionUID = 1L;
 
 	private static Logger log = Logger.getLogger(LoginConnection.class.getCanonicalName());
+	
+	@Override
+	public void init() throws ServletException{}
 
 	@Override
 	public LoginConfig login(String token) throws DeniedAccess{

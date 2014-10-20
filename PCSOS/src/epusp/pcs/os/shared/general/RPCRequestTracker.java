@@ -28,6 +28,15 @@ public class RPCRequestTracker {
 	public RPCRequestTracker(){
 		event = null;
 		source = null;
+	}	
+	
+	public void fire(){
+		if(event != null){
+			if(source == null)
+				EventBus.get().fireEvent(event);
+			else
+				EventBus.get().fireEventFromSource(event, source);
+		}
 	}
 	
 	public void add(AsyncCallback<?>... calls){

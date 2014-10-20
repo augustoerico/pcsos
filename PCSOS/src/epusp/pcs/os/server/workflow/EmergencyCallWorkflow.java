@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -352,7 +350,6 @@ public enum EmergencyCallWorkflow {
 	 * Other methods
 	 */
 	public EmergencyCall getMonitorEmergencyCall(String monitorId){
-		System.out.println(monitorsOnCall.get(monitorId));
 		return monitorsOnCall.get(monitorId);
 	}
 	
@@ -369,11 +366,11 @@ public enum EmergencyCallWorkflow {
 
 		for(VehicleOnCall vehicle : call.getVehicles()){
 			int i = 0;
-			if(vehicleLastPositions.containsKey(vehicle.getId())){
-				i = vehicleLastPositions.get(vehicle.getId());
+			if(vehicleLastPositions.containsKey(vehicle.getVehicleId())){
+				i = vehicleLastPositions.get(vehicle.getVehicleId());
 			}
-			emergencyCall.addVehicle(vehicle.getId(), vehicle.getAgents());
-			emergencyCall.addVehiclePositions(vehicle.getId(),  vehicle.getPositions(i));
+			emergencyCall.addVehicle(vehicle.getVehicleId(), vehicle.getAgents());
+			emergencyCall.addVehiclePositions(vehicle.getVehicleId(),  vehicle.getPositions(i));
 		}
 		
 		List<Position> positions = emergencyCall.getVictimPositions(victimLastPosition);

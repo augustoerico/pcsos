@@ -17,12 +17,9 @@ import epusp.pcs.os.shared.client.rpc.IConnectionService;
 import epusp.pcs.os.shared.exception.LoginException;
 import epusp.pcs.os.shared.model.oncall.Position;
 import epusp.pcs.os.shared.model.person.Victim;
-import epusp.pcs.os.shared.model.person.user.Admin;
 import epusp.pcs.os.shared.model.person.user.Agent;
-import epusp.pcs.os.shared.model.person.user.Auditor;
 import epusp.pcs.os.shared.model.person.user.AvailableLanguages;
 import epusp.pcs.os.shared.model.person.user.Monitor;
-import epusp.pcs.os.shared.model.person.user.SuperUser;
 import epusp.pcs.os.shared.model.person.user.User;
 import epusp.pcs.os.shared.model.vehicle.Car;
 import epusp.pcs.os.shared.model.vehicle.Helicopter;
@@ -424,7 +421,6 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 			
 			pm = PMF.get().getPersistenceManager();
 			Vehicle vehicle = null;
-			System.out.println(vehicleId);
 			try{
 				vehicle = pm.getObjectById(Car.class, vehicleId);
 			}catch(Exception e){
@@ -441,7 +437,6 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 					pm.close();
 				}
 			}
-			System.out.println(vehicle.getId());
 			return vehicle;
 		}
 		

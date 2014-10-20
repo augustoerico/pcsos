@@ -148,6 +148,17 @@ public class EmergencyCall implements Serializable {
 		return new Position();
 	}
 	
+	public List<Position> getVehiclePositions(String vehicleId){
+		List<Position> positions = new ArrayList<Position>();
+		for(VehicleOnCall vehicle : vehicles){
+			if(vehicle.getVehicleId().equals(vehicleId)){
+				positions.addAll(vehicle.getPositions());
+				return positions;
+			}
+		}
+		return positions;
+	}
+	
 	public void addVehiclePositions(String vehicleId, List<Position> positions){
 		for(VehicleOnCall vehicle : vehicles){
 			if(vehicle.getVehicleId().equals(vehicleId)){

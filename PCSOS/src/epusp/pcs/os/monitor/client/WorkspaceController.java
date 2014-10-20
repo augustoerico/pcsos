@@ -1,6 +1,7 @@
 package epusp.pcs.os.monitor.client;
 
 import java.util.HashMap;
+import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -26,6 +27,7 @@ import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.client.view.Preferences;
 import epusp.pcs.os.shared.general.RPCRequestTracker;
 import epusp.pcs.os.shared.model.oncall.EmergencyCall;
+import epusp.pcs.os.shared.model.oncall.Position;
 import epusp.pcs.os.shared.model.oncall.VehicleOnCall;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
@@ -44,9 +46,9 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 
 	private EmergencyCallSpecs emergencyCallSpecs = new EmergencyCallSpecs();
 
-	private RPCRequestTracker tracker = new RPCRequestTracker(new LoadedVehiclesEvent());
+	private RPCRequestTracker tracker;
 
-	private HashMap<String, Vehicle> vehicles = new HashMap<String, Vehicle>();
+	private final HashMap<String, Vehicle> vehicles = new HashMap<String, Vehicle>();
 
 	private Timer timer = new Timer() {
 		@Override
@@ -132,74 +134,144 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 				}
 			});			
 			break;
-		case StartingCall:
-			monitorService.getEmergencyCallDetails(emergencyCallSpecs, new AsyncCallback<EmergencyCall>() {
-
-				@Override
-				public void onSuccess(EmergencyCall result) {
-					emergencyCallSpecs.setVictimLastPositionIndex(result.getVictimPositionSize()-1);
-					tracker.clear();
-					timer.cancel();
-					for(VehicleOnCall vehicle : result.getVehicles()){
-						AsyncCallback<Vehicle> vehicleCall = new AsyncCallback<Vehicle>() {
-
-							@Override
-							public void onFailure(Throwable caught) {
-							}
-
-							@Override
-							public void onSuccess(Vehicle result) {
-								if(tracker.hasCall(this)){
-									if(result != null){
-										System.out.println(result.getId());
-										vehicles.put(result.getId(), result);
-									}
-									tracker.remove(this);
-								}
-							}
-						};
-
-						tracker.add(vehicleCall);
-
-						monitorService.getVehicle(vehicle.getId(), vehicleCall);
-						emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getId(), vehicle.getPositions().size()-1);
-					}
-
-					googleMapsPresenter.addVictim(result.getVictimPositions().get(0));
-
-					monitorStatus = MonitorStatusLifecycle.OnCall;
-				}
-
-				@Override
-				public void onFailure(Throwable caught) {
-				}
-			});
-			break;
-		case OnCall:			
-			monitorService.getEmergencyCallDetails(emergencyCallSpecs, new AsyncCallback<EmergencyCall>() {
-
-				@Override
-				public void onSuccess(EmergencyCall result) {
-					emergencyCallSpecs.setVictimLastPositionIndex(result.getVictimPositionSize()-1);
-					for(VehicleOnCall vehicle : result.getVehicles()){
-						emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getId(), vehicle.getPositions().size()-1);
-					}
-					googleMapsPresenter.updateVictimPosition(result.getVictimPositions());
-				}
-
-				@Override
-				public void onFailure(Throwable caught) {
-				}
-			});
-			break;
+//		case StartingCall:
+//			timer.cancel();
+//			monitorService.getEmergencyCallDetails(emergencyCallSpecs, new AsyncCallback<EmergencyCall>() {
+//
+//				@Override
+//				public void onSuccess(EmergencyCall result) {
+//					emergencyCallSpecs.setVictimLastPositionIndex(result.getVictimPositionSize()-1);
+//					tracker.clear();
+//					for(VehicleOnCall vehicle : result.getVehicles()){
+//						AsyncCallback<Vehicle> vehicleCall = new AsyncCallback<Vehicle>() {
+//
+//							@Override
+//							public void onFailure(Throwable caught) {
+//							}
+//
+//							@Override
+//							public void onSuccess(Vehicle result) {
+//								if(tracker.hasCall(this)){
+//									if(result != null){
+//										vehicles.put(result.getId(), result);
+//									}
+//									tracker.remove(this);
+//								}
+//							}
+//						};
+//
+//						tracker.add(vehicleCall);
+//
+//						monitorService.getVehicle(vehicle.getVehicleId(), vehicleCall);
+//						emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getVehicleId(), vehicle.getPositions().size()-1);
+//					}
+//
+//					googleMapsPresenter.addVictim(result.getVictimPositions().get(0));
+//
+//					monitorStatus = MonitorStatusLifecycle.OnCall;
+//				}
+//
+//				@Override
+//				public void onFailure(Throwable caught) {
+//				}
+//			});
+//			break;
+//		case OnCall:
+//			monitorService.getEmergencyCallDetails(emergencyCallSpecs, new AsyncCallback<EmergencyCall>() {
+//
+//				@Override
+//				public void onSuccess(EmergencyCall result) {
+//					emergencyCallSpecs.setVictimLastPositionIndex(emergencyCallSpecs.getVictimLastPositionIndex() + result.getVictimPositionSize());
+//					for(VehicleOnCall vehicle : result.getVehicles()){
+//						emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getVehicleId(), emergencyCallSpecs.getVehiclesLastPositionIndex().get(vehicle.getVehicleId())
+//								+ vehicle.getPositions().size());
+//					}
+//					googleMapsPresenter.updateVictimPosition(result.getVictimPositions());
+//				}
+//
+//				@Override
+//				public void onFailure(Throwable caught) {
+//				}
+//			});
+//			break;
 		default:
+			
+			monitorService.getEmergencyCallDetails(emergencyCallSpecs, new AsyncCallback<EmergencyCall>() {
+
+				@Override
+				public void onSuccess(EmergencyCall result) {
+					emergencyCallSpecs.setVictimLastPositionIndex(emergencyCallSpecs.getVictimLastPositionIndex() + result.getVictimPositionSize());
+					
+					loadVehicles(result);
+
+					if(!googleMapsPresenter.hasVictim()){
+						googleMapsPresenter.addVictim(result.getVictimPositions().remove(0));
+					}
+					
+					googleMapsPresenter.updateVictimPosition(result.getVictimPositions());					
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+				}
+			});
+			
 			break;
 		}
+	}
+	
+	private void loadVehicles(final EmergencyCall emergencyCall){
+		tracker = new RPCRequestTracker(new LoadedVehiclesEvent(emergencyCall));
+		for(VehicleOnCall vehicle : emergencyCall.getVehicles()){
+			if(!vehicles.containsKey(vehicle.getVehicleId())){
+				
+				AsyncCallback<Vehicle> vehicleCall = new AsyncCallback<Vehicle>() {
+					@Override
+					public void onFailure(Throwable caught) {
+						if(tracker.hasCall(this))
+							tracker.remove(this);
+					}
+
+					@Override
+					public void onSuccess(Vehicle result) {
+						if(tracker.hasCall(this)){
+							if(result != null){
+								vehicles.put(result.getId(), result);
+							}
+							tracker.remove(this);
+						}
+					}
+				};
+
+				tracker.add(vehicleCall);
+				
+				monitorService.getVehicle(vehicle.getVehicleId(), vehicleCall);
+			}			
+		}
+		
+		if(tracker.isEmpty())
+			tracker.fire();
 	}
 
 	@Override
 	public void onVehiclesLoaded(LoadedVehiclesEvent loadedVehiclesEvent) {
-		timer.scheduleRepeating(2*1000);
+		EmergencyCall emergencyCall = loadedVehiclesEvent.getEmergencyCall();
+		for(VehicleOnCall vehicle : emergencyCall.getVehicles()){
+			
+			List<Position> vehiclePositions = emergencyCall.getVehiclePositions(vehicle.getVehicleId());
+			
+			if(!vehiclePositions.isEmpty()){				
+				if(!googleMapsPresenter.hasVehicle(vehicle.getVehicleId())){
+					googleMapsPresenter.addVehicle(vehicles.get(vehicle.getVehicleId()), vehiclePositions.remove(0));
+					emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getVehicleId(), 0);
+				}
+				
+				emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getVehicleId(), emergencyCallSpecs.getVehicleLastPositionIndex(vehicle.getVehicleId())
+						+ vehicle.getPositions().size());
+			}
+			
+			googleMapsPresenter.updateVehiclePosition(vehicle.getVehicleId(), vehiclePositions);
+		}
 	}
 
 }
