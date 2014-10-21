@@ -134,68 +134,7 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 				}
 			});			
 			break;
-//		case StartingCall:
-//			timer.cancel();
-//			monitorService.getEmergencyCallDetails(emergencyCallSpecs, new AsyncCallback<EmergencyCall>() {
-//
-//				@Override
-//				public void onSuccess(EmergencyCall result) {
-//					emergencyCallSpecs.setVictimLastPositionIndex(result.getVictimPositionSize()-1);
-//					tracker.clear();
-//					for(VehicleOnCall vehicle : result.getVehicles()){
-//						AsyncCallback<Vehicle> vehicleCall = new AsyncCallback<Vehicle>() {
-//
-//							@Override
-//							public void onFailure(Throwable caught) {
-//							}
-//
-//							@Override
-//							public void onSuccess(Vehicle result) {
-//								if(tracker.hasCall(this)){
-//									if(result != null){
-//										vehicles.put(result.getId(), result);
-//									}
-//									tracker.remove(this);
-//								}
-//							}
-//						};
-//
-//						tracker.add(vehicleCall);
-//
-//						monitorService.getVehicle(vehicle.getVehicleId(), vehicleCall);
-//						emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getVehicleId(), vehicle.getPositions().size()-1);
-//					}
-//
-//					googleMapsPresenter.addVictim(result.getVictimPositions().get(0));
-//
-//					monitorStatus = MonitorStatusLifecycle.OnCall;
-//				}
-//
-//				@Override
-//				public void onFailure(Throwable caught) {
-//				}
-//			});
-//			break;
-//		case OnCall:
-//			monitorService.getEmergencyCallDetails(emergencyCallSpecs, new AsyncCallback<EmergencyCall>() {
-//
-//				@Override
-//				public void onSuccess(EmergencyCall result) {
-//					emergencyCallSpecs.setVictimLastPositionIndex(emergencyCallSpecs.getVictimLastPositionIndex() + result.getVictimPositionSize());
-//					for(VehicleOnCall vehicle : result.getVehicles()){
-//						emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getVehicleId(), emergencyCallSpecs.getVehiclesLastPositionIndex().get(vehicle.getVehicleId())
-//								+ vehicle.getPositions().size());
-//					}
-//					googleMapsPresenter.updateVictimPosition(result.getVictimPositions());
-//				}
-//
-//				@Override
-//				public void onFailure(Throwable caught) {
-//				}
-//			});
-//			break;
-		default:
-			
+		case OnCall:
 			monitorService.getEmergencyCallDetails(emergencyCallSpecs, new AsyncCallback<EmergencyCall>() {
 
 				@Override
@@ -215,7 +154,9 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 				public void onFailure(Throwable caught) {
 				}
 			});
-			
+			break;
+		default:
+	
 			break;
 		}
 	}
