@@ -112,12 +112,12 @@ public enum EmergencyCallWorkflow {
 		}
 	}
 	
-	public void addFreeVehicle(String vehicleId, List<Agent> agents){
-		if(!activeVehicles.containsKey(vehicleId)){
+	public void addFreeVehicle(String vehicleIdTag, List<Agent> agents){
+		if(!activeVehicles.containsKey(vehicleIdTag)){
 			PersistenceManager mgr = getPersistenceManager();
 			Vehicle vehicle, detached = null;
 			try {
-				vehicle = mgr.getObjectById(Car.class, vehicleId);
+				vehicle = mgr.getObjectById(Car.class, vehicleIdTag);
 				if(vehicle != null)
 					detached = mgr.detachCopy(vehicle);
 			} finally {
@@ -136,7 +136,7 @@ public enum EmergencyCallWorkflow {
 					break;
 				}
 				detached.addAgents(agents);
-				activeVehicles.put(vehicleId, detached);
+				activeVehicles.put(vehicleIdTag, detached);
 				if(!waitingCalls.isEmpty() && !freeMonitors.isEmpty())
 					associate();
 			}
@@ -171,8 +171,8 @@ public enum EmergencyCallWorkflow {
 		return monitorsOnCall.containsKey(monitorId);
 	}
 	
-	public Boolean isVehicleOnCall(String vehicleId){
-		return vehiclesOnCall.containsKey(vehicleId);
+	public Boolean isVehicleOnCall(String vehicleIdTag){
+		return vehiclesOnCall.containsKey(vehicleIdTag);
 	}
 	
 	public void monitorOnCallAcknowledgment(String monitorId){
@@ -190,8 +190,8 @@ public enum EmergencyCallWorkflow {
 			}
 	}
 
-	public void vehicleOnCallAcknowledgment(String vehicleId){
-		EmergencyCall emergencyCall = vehiclesOnCall.get(vehicleId);
+	public void vehicleOnCallAcknowledgment(String vehicleIdTag){
+		EmergencyCall emergencyCall = vehiclesOnCall.get(vehicleIdTag);
 		if(emergencyCall != null)
 			switch (emergencyCall.getEmergencyCallLifecycle()) {
 			case WaitingAcknowledgment:
@@ -230,13 +230,13 @@ public enum EmergencyCallWorkflow {
 	}
 	
 	
-	public void vehicleFinishedCallAcknowledgment(String vehicleId){
-		EmergencyCall emergencyCall = vehiclesOnCall.get(vehicleId);
+	public void vehicleFinishedCallAcknowledgment(String vehicleIdTag){
+		EmergencyCall emergencyCall = vehiclesOnCall.get(vehicleIdTag);
 		if(emergencyCall != null && emergencyCall.getEmergencyCallLifecycle().equals(EmergencyCallLifecycle.Finished)){
-			vehiclesOnCall.remove(vehicleId);
-			Vehicle vehicle = activeVehicles.get(vehicleId);
+			vehiclesOnCall.remove(vehicleIdTag);
+			Vehicle vehicle = activeVehicles.get(vehicleIdTag);
 			AcknowledgmentTracker tracker = ackControl.get(emergencyCall.getVictimEmail());
-			tracker.remove(vehicleId);
+			tracker.remove(vehicleIdTag);
 			if(tracker.isEmpty())
 				finish(emergencyCall);
 			switch(vehicle.getPriority()){
@@ -295,12 +295,12 @@ public enum EmergencyCallWorkflow {
 			emergencyCall.addVictimPosition(position);
 	}
 	
-	public void addVehiclePosition(String vehicleId, Position position){
+	public void addVehiclePosition(String vehicleIdTag, Position position){
 		if(!position.isEmpty()){
-			EmergencyCall emergencyCall = vehiclesOnCall.get(vehicleId);
-			activeVehicles.get(vehicleId).setPosition(position);
+			EmergencyCall emergencyCall = vehiclesOnCall.get(vehicleIdTag);
+			activeVehicles.get(vehicleIdTag).setPosition(position);
 			if(emergencyCall != null && !emergencyCall.getEmergencyCallLifecycle().equals(EmergencyCallLifecycle.Finished)){
-				vehiclesOnCall.get(vehicleId).addVehiclePosition(vehicleId, position);
+				vehiclesOnCall.get(vehicleIdTag).addVehiclePosition(vehicleIdTag, position);
 			}
 		}
 	}
@@ -354,8 +354,8 @@ public enum EmergencyCallWorkflow {
 		return monitorsOnCall.get(monitorId);
 	}
 	
-	public EmergencyCall getVehicleEmergencyCall(String vehicleId){
-		return vehiclesOnCall.get(vehicleId);
+	public EmergencyCall getVehicleEmergencyCall(String vehicleIdTag){
+		return vehiclesOnCall.get(vehicleIdTag);
 	}
 	
 	public EmergencyCall getMonitorEmergencyCall(String monitorId, HashMap<String, Integer> vehicleLastPositions, int victimLastPosition){
@@ -380,30 +380,30 @@ public enum EmergencyCallWorkflow {
 		return emergencyCall;
 	}
 	
-	public void addAgentsToVehicle(String vehicleId, List<Agent> agents){
-		if(activeVehicles.containsKey(vehicleId)){
-			Vehicle vehicle = activeVehicles.get(vehicleId);
+	public void addAgentsToVehicle(String vehicleIdTag, List<Agent> agents){
+		if(activeVehicles.containsKey(vehicleIdTag)){
+			Vehicle vehicle = activeVehicles.get(vehicleIdTag);
 			vehicle.addAgents(agents);
 		}
 	}
 
-	public void addAgentToVehicle(String vehicleId, Agent agent){
-		if(activeVehicles.containsKey(vehicleId)){
-			Vehicle vehicle = activeVehicles.get(vehicleId);
+	public void addAgentToVehicle(String vehicleIdTag, Agent agent){
+		if(activeVehicles.containsKey(vehicleIdTag)){
+			Vehicle vehicle = activeVehicles.get(vehicleIdTag);
 			vehicle.addAgent(agent);
 		}
 	}
 
-	public void removeAgentFromVehicle(String vehicleId, Agent agent){
-		if(activeVehicles.containsKey(vehicleId)){
-			Vehicle vehicle = activeVehicles.get(vehicleId);
+	public void removeAgentFromVehicle(String vehicleIdTag, Agent agent){
+		if(activeVehicles.containsKey(vehicleIdTag)){
+			Vehicle vehicle = activeVehicles.get(vehicleIdTag);
 			vehicle.removeAgent(agent);
 		}
 	}
 
-	public void removeAllAgentsFromVehicle(String vehicleId){
-		if(activeVehicles.containsKey(vehicleId)){
-			Vehicle vehicle = activeVehicles.get(vehicleId);
+	public void removeAllAgentsFromVehicle(String vehicleIdTag){
+		if(activeVehicles.containsKey(vehicleIdTag)){
+			Vehicle vehicle = activeVehicles.get(vehicleIdTag);
 			vehicle.removeAgents();
 		}
 	}
@@ -422,9 +422,9 @@ public enum EmergencyCallWorkflow {
 		return null;
 	}
 	
-	public Vehicle getVehicle(String vehicleId){
-		if(activeVehicles.containsKey(vehicleId)){
-			return activeVehicles.get(vehicleId);
+	public Vehicle getVehicle(String vehicleIdTag){
+		if(activeVehicles.containsKey(vehicleIdTag)){
+			return activeVehicles.get(vehicleIdTag);
 		}
 		return null;
 	}
@@ -437,17 +437,17 @@ public enum EmergencyCallWorkflow {
 		}
 	}
 	
-	public void vehicleLeaving(String vehicleId){
-		if(freeSupportVehicles.containsKey(vehicleId) || freePrimaryVehicles.contains(vehicleId)){
-			Vehicle vehicle = activeVehicles.get(vehicleId);
-			activeVehicles.remove(vehicleId);
+	public void vehicleLeaving(String vehicleIdTag){
+		if(freeSupportVehicles.containsKey(vehicleIdTag) || freePrimaryVehicles.contains(vehicleIdTag)){
+			Vehicle vehicle = activeVehicles.get(vehicleIdTag);
+			activeVehicles.remove(vehicleIdTag);
 			
 			switch(vehicle.getPriority()){
 			case PRIMARY:
 				freePrimaryVehicles.remove(vehicle);
 				break;
 			case SUPPORT:
-				freeSupportVehicles.remove(vehicleId);
+				freeSupportVehicles.remove(vehicleIdTag);
 				break;
 			default:
 				break;

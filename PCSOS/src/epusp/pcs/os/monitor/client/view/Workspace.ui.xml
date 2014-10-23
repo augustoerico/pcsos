@@ -61,7 +61,7 @@
 		padding-right: 10px;
 	}
 	
-	.maps {
+	.panel {
 		padding-top: 10px;
 		padding-left: 20px;
 	}
@@ -174,8 +174,9 @@
 				<g:DeckLayoutPanel ui:field="deckPanel" width="100%"
 					height="100%">
 					<g:AbsolutePanel title="Google Maps View" ui:field="mapsArea"
-						styleName="{style.maps}" />
-					<g:Label styleName="{style.tmp}">info goes here</g:Label>
+						styleName="{style.panel}" />
+					<g:AbsolutePanel title="Emergency Call Info View" ui:field="infoArea"
+						styleName="{style.panel}" />
 					<g:Label styleName="{style.tmp}">backup goes here</g:Label>
 				</g:DeckLayoutPanel>
 			</g:south>

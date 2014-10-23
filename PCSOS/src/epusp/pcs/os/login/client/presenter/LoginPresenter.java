@@ -22,6 +22,7 @@ public class LoginPresenter implements Presenter{
 	private final static String AUTH_URL = "https://accounts.google.com/o/oauth2/auth";
 	private final static String CLIENT_ID = "1043837675219-q4pthfju82obio990mn3l5adnuajo97b.apps.googleusercontent.com"; // available from the APIs console
 	private final static String EMAIL_SCOPE = "https://www.googleapis.com/auth/userinfo.email";
+	private static final String PLUS_ME_SCOPE = "https://www.googleapis.com/auth/plus.me";
 	
 	private final ILoginServiceAsync loginService;
 	private final Display view;
@@ -57,7 +58,7 @@ public class LoginPresenter implements Presenter{
 	
 	private void authenticate(){
 		AuthRequest req = new AuthRequest(AUTH_URL, CLIENT_ID)
-		.withScopes(EMAIL_SCOPE); // Can specify multiple scopes here
+		.withScopes(EMAIL_SCOPE, PLUS_ME_SCOPE); // Can specify multiple scopes here
 
 		Auth.get().login(req, new Callback<String, Throwable>() {
 			@Override

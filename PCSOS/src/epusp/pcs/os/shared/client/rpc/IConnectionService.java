@@ -4,6 +4,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import epusp.pcs.os.shared.exception.LoginException;
+import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.AvailableLanguages;
 import epusp.pcs.os.shared.model.person.user.User;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
@@ -22,5 +23,7 @@ public interface IConnectionService extends RemoteService {
 	AvailableLanguages getUserLanguage();
 
 	Vehicle getVehicle(String vehicleId);
+
+	Victim getVictim(String email);
 	
 }

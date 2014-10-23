@@ -16,9 +16,11 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
 import epusp.pcs.os.monitor.client.event.LoadedVehiclesEvent;
 import epusp.pcs.os.monitor.client.event.LoadedVehiclesEvent.LoadedVehiclesHandler;
+import epusp.pcs.os.monitor.client.presenter.CallInfoPresenter;
 import epusp.pcs.os.monitor.client.presenter.GoogleMapsPresenter;
 import epusp.pcs.os.monitor.client.presenter.WorkspacePresenter;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
+import epusp.pcs.os.monitor.client.view.CallInfo;
 import epusp.pcs.os.monitor.client.view.Workspace;
 import epusp.pcs.os.monitor.shared.EmergencyCallSpecs;
 import epusp.pcs.os.shared.client.event.EventBus;
@@ -29,6 +31,7 @@ import epusp.pcs.os.shared.general.RPCRequestTracker;
 import epusp.pcs.os.shared.model.oncall.EmergencyCall;
 import epusp.pcs.os.shared.model.oncall.Position;
 import epusp.pcs.os.shared.model.oncall.VehicleOnCall;
+import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
@@ -39,6 +42,7 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 	private WorkspacePresenter workspacePresenter;
 	private GoogleMapsPresenter googleMapsPresenter;
 	private PreferencesPresenter preferencesPresenter;
+	private CallInfoPresenter callInfoPresenter;
 
 	PopupPanel preferencesPopup = new PopupPanel(true);
 
@@ -98,6 +102,8 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 		workspacePresenter.go(container);
 		googleMapsPresenter = new GoogleMapsPresenter(monitorService, constants);
 		googleMapsPresenter.go(workspacePresenter.getMapsArea());
+		callInfoPresenter = new CallInfoPresenter(monitorService, new CallInfo(), constants);
+		callInfoPresenter.go(workspacePresenter.getInfoArea());
 		preferencesPresenter = new PreferencesPresenter(monitorService, new Preferences(), constants);
 		preferencesPresenter.go(preferencesPopup);
 		timer.scheduleRepeating(2*1000);
@@ -125,7 +131,7 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 				@Override
 				public void onSuccess(Boolean result) {
 					if(result){
-						monitorStatus = MonitorStatusLifecycle.StartingCall;
+						monitorStatus = MonitorStatusLifecycle.OnCall;
 					}
 				}
 
@@ -134,7 +140,7 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 				}
 			});			
 			break;
-		case OnCall:
+		case OnCall:			
 			monitorService.getEmergencyCallDetails(emergencyCallSpecs, new AsyncCallback<EmergencyCall>() {
 
 				@Override
@@ -142,7 +148,10 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 					emergencyCallSpecs.setVictimLastPositionIndex(emergencyCallSpecs.getVictimLastPositionIndex() + result.getVictimPositionSize());
 					
 					loadVehicles(result);
-
+					
+					if(!callInfoPresenter.hasVictim())
+						loadVictim(result.getVictimEmail());
+					
 					if(!googleMapsPresenter.hasVictim()){
 						googleMapsPresenter.addVictim(result.getVictimPositions().remove(0));
 					}
@@ -159,6 +168,20 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 	
 			break;
 		}
+	}
+	
+	private void loadVictim(final String victimEmail){
+		monitorService.getVictim(victimEmail, new AsyncCallback<Victim>() {
+
+			@Override
+			public void onSuccess(Victim result) {
+				callInfoPresenter.showVictim(result);
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+			}
+		});
 	}
 	
 	private void loadVehicles(final EmergencyCall emergencyCall){
@@ -200,7 +223,6 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 		for(VehicleOnCall vehicle : emergencyCall.getVehicles()){
 			
 			List<Position> vehiclePositions = emergencyCall.getVehiclePositions(vehicle.getVehicleId());
-			System.out.println(vehiclePositions.size());
 			if(!vehiclePositions.isEmpty()){				
 				if(!googleMapsPresenter.hasVehicle(vehicle.getVehicleId())){
 					googleMapsPresenter.addVehicle(vehicles.get(vehicle.getVehicleId()), vehiclePositions.remove(0));

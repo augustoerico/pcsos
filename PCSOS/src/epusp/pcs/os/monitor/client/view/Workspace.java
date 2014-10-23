@@ -38,7 +38,7 @@ public class Workspace extends Composite implements Display{
 	RadioButton mapRadio, infoRadio, reinforcementsRadio;
 	
 	@UiField
-	AbsolutePanel mapsArea;
+	AbsolutePanel mapsArea, infoArea;
 
 	@UiField
 	ToggleButton trafficButton, phoneButton;
@@ -171,6 +171,11 @@ public class Workspace extends Composite implements Display{
 	@Override
 	public HasWidgets getMapsArea() {
 		return mapsArea;
+	}
+	
+	@Override
+	public HasWidgets getInfoArea() {
+		return infoArea;
 	}
 
 	@Override

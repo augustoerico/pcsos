@@ -38,6 +38,7 @@ public class WorkspacePresenter implements Presenter {
 		RadioButton getReinforcementsButton();
 		Widget asWidget();
 		HasWidgets getMapsArea();
+		HasWidgets getInfoArea();
 		ToggleButton getTrafficButton();
 		Image getLogout();
 		Image getPreferences();
@@ -79,7 +80,7 @@ public class WorkspacePresenter implements Presenter {
 	    bind();
 	}
 
-	public void bind() {
+	private void bind() {
 		display.getMapButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -142,6 +143,10 @@ public class WorkspacePresenter implements Presenter {
 		return display.getMapsArea();
 	}
 
+	public HasWidgets getInfoArea(){
+		return display.getInfoArea();
+	}
+	
 	public Image getPreferencesButton() {
 		return display.getPreferences();
 	}

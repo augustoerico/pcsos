@@ -88,6 +88,7 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 //		System.out.println("Create Victim");
 		Victim victim = new Victim("Erico", "da Silva", "augusto.ericosilva@gmail.com");
 		victim.setIsActive(true);
+		victim.setPictureURL("https://lh5.googleusercontent.com/-bz0jlqC47wI/VCxuAL0oCdI/AAAAAAAAGo0/wtMnqqoCOFc/s903-no/IMG_20130504_151332.jpg");
 		victim.setGoogleUserId("0000004");
 //		
 //		Victim victim2 = new Victim("Luizinho", "da Silva", "luizinho.silva@gmail.com");
@@ -135,13 +136,13 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 
 		
 		/*************************************************************************************************************************/
-//		List<Agent> l = new ArrayList<Agent>();
-//		l.clear();
-//		l.add(detachedAgent1);
-//		workflow.addFreeVehicle(detachedCar.getId(), l);
-//		workflow.addWaitingCall(detachedVictim.getEmail());
-//		workflow.addVictimPosition(victim.getEmail(), new Position(43.0578914, -87.96743));
-//		workflow.addVehiclePosition(detachedCar.getId(), new Position(43.0578900, -87.967435));
+		List<Agent> l = new ArrayList<Agent>();
+		l.clear();
+		l.add(detachedAgent1);
+		workflow.addFreeVehicle(detachedCar.getIdTag(), l);
+		workflow.addWaitingCall(detachedVictim.getEmail());
+		workflow.addVictimPosition(victim.getEmail(), new Position(43.0578914, -87.96743));
+		workflow.addVehiclePosition(detachedCar.getIdTag(), new Position(43.0578900, -87.967435));
 		/*************************************************************************************************************************/
 		
 		
@@ -441,6 +442,25 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 			return vehicle;
 		}
 		
+		return null;
+	}
+	
+	@Override
+	public Victim getVictim(String email){
+		if(isLoggedIn()){
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			
+			pm = PMF.get().getPersistenceManager();
+			Victim victim = null;
+			try{
+				victim = pm.getObjectById(Victim.class, email);
+			}catch(Exception e){
+			}finally{				
+				pm.close();
+			}
+		
+			return victim;
+		}
 		return null;
 	}
 	

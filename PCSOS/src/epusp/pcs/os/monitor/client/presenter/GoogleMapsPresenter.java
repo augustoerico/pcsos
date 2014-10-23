@@ -56,7 +56,7 @@ public class GoogleMapsPresenter implements Presenter {
 	private HashMap<String, Vehicle> vehicles = new HashMap<String, Vehicle>();
 	private HashMap<String, List<Polyline>> vehicleRoute = new HashMap<String, List<Polyline>>();
 	
-	  private TrafficOverlay trafficInfo;
+	private TrafficOverlay trafficInfo;
 	
 	private MonitorResources resources = MonitorResources.INSTANCE;
 	

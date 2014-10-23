@@ -2,7 +2,7 @@ package epusp.pcs.os.monitor.client.constants;
 
 import com.google.gwt.i18n.client.Constants;
 
-public interface MonitorWorkspaceConstants extends Constants {
+public interface MonitorWorkspaceConstants extends Constants{
 
 	@DefaultStringValue("Welcome to Monitor Workspace!")
 	String welcome();
@@ -36,4 +36,13 @@ public interface MonitorWorkspaceConstants extends Constants {
 	
 	@DefaultStringValue("Save")
 	String save();
+	
+	@DefaultStringValue("Victim Details")
+	String victimHeader();
+	
+	@DefaultStringValue("Given Name")
+	String givenName();
+	
+	@DefaultStringValue("Surname")
+	String surname();
 }
