@@ -27,7 +27,7 @@ public class VehicleOnCall implements Serializable{
 	private String id;
 	
 	@Persistent
-	private String vehicleId;
+	private String vehicleIdTag;
 	
 	@Persistent
 	private List<String> agents = new ArrayList<String>();
@@ -38,8 +38,8 @@ public class VehicleOnCall implements Serializable{
 	@Persistent
 	private List<Double> longitudes = new ArrayList<Double>();
 		
-	public VehicleOnCall(String vehicleId, Collection<String> agents){
-		this.vehicleId = vehicleId;
+	public VehicleOnCall(String vehicleIdTag, Collection<String> agents){
+		this.vehicleIdTag = vehicleIdTag;
 		this.agents.addAll(agents);
 	}
 	
@@ -47,8 +47,8 @@ public class VehicleOnCall implements Serializable{
 		return id;
 	}
 
-	public String getVehicleId() {
-		return vehicleId;
+	public String getVehicleIdTag() {
+		return vehicleIdTag;
 	}
 	
 	public void addPosition(Position positon){

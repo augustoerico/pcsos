@@ -187,7 +187,7 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 	private void loadVehicles(final EmergencyCall emergencyCall){
 		tracker = new RPCRequestTracker(new LoadedVehiclesEvent(emergencyCall));
 		for(VehicleOnCall vehicle : emergencyCall.getVehicles()){
-			if(!vehicles.containsKey(vehicle.getVehicleId())){
+			if(!vehicles.containsKey(vehicle.getVehicleIdTag())){
 				
 				AsyncCallback<Vehicle> vehicleCall = new AsyncCallback<Vehicle>() {
 					@Override
@@ -200,7 +200,7 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 					public void onSuccess(Vehicle result) {
 						if(tracker.hasCall(this)){
 							if(result != null){
-								vehicles.put(result.getId(), result);
+								vehicles.put(result.getIdTag(), result);
 							}
 							tracker.remove(this);
 						}
@@ -209,7 +209,7 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 
 				tracker.add(vehicleCall);
 				
-				monitorService.getVehicle(vehicle.getVehicleId(), vehicleCall);
+				monitorService.getVehicle(vehicle.getVehicleIdTag(), vehicleCall);
 			}			
 		}
 		
@@ -222,18 +222,18 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 		EmergencyCall emergencyCall = loadedVehiclesEvent.getEmergencyCall();
 		for(VehicleOnCall vehicle : emergencyCall.getVehicles()){
 			
-			List<Position> vehiclePositions = emergencyCall.getVehiclePositions(vehicle.getVehicleId());
+			List<Position> vehiclePositions = emergencyCall.getVehiclePositions(vehicle.getVehicleIdTag());
 			if(!vehiclePositions.isEmpty()){				
-				if(!googleMapsPresenter.hasVehicle(vehicle.getVehicleId())){
-					googleMapsPresenter.addVehicle(vehicles.get(vehicle.getVehicleId()), vehiclePositions.remove(0));
-					emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getVehicleId(), 0);
+				if(!googleMapsPresenter.hasVehicle(vehicle.getVehicleIdTag())){
+					googleMapsPresenter.addVehicle(vehicles.get(vehicle.getVehicleIdTag()), vehiclePositions.remove(0));
+					emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getVehicleIdTag(), 0);
 				}
 				
-				emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getVehicleId(), emergencyCallSpecs.getVehicleLastPositionIndex(vehicle.getVehicleId())
+				emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getVehicleIdTag(), emergencyCallSpecs.getVehicleLastPositionIndex(vehicle.getVehicleIdTag())
 						+ vehicle.getPositions().size());
 			}
 			
-			googleMapsPresenter.updateVehiclePosition(vehicle.getVehicleId(), vehiclePositions);
+			googleMapsPresenter.updateVehiclePosition(vehicle.getVehicleIdTag(), vehiclePositions);
 		}
 	}
 

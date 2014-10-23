@@ -124,14 +124,14 @@ public class EmergencyCall implements Serializable {
 		return new Position(latitudes.get(i), longitudes.get(i));
 	}
 	
-	public void addVehicle(String vehicleId, Collection<String> agents){
-		vehicles.add(new VehicleOnCall(vehicleId, agents));
+	public void addVehicle(String vehicleIdTag, Collection<String> agents){
+		vehicles.add(new VehicleOnCall(vehicleIdTag, agents));
 	}
 	
-	public void addVehiclePosition(String vehicleId, Position position){
+	public void addVehiclePosition(String vehicleIdTag, Position position){
 		if(!position.isEmpty()){
 			for(VehicleOnCall vehicle : vehicles){
-				if(vehicle.getVehicleId().equals(vehicleId)){
+				if(vehicle.getVehicleIdTag().equals(vehicleIdTag)){
 					vehicle.addPosition(position);
 					return;
 				}
@@ -139,19 +139,19 @@ public class EmergencyCall implements Serializable {
 		}
 	}
 
-	public Position getVehiclePosition(String vehicleId, int i){
+	public Position getVehiclePosition(String vehicleIdTag, int i){
 		for(VehicleOnCall vehicle : vehicles){
-			if(vehicle.getVehicleId().equals(vehicleId)){
+			if(vehicle.getVehicleIdTag().equals(vehicleIdTag)){
 				return vehicle.getPosition(i);
 			}
 		}
 		return new Position();
 	}
 	
-	public List<Position> getVehiclePositions(String vehicleId){
+	public List<Position> getVehiclePositions(String vehicleIdTag){
 		List<Position> positions = new ArrayList<Position>();
 		for(VehicleOnCall vehicle : vehicles){
-			if(vehicle.getVehicleId().equals(vehicleId)){
+			if(vehicle.getVehicleIdTag().equals(vehicleIdTag)){
 				positions.addAll(vehicle.getPositions());
 				return positions;
 			}
@@ -159,26 +159,26 @@ public class EmergencyCall implements Serializable {
 		return positions;
 	}
 	
-	public void addVehiclePositions(String vehicleId, List<Position> positions){
+	public void addVehiclePositions(String vehicleIdTag, List<Position> positions){
 		for(VehicleOnCall vehicle : vehicles){
-			if(vehicle.getVehicleId().equals(vehicleId)){
+			if(vehicle.getVehicleIdTag().equals(vehicleIdTag)){
 				vehicle.addPositions(positions);
 			}
 		}
 	}
 	
-	public int getVehiclePositionSize(String vehicleId){
+	public int getVehiclePositionSize(String vehicleIdTag){
 		for(VehicleOnCall vehicle : vehicles){
-			if(vehicle.getVehicleId().equals(vehicleId)){
+			if(vehicle.getVehicleIdTag().equals(vehicleIdTag)){
 				return vehicle.getSize();
 			}
 		}
 		return 0;
 	}
 	
-	public Position getLastVehiclePosition(String vehicleId){
+	public Position getLastVehiclePosition(String vehicleIdTag){
 		for(VehicleOnCall vehicle : vehicles){
-			if(vehicle.getVehicleId().equals(vehicleId)){
+			if(vehicle.getVehicleIdTag().equals(vehicleIdTag)){
 				return vehicle.getLastPosition();
 			}
 		}

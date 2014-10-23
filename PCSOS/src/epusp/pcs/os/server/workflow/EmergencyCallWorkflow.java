@@ -157,10 +157,10 @@ public enum EmergencyCallWorkflow {
 		for(Agent agent : vehicle.getAgents())
 			agents.add(agent.getId());
 		
-		emergencyCall.addVehicle(vehicle.getId(), agents);
-		emergencyCall.addVehiclePosition(vehicle.getId(), vehicle.getPosition());
+		emergencyCall.addVehicle(vehicle.getIdTag(), agents);
+		emergencyCall.addVehiclePosition(vehicle.getIdTag(), vehicle.getPosition());
 		emergencyCall.setEmergencyCallLifecycle(EmergencyCallLifecycle.WaitingAcknowledgment);
-		vehiclesOnCall.put(vehicle.getId(), emergencyCall);
+		vehiclesOnCall.put(vehicle.getIdTag(), emergencyCall);
 		monitorsOnCall.put(monitor.getId(), emergencyCall);
 	}
 	
@@ -221,7 +221,7 @@ public enum EmergencyCallWorkflow {
 			AcknowledgmentTracker tracker = new AcknowledgmentTracker();
 			
 			for(VehicleOnCall vehicleOnCall : vehicles)
-				tracker.add(vehicleOnCall.getVehicleId());
+				tracker.add(vehicleOnCall.getVehicleIdTag());
 			
 			tracker.add(monitorId);
 			
@@ -296,30 +296,32 @@ public enum EmergencyCallWorkflow {
 	}
 	
 	public void addVehiclePosition(String vehicleIdTag, Position position){
-		if(!position.isEmpty()){
-			EmergencyCall emergencyCall = vehiclesOnCall.get(vehicleIdTag);
-			activeVehicles.get(vehicleIdTag).setPosition(position);
-			if(emergencyCall != null && !emergencyCall.getEmergencyCallLifecycle().equals(EmergencyCallLifecycle.Finished)){
-				vehiclesOnCall.get(vehicleIdTag).addVehiclePosition(vehicleIdTag, position);
+		if(!position.isEmpty() && activeVehicles.containsKey(vehicleIdTag)){
+			if(vehiclesOnCall.containsKey(vehicleIdTag)){
+				EmergencyCall emergencyCall = vehiclesOnCall.get(vehicleIdTag);
+				if(emergencyCall != null && !emergencyCall.getEmergencyCallLifecycle().equals(EmergencyCallLifecycle.Finished)){
+					vehiclesOnCall.get(vehicleIdTag).addVehiclePosition(vehicleIdTag, position);
+				}
 			}
+			activeVehicles.get(vehicleIdTag).setPosition(position);
 		}
 	}
 	
-	public void addVehicleToCall(String victimEmail, String vehicleId){
-		Vehicle vehicle = activeVehicles.get(vehicleId);
+	public void addVehicleToCall(String victimEmail, String vehicleIdTag){
+		Vehicle vehicle = activeVehicles.get(vehicleIdTag);
 		if(activeCalls.containsKey(victimEmail)){
 			EmergencyCall call = activeCalls.get(victimEmail);
 			if(call != null && !call.getEmergencyCallLifecycle().equals(EmergencyCallLifecycle.Finished)){
 				List<String> agents = new ArrayList<String>();
 				for(Agent agent : vehicle.getAgents())
 					agents.add(agent.getId());
-				call.addVehicle(vehicleId, agents);
+				call.addVehicle(vehicleIdTag, agents);
 				Position p = vehicle.getPosition();
 				if(!p.isEmpty()){
-					call.addVehiclePosition(vehicleId, p);
+					call.addVehiclePosition(vehicleIdTag, p);
 				}
-				freeSupportVehicles.remove(vehicleId);
-				vehiclesOnCall.put(vehicle.getId(), call);
+				freeSupportVehicles.remove(vehicleIdTag);
+				vehiclesOnCall.put(vehicle.getIdTag(), call);
 			}
 		}
 	}
@@ -367,11 +369,11 @@ public enum EmergencyCallWorkflow {
 
 		for(VehicleOnCall vehicle : call.getVehicles()){
 			int i = 0;
-			if(vehicleLastPositions.containsKey(vehicle.getVehicleId())){
-				i = vehicleLastPositions.get(vehicle.getVehicleId());
+			if(vehicleLastPositions.containsKey(vehicle.getVehicleIdTag())){
+				i = vehicleLastPositions.get(vehicle.getVehicleIdTag());
 			}
-			emergencyCall.addVehicle(vehicle.getVehicleId(), vehicle.getAgents());
-			emergencyCall.addVehiclePositions(vehicle.getVehicleId(),  vehicle.getPositions(i));
+			emergencyCall.addVehicle(vehicle.getVehicleIdTag(), vehicle.getAgents());
+			emergencyCall.addVehiclePositions(vehicle.getVehicleIdTag(),  vehicle.getPositions(i));
 		}
 		
 		List<Position> positions = emergencyCall.getVictimPositions(victimLastPosition);

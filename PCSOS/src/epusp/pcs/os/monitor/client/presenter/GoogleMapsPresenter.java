@@ -174,8 +174,8 @@ public class GoogleMapsPresenter implements Presenter {
 	}
 
 	public void addVehicle(Vehicle vehicle, Position begin){
-		if(!vehicles.containsKey(vehicle.getId())){
-			vehicles.put(vehicle.getId(), vehicle);
+		if(!vehicles.containsKey(vehicle.getIdTag())){
+			vehicles.put(vehicle.getIdTag(), vehicle);
 
 			Icon icon = null;
 			MarkerOptions options = MarkerOptions.newInstance();
@@ -200,19 +200,19 @@ public class GoogleMapsPresenter implements Presenter {
 			
 			Marker vehicleMarker = new Marker(latLng, options);
 			vehicleMarker.setDraggingEnabled(false);
-			vehiclesMarker.put(vehicle.getId(), vehicleMarker);
+			vehiclesMarker.put(vehicle.getIdTag(), vehicleMarker);
 			
 			view.addOverlay(vehicleMarker);
 		}
 	}
 	
-	public void updateVehiclePosition(final String id, List<Position> positions){
+	public void updateVehiclePosition(final String idTag, List<Position> positions){
 		if(!positions.isEmpty()){
-			if(vehicles.containsKey(id)){
-				Vehicle vehicle = vehicles.get(id);
-				Marker vehicleMarker = vehiclesMarker.get(id);
-				if(!vehicleRoute.containsKey(id)){
-					vehicleRoute.put(id, new ArrayList<Polyline>());
+			if(vehicles.containsKey(idTag)){
+				Vehicle vehicle = vehicles.get(idTag);
+				Marker vehicleMarker = vehiclesMarker.get(idTag);
+				if(!vehicleRoute.containsKey(idTag)){
+					vehicleRoute.put(idTag, new ArrayList<Polyline>());
 				}
 
 				switch (vehicle.getType()) {
@@ -232,7 +232,7 @@ public class GoogleMapsPresenter implements Presenter {
 						}
 
 						public void onSuccess(DirectionResults result) {
-							final List<Polyline> route = vehicleRoute.get(id);
+							final List<Polyline> route = vehicleRoute.get(idTag);
 							final Polyline polyline = result.getPolyline();
 							PolyStyleOptions style = PolyStyleOptions.newInstance("#0000FF", 4, 0.6);
 							polyline.setStrokeStyle(style);
@@ -268,7 +268,7 @@ public class GoogleMapsPresenter implements Presenter {
 					for(Position position : positions)
 						points[j++] = LatLng.newInstance(position.getLatitude(), position.getLongitude());
 
-					final List<Polyline> route = vehicleRoute.get(id);
+					final List<Polyline> route = vehicleRoute.get(idTag);
 					final Polyline polyline = new Polyline(points);
 					PolyStyleOptions style = PolyStyleOptions.newInstance("#DAA520", 4, 0.7);
 					polyline.setStrokeStyle(style);
@@ -305,7 +305,7 @@ public class GoogleMapsPresenter implements Presenter {
 		return victim != null;
 	}
 	
-	public Boolean hasVehicle(String id){
-		return vehicles.containsKey(id);
+	public Boolean hasVehicle(String idTag){
+		return vehicles.containsKey(idTag);
 	}
 }
