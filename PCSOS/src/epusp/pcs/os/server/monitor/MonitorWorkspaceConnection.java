@@ -34,7 +34,7 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 		if(isLoggedIn()){
 			Monitor monitor = (Monitor) getSessionAttibute(userSessionAttribute);
 			
-//			test();
+			test();
 			
 			if(specs.getVictimLastPositionIndex() == -1 && specs.getVehiclesLastPositionsIndex().isEmpty())
 				return workflow.getMonitorEmergencyCall(monitor.getId());
@@ -59,8 +59,8 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 		
 	
 		workflow.addVehiclePosition("TAG001", p[test%5]);
-		workflow.addVictimPosition("augusto.ericosilva@gmail.com", p[test++%5]);
-		System.out.println(test%5);
+		test++;
+		workflow.addVictimPosition("augusto.ericosilva@gmail.com", p[test%5]);
 		/*************************************************************/
 	}
 

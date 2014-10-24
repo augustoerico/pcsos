@@ -291,8 +291,9 @@ public enum EmergencyCallWorkflow {
 	 */
 	public void addVictimPosition(String victimEmail, Position position){
 		EmergencyCall emergencyCall = activeCalls.get(victimEmail);
-		if(activeCalls.containsKey(victimEmail) && !emergencyCall.getEmergencyCallLifecycle().equals(EmergencyCallLifecycle.Finished))
+		if(activeCalls.containsKey(victimEmail) && !emergencyCall.getEmergencyCallLifecycle().equals(EmergencyCallLifecycle.Finished)){
 			emergencyCall.addVictimPosition(position);
+		}
 	}
 	
 	public void addVehiclePosition(String vehicleIdTag, Position position){
@@ -375,8 +376,7 @@ public enum EmergencyCallWorkflow {
 			emergencyCall.addVehicle(vehicle.getVehicleIdTag(), vehicle.getAgents());
 			emergencyCall.addVehiclePositions(vehicle.getVehicleIdTag(),  vehicle.getPositions(i));
 		}
-		
-		List<Position> positions = emergencyCall.getVictimPositions(victimLastPosition);
+		List<Position> positions = call.getVictimPositions(victimLastPosition);
 		emergencyCall.addVictimPositions(positions);
 		
 		return emergencyCall;

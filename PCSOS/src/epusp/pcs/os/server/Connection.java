@@ -136,19 +136,19 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 
 		
 		/*************************************************************************************************************************/
-//		Position ATLANTA = new Position(33.7814790, -84.3880580);
-//		Position STONE_MOUNTAIN_PARK = new Position(33.80653802509606, -84.15252685546875);
-//		Position CYCLORAMA = new Position(33.741185330333956, -84.35834884643555);
-//		Position GEORGIA_AQUARIUM = new Position(33.761443931868925, -84.39432263374329);
-//		Position UNDERGROUND_ATLANTA = new Position(33.75134645137294, -84.39026713371277);
-//		
-//		List<Agent> l = new ArrayList<Agent>();
-//		l.clear();
-//		l.add(detachedAgent1);
-//		workflow.addFreeVehicle(detachedCar.getIdTag(), l);
-//		workflow.addWaitingCall(detachedVictim.getEmail());
-//		workflow.addVictimPosition(victim.getEmail(), GEORGIA_AQUARIUM);
-//		workflow.addVehiclePosition(detachedCar.getIdTag(), CYCLORAMA);
+		Position ATLANTA = new Position(33.7814790, -84.3880580);
+		Position STONE_MOUNTAIN_PARK = new Position(33.80653802509606, -84.15252685546875);
+		Position CYCLORAMA = new Position(33.741185330333956, -84.35834884643555);
+		Position GEORGIA_AQUARIUM = new Position(33.761443931868925, -84.39432263374329);
+		Position UNDERGROUND_ATLANTA = new Position(33.75134645137294, -84.39026713371277);
+		
+		List<Agent> l = new ArrayList<Agent>();
+		l.clear();
+		l.add(detachedAgent1);
+		workflow.addFreeVehicle(detachedCar.getIdTag(), l);
+		workflow.addWaitingCall(detachedVictim.getEmail());
+		workflow.addVictimPosition(victim.getEmail(), GEORGIA_AQUARIUM);
+		workflow.addVehiclePosition(detachedCar.getIdTag(), CYCLORAMA);
 		/*************************************************************************************************************************/
 		
 		

@@ -144,18 +144,19 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 			monitorService.getEmergencyCallDetails(emergencyCallSpecs, new AsyncCallback<EmergencyCall>() {
 
 				@Override
-				public void onSuccess(EmergencyCall result) {
-					emergencyCallSpecs.setVictimLastPositionIndex(emergencyCallSpecs.getVictimLastPositionIndex() + result.getVictimPositionSize());
-					
+				public void onSuccess(EmergencyCall result) {					
 					loadVehicles(result);
 					
-					if(!callInfoPresenter.hasVictim())
+					if(!callInfoPresenter.hasVictim()){
 						loadVictim(result.getVictimEmail());
+					}
 					
 					if(!googleMapsPresenter.hasVictim()){
 						googleMapsPresenter.addVictim(result.getVictimPositions().remove(0));
+						emergencyCallSpecs.setVictimLastPositionIndex(0);
 					}
 					
+					emergencyCallSpecs.setVictimLastPositionIndex(emergencyCallSpecs.getVictimLastPositionIndex() + result.getVictimPositionSize());
 					googleMapsPresenter.updateVictimPosition(result.getVictimPositions());					
 				}
 
@@ -165,7 +166,6 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 			});
 			break;
 		default:
-	
 			break;
 		}
 	}

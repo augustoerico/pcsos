@@ -88,8 +88,7 @@ public class EmergencyCall implements Serializable {
 	
 	public void addVictimPositions(List<Position> positions){
 		for(Position position : positions){
-			latitudes.add(position.getLatitude());
-			longitudes.add(position.getLongitude());
+			addVictimPosition(position);
 		}
 	}
 	
