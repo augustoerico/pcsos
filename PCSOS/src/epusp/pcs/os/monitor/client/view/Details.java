@@ -26,7 +26,7 @@ public class Details extends Composite implements Display{
 	Image picture;
 	
 	@UiField
-	VerticalPanel staticAttributes, panel;
+	VerticalPanel panel, staticAttributes, dynamicAttributes;
 	
 	HashMap<Category, FlowPanel> categories = new HashMap<Category, FlowPanel>();
 
@@ -47,8 +47,7 @@ public class Details extends Composite implements Display{
 	@Override
 	public void addDynamicAttribute(Category category, String label,
 			String value) {
-		// TODO Auto-generated method stub
-		
+		dynamicAttributes.add(addAttribute(label, value));
 	}
 	
 	@Override

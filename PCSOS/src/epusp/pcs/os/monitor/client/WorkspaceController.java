@@ -171,7 +171,7 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 	}
 	
 	private void loadVictim(final String victimEmail){
-		monitorService.getVictim(victimEmail, new AsyncCallback<Victim>() {
+		monitorService.getFullVictim(victimEmail, new AsyncCallback<Victim>() {
 
 			@Override
 			public void onSuccess(Victim result) {

@@ -21,7 +21,10 @@ public class AttributeInfo implements Serializable {
 	private String attributeName;
 	
 	@Persistent
-	private String label;
+	private List<String> locales = new ArrayList<String>();
+	
+	@Persistent
+	private List<String> labels = new ArrayList<String>();
 	
 	@Persistent
 	private Boolean isRequired = false;
@@ -35,18 +38,34 @@ public class AttributeInfo implements Serializable {
 	@Persistent
 	private Category category;
 
-	public AttributeInfo(String attributeName, Category category, String label){
+	public AttributeInfo(String attributeName, Category category){
 		this.attributeName = attributeName;
 		this.category = category;
-		this.label = label;
 	}
 
 	public String getAttributeName(){
 		return attributeName;
 	}
 
-	public String getLabel(){
-		return label;
+	public String getLabel(String locale){
+		int i = locales.indexOf(locale);
+		if(i >= 0)
+			return labels.get(i);
+		else
+			return "";
+	}
+	
+	public void addLocale(String locale, String label){
+		labels.add(label);
+		locales.add(locale);
+	}
+	
+	public void removeLocale(String locale){
+		int i = locales.indexOf(locale);
+		if(i >= 0){
+			labels.remove(i);
+			locales.remove(i);
+		}
 	}
 
 	public Category getCategory(){

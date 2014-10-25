@@ -7,9 +7,11 @@ import epusp.pcs.os.monitor.shared.EmergencyCallSpecs;
 import epusp.pcs.os.server.Connection;
 import epusp.pcs.os.shared.model.oncall.EmergencyCall;
 import epusp.pcs.os.shared.model.oncall.Position;
+import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.AccountTypes;
 import epusp.pcs.os.shared.model.person.user.Monitor;
 import epusp.pcs.os.shared.model.person.user.User;
+import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 public class MonitorWorkspaceConnection extends Connection implements IMonitorWorkspaceService{
 
@@ -34,7 +36,7 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 		if(isLoggedIn()){
 			Monitor monitor = (Monitor) getSessionAttibute(userSessionAttribute);
 			
-			test();
+//			test();
 			
 			if(specs.getVictimLastPositionIndex() == -1 && specs.getVehiclesLastPositionsIndex().isEmpty())
 				return workflow.getMonitorEmergencyCall(monitor.getId());
@@ -83,6 +85,21 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 		}
 		return null;
 	}
+	
+	@Override
+	public Vehicle getVehicle(String vehicleIdTag){
+		if(isLoggedIn()){
+			return workflow.getVehicle(vehicleIdTag);
+		}
+		return null;
+	}
+	
+	@Override
+	public Victim getVictim(String email){
+		if(isLoggedIn()){
+			return workflow.getVictim(email);
+		}
+		return null;
+	}
 
-	//TODO: Override métodos getVehicle e getVictim para pegar direto do workflow!
 }

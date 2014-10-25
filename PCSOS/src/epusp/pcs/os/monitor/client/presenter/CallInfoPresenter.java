@@ -42,7 +42,7 @@ public class CallInfoPresenter implements Presenter{
 
 	public void showVictim(Victim victim){
 		hasVictim = true;
-		this.victim = new DetailsPresenter(victim, new Details(), constants);
+		this.victim = new DetailsPresenter(victim, new Details(), rpcService, constants);
 		this.victim.go(view.getVictimPanel());
 	}
 

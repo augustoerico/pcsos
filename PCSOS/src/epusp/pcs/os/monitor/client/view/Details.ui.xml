@@ -23,6 +23,9 @@
 					</g:cell>
 				</g:HorizontalPanel>
 			</g:cell>
+			<g:cell>
+				<g:VerticalPanel ui:field="dynamicAttributes"/>
+			</g:cell>
 		</g:VerticalPanel>
 
 	</g:AbsolutePanel>

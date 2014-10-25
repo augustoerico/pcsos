@@ -15,6 +15,11 @@ import epusp.pcs.os.server.login.AuthenticationManager;
 import epusp.pcs.os.server.workflow.EmergencyCallWorkflow;
 import epusp.pcs.os.shared.client.rpc.IConnectionService;
 import epusp.pcs.os.shared.exception.LoginException;
+import epusp.pcs.os.shared.model.attribute.AttributeInfo;
+import epusp.pcs.os.shared.model.attribute.Category;
+import epusp.pcs.os.shared.model.attribute.types.IntegerAttribute;
+import epusp.pcs.os.shared.model.attribute.types.StringAttribute;
+import epusp.pcs.os.shared.model.exception.AttributeCastException;
 import epusp.pcs.os.shared.model.oncall.Position;
 import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
@@ -107,6 +112,56 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		Car detachedCar = null, detachedSupportCar = null;
 //		Monitor detachedMonitor = null;
 		Victim detachedVictim = null, detachedVictim2 = null;
+		
+
+		AttributeInfo info = new AttributeInfo("cor_dos_olhos", Category.PhysicalProfile);
+		info.addLocale("pt", "Cor dos Olhos");
+		info.addLocale("en", "Eye Color");
+		
+
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(info);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+		
+		info = new AttributeInfo("idade", Category.PhysicalProfile);
+		info.addLocale("pt", "Idade");
+		info.addLocale("en", "Age");
+		
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(info);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+
+		StringAttribute corDosOlhos = new StringAttribute("marrom", "cor_dos_olhos"); 
+		IntegerAttribute idade = new IntegerAttribute(25, "idade");
+		
+		try {
+			victim.addAttribute(corDosOlhos);
+			victim.addAttribute(idade);
+		} catch (AttributeCastException e) {
+			e.printStackTrace();
+		}
+		
+		pm =  PMF.get().getPersistenceManager();
 //		
 		try{
 			pm.currentTransaction().begin();
@@ -133,6 +188,10 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		}finally{
 			pm.close();
 		}
+		
+		
+		
+		
 
 		
 		/*************************************************************************************************************************/
@@ -456,7 +515,6 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		if(isLoggedIn()){
 			PersistenceManager pm = PMF.get().getPersistenceManager();
 			
-			pm = PMF.get().getPersistenceManager();
 			Victim victim = null;
 			try{
 				victim = pm.getObjectById(Victim.class, email);
@@ -466,6 +524,58 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 			}
 		
 			return victim;
+		}
+		return null;
+	}
+	
+	@Override
+	public Victim getFullVictim(String email){
+		if(isLoggedIn()){
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			
+			pm.getFetchPlan().addGroup("all_system_object_attributes");
+			pm.getFetchPlan().setMaxFetchDepth(-1);
+			
+			Victim victim = null, detached = null;
+			try{
+				pm.currentTransaction().begin();
+				victim = pm.getObjectById(Victim.class, email);
+				detached = pm.detachCopy(victim);
+				pm.currentTransaction().commit();
+			}catch(Exception e){
+				e.printStackTrace();
+				if (pm.currentTransaction().isActive())
+					pm.currentTransaction().rollback();
+			}finally{
+				pm.close();
+			}
+		
+			return detached;
+		}
+		return null;
+	}
+	
+	@Override
+	public AttributeInfo getAttributeInfo(String attributeName){
+		if(isLoggedIn()){
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			
+			pm = PMF.get().getPersistenceManager();
+			AttributeInfo attributeInfo = null, detached = null;
+			try{
+				pm.currentTransaction().begin();
+				attributeInfo = pm.getObjectById(AttributeInfo.class, attributeName);
+				detached = pm.detachCopy(attributeInfo);
+				pm.currentTransaction().commit();
+			}catch(Exception e){
+				e.printStackTrace();
+				if (pm.currentTransaction().isActive())
+					pm.currentTransaction().rollback();
+			}finally{
+				pm.close();
+			}
+		
+			return detached;
 		}
 		return null;
 	}
