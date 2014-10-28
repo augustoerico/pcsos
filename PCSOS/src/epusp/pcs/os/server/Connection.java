@@ -73,6 +73,7 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		System.out.println("Create Cars...");
 		Car car = new Car("TAG001", "PCS-0505");
 		car.setPrioraty(Priority.PRIMARY);
+		car.setImageURL("http://upload.wikimedia.org/wikipedia/commons/1/17/'74_Ford_Gran_Torino_Starsky_%26_Hutch_(Auto_classique_Jukebox_Burgers_'11).JPG");
 //
 //		Car supportCar = new Car("PCS-0506");
 //		supportCar.setPrioraty(Priority.SUPPORT);
@@ -81,6 +82,7 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		Agent agent1 = new Agent("Maria", "Emilia Midori", "Hirami", "stmidori@gmail.com");
 		agent1.setIsActive(true);
 		agent1.setGoogleUserId("0000002");
+		agent1.setPictureURL("https://lh5.googleusercontent.com/Z59ZqJ392vBnwHtcgrm-h_c8ZPZGl-CXrmzgRmoW-_E=s207-p-no");
 //		
 //		Agent agent2 = new Agent("Ken", "Hutchinson", "ken.hutchinson@gmail.com");
 //		agent2.setIsActive(true);
@@ -152,11 +154,37 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		}
 
 		StringAttribute corDosOlhos = new StringAttribute("marrom", "cor_dos_olhos"); 
-		IntegerAttribute idade = new IntegerAttribute(25, "idade");
+		IntegerAttribute idade = new IntegerAttribute(23, "idade");
 		
 		try {
 			victim.addAttribute(corDosOlhos);
 			victim.addAttribute(idade);
+		} catch (AttributeCastException e) {
+			e.printStackTrace();
+		}
+		
+		info = new AttributeInfo("cor", Category.PersonalVehicle);
+		info.addLocale("pt", "Cor");
+		info.addLocale("en", "Color");
+		
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(info);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+		
+		StringAttribute cor = new StringAttribute("vermelho", "cor");
+		
+		try {
+			car.addAttribute(cor);
 		} catch (AttributeCastException e) {
 			e.printStackTrace();
 		}
@@ -189,7 +217,46 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 			pm.close();
 		}
 		
+		Helicopter h = new Helicopter("TAG002");
+		h.setPrioraty(Priority.SUPPORT);
+		h.setImageURL("http://3.bp.blogspot.com/-nPMJ8lbBR-Q/UVc42PBUfbI/AAAAAAAAAIc/r4pyz4NTEPI/s320/Helicoptero+Aguia+11+PMESP1.jpg");
+		Helicopter detachedH = null;
 		
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(h);
+			detachedH = pm.detachCopy(h);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+		
+		Agent agent = new Agent("David", "Starsky", "david.starsk@gmail.com");
+		agent.setIsActive(true);
+		agent.setPictureURL("http://cdn.buzznet.com/assets/users16/pattygopez/default/david-starsky-starsky-hutch--large-msg-132259952209.jpg");
+
+		Agent detachedAgent = null;
+		
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(agent);
+			detachedAgent = pm.detachCopy(agent);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
 		
 		
 
@@ -208,6 +275,10 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		workflow.addWaitingCall(detachedVictim.getEmail());
 		workflow.addVictimPosition(victim.getEmail(), GEORGIA_AQUARIUM);
 		workflow.addVehiclePosition(detachedCar.getIdTag(), CYCLORAMA);
+		l.clear();
+		l.add(detachedAgent);
+		workflow.addFreeVehicle(detachedH.getIdTag(), l);
+		workflow.addVehiclePosition(detachedH.getIdTag(), ATLANTA);
 		/*************************************************************************************************************************/
 		
 		
@@ -541,6 +612,51 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 				pm.currentTransaction().begin();
 				victim = pm.getObjectById(Victim.class, email);
 				detached = pm.detachCopy(victim);
+				pm.currentTransaction().commit();
+			}catch(Exception e){
+				e.printStackTrace();
+				if (pm.currentTransaction().isActive())
+					pm.currentTransaction().rollback();
+			}finally{
+				pm.close();
+			}
+		
+			return detached;
+		}
+		return null;
+	}
+	
+	@Override
+	public Agent getAgent(String id){
+		if(isLoggedIn()){
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			
+			Agent agent = null;
+			try{
+				agent = pm.getObjectById(Agent.class, id);
+			}catch(Exception e){
+			}finally{				
+				pm.close();
+			}
+		
+			return agent;
+		}
+		return null;
+	}
+	
+	@Override
+	public Agent getFullAgent(String id){
+		if(isLoggedIn()){
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			
+			pm.getFetchPlan().addGroup("all_system_object_attributes");
+			pm.getFetchPlan().setMaxFetchDepth(-1);
+			
+			Agent agent = null, detached = null;
+			try{
+				pm.currentTransaction().begin();
+				agent = pm.getObjectById(Agent.class, id);
+				detached = pm.detachCopy(agent);
 				pm.currentTransaction().commit();
 			}catch(Exception e){
 				e.printStackTrace();

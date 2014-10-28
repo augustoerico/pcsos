@@ -38,6 +38,9 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 			
 //			test();
 			
+			if(t)
+				test2();
+			
 			if(specs.getVictimLastPositionIndex() == -1 && specs.getVehiclesLastPositionsIndex().isEmpty())
 				return workflow.getMonitorEmergencyCall(monitor.getId());
 			else
@@ -48,9 +51,10 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 	
 	//test method
 	//remover
+	/*************************************************************/
 	public static int test = 0;
 	private void test(){
-		/*************************************************************/
+		
 		Position ATLANTA = new Position(33.7814790, -84.3880580);
 		Position STONE_MOUNTAIN_PARK = new Position(33.80653802509606, -84.15252685546875);
 		Position CYCLORAMA = new Position(33.741185330333956, -84.35834884643555);
@@ -63,9 +67,17 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 		workflow.addVehiclePosition("TAG001", p[test%5]);
 		test++;
 		workflow.addVictimPosition("augusto.ericosilva@gmail.com", p[test%5]);
-		/*************************************************************/
+		
 	}
-
+	
+	public static Boolean t = true;
+	public void test2(){
+		t = false;
+		workflow.addVehicleToCall("augusto.ericosilva@gmail.com", "TAG002");
+	}
+	/*************************************************************/
+	
+	
 	@Override
 	public void addFreeMonitor(){
 		if(isLoggedIn()){

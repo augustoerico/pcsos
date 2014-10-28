@@ -4,6 +4,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import epusp.pcs.os.shared.model.attribute.AttributeInfo;
 import epusp.pcs.os.shared.model.person.Victim;
+import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.person.user.AvailableLanguages;
 import epusp.pcs.os.shared.model.person.user.User;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
@@ -30,4 +31,8 @@ public interface IConnectionServiceAsync {
 
 	void getAttributeInfo(String attributeName,
 			AsyncCallback<AttributeInfo> callback);
+
+	void getAgent(String id, AsyncCallback<Agent> callback);
+
+	void getFullAgent(String id, AsyncCallback<Agent> callback);
 }

@@ -20,6 +20,7 @@ import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.person.user.Monitor;
 import epusp.pcs.os.shared.model.vehicle.Car;
+import epusp.pcs.os.shared.model.vehicle.Helicopter;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 public enum EmergencyCallWorkflow {
@@ -115,13 +116,28 @@ public enum EmergencyCallWorkflow {
 	public void addFreeVehicle(String vehicleIdTag, List<Agent> agents){
 		if(!activeVehicles.containsKey(vehicleIdTag)){
 			PersistenceManager mgr = getPersistenceManager();
-			Vehicle vehicle, detached = null;
+			mgr.getFetchPlan().addGroup("all_system_object_attributes");
+			Vehicle vehicle = null, detached = null;
 			try {
 				vehicle = mgr.getObjectById(Car.class, vehicleIdTag);
 				if(vehicle != null)
 					detached = mgr.detachCopy(vehicle);
+			}catch (Exception e){
 			} finally {
 				mgr.close();
+			}
+			
+			if(vehicle == null){
+				mgr = getPersistenceManager();
+				mgr.getFetchPlan().addGroup("all_system_object_attributes");
+				try {
+					vehicle = mgr.getObjectById(Helicopter.class, vehicleIdTag);
+					if(vehicle != null)
+						detached = mgr.detachCopy(vehicle);
+				}catch (Exception e){
+				} finally {
+					mgr.close();
+				}
 			}
 
 			if(detached != null){
@@ -130,13 +146,14 @@ public enum EmergencyCallWorkflow {
 					freePrimaryVehicles.add(detached);
 					break;
 				case SUPPORT:
-					freeSupportVehicles.put(detached.getId(), detached);
+					freeSupportVehicles.put(detached.getIdTag(), detached);
 					break;
 				default:
 					break;
 				}
 				detached.addAgents(agents);
 				activeVehicles.put(vehicleIdTag, detached);
+				
 				if(!waitingCalls.isEmpty() && !freeMonitors.isEmpty())
 					associate();
 			}

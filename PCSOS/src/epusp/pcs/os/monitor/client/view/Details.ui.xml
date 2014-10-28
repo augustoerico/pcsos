@@ -1,13 +1,42 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style>
+	<ui:style type="epusp.pcs.os.monitor.client.view.Details.Style">
 	.picture {
 		border-radius: 5px;
 	}
+	
+	.abPanel{
+		float: left;
+	}
+	
+	.panel{
+		padding-bottom: 10px;
+	}
+	
+	.label {
+		font-family: Perpetua, Baskerville, "Big Caslon", "Palatino Linotype",
+			Palatino, "URW Palladio L", "Nimbus Roman No9 L", serif;
+		color: #FFFFFF;
+		font-size: 17px;
+		padding-left: 9px;
+		font-weight: bold;
+		font-style: italic;
+		font-variant: small-caps;
+		text-shadow: 1px -1px 3px #D4D2D2;
+	}
+	
+	.text {
+		font-family: Perpetua, Baskerville, "Big Caslon", "Palatino Linotype",
+			Palatino, "URW Palladio L", "Nimbus Roman No9 L", serif;
+		color: #FFFFFF;
+		font-size: 18px;
+		padding-left: 15px;
+		font-variant: small-caps;
+	}
 	</ui:style>
 
-	<g:AbsolutePanel>
+	<g:AbsolutePanel styleName="{style.abPanel}">
 		<g:VerticalPanel ui:field="panel">
 			<g:cell>
 				<g:Label ui:field="infoHeader" />

@@ -6,6 +6,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import epusp.pcs.os.shared.exception.LoginException;
 import epusp.pcs.os.shared.model.attribute.AttributeInfo;
 import epusp.pcs.os.shared.model.person.Victim;
+import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.person.user.AvailableLanguages;
 import epusp.pcs.os.shared.model.person.user.User;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
@@ -30,5 +31,9 @@ public interface IConnectionService extends RemoteService {
 	Victim getFullVictim(String email);
 
 	AttributeInfo getAttributeInfo(String attributeName);
+
+	Agent getAgent(String id);
+
+	Agent getFullAgent(String id);
 	
 }

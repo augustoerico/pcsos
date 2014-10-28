@@ -1,10 +1,15 @@
 package epusp.pcs.os.monitor.client.view;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DeckLayoutPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -19,19 +24,70 @@ public class CallInfo extends Composite implements Display {
 	}
 	
 	@UiField
-	AbsolutePanel victimPanel;
+	AbsolutePanel victimPanel, background;
+	
+	@UiField
+	FlowPanel control;
+	
+	@UiField
+	DeckLayoutPanel infoPanel;
 	
 	public CallInfo(){
 		initWidget(uiBinder.createAndBindUi(this));
+		
+		int height = Window.getClientHeight();
+		int width = Window.getClientWidth();
+		
+		background.setWidth(width-40 + "px");
+		background.setHeight(0.9*height-20 + "px");
+		
+		Window.addResizeHandler(new ResizeHandler() {
+			@Override
+			public void onResize(ResizeEvent event) {
+				int height = Window.getClientHeight();
+				int width = Window.getClientWidth();
+				
+				background.setWidth(width-40 + "px");
+				background.setHeight(0.9*height-20 + "px");
+			}
+		});
+	}
+	
+	@Override
+	public DeckLayoutPanel getInfoPanel() {
+		return infoPanel;
+	}
+	
+	@Override
+	public FlowPanel getControlPanel() {
+		return control;
 	}
 	
 	@Override
 	public HasWidgets getVictimPanel(){
 		return victimPanel;
 	}
+
+	@Override
+	public void addControl(Widget w) {
+		AbsolutePanel p = new AbsolutePanel();
+		p.add(w);
+		p.addStyleName("controlItem");
+		control.add(p);
+	}
+
+	@Override
+	public void addInfo(Widget w) {
+		AbsolutePanel p = new AbsolutePanel();
+		p.setSize("100%", "500px");
+		p.addStyleName("detailsPanel");
+		p.add(w);
+		infoPanel.add(p);
+	}
 	
 	@Override
 	public Widget asWidget(){
 		return this;
 	}
+
 }

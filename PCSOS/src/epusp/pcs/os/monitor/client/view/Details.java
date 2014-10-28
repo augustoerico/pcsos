@@ -3,6 +3,7 @@ package epusp.pcs.os.monitor.client.view;
 import java.util.HashMap;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -29,6 +30,15 @@ public class Details extends Composite implements Display{
 	VerticalPanel panel, staticAttributes, dynamicAttributes;
 	
 	HashMap<Category, FlowPanel> categories = new HashMap<Category, FlowPanel>();
+	
+	public interface Style extends CssResource{
+		String label();
+		String text();
+		String panel();
+	}
+	
+	@UiField
+	Style style;
 
 	interface DetailsUiBinder extends UiBinder<Widget, Details> {
 	}
@@ -39,8 +49,15 @@ public class Details extends Composite implements Display{
 	
 	private FlowPanel addAttribute(String label, String text){
 		FlowPanel panel = new FlowPanel();
-		panel.add(new Label(label));
-		panel.add(new Label(text));
+		panel.addStyleName(style.panel());
+		Label l = new Label();
+		l.setText(label);
+		l.addStyleName(style.label());
+		panel.add(l);
+		Label t = new Label();
+		t.setText(text);
+		t.addStyleName(style.text());
+		panel.add(t);
 		return panel;
 	}
 	

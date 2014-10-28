@@ -30,6 +30,9 @@ public abstract class Vehicle extends SystemObject implements Serializable {
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
 	private String idTag;
 	
+	@Persistent
+	private String imageURL;
+	
 	@NotPersistent
 	private List<Agent> agents = new ArrayList<Agent>();
 	
@@ -64,6 +67,14 @@ public abstract class Vehicle extends SystemObject implements Serializable {
 
 	public void setStatus(Boolean status) {
 		this.status = status;
+	}
+	
+	public void setImageURL(String imageURL){
+		this.imageURL = imageURL;
+	}
+	
+	public String getImageURL(){
+		return imageURL;
 	}
 	
 	public List<Agent> getAgents() {

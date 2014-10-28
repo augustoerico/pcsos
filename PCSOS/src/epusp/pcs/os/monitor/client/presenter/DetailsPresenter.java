@@ -19,6 +19,8 @@ import epusp.pcs.os.shared.model.attribute.AttributeInfo;
 import epusp.pcs.os.shared.model.attribute.Category;
 import epusp.pcs.os.shared.model.attribute.IAttribute;
 import epusp.pcs.os.shared.model.person.Victim;
+import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 	
@@ -35,7 +37,7 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 	private MonitorWorkspaceConstants constants;
 	private IMonitorWorkspaceServiceAsync rpcService;
 	
-	private HashMap<String, AttributeInfo> attributeInfo = new HashMap<String, AttributeInfo>();
+	private static final HashMap<String, AttributeInfo> attributeInfo = new HashMap<String, AttributeInfo>();
 	
 	private RPCRequestTracker tracker = new RPCRequestTracker(new LoadedAttributeInfoEvent(), this);
 	
@@ -51,10 +53,7 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 	}
 
 	@Override
-	public void go(HasWidgets container) {		
-		container.clear();
-		container.add(view.asWidget());
-		
+	public void go(HasWidgets container) {				
 		for(IAttribute attribute : item.getAllAttributes()){
 			if(!attributeInfo.containsKey(attribute.getAttributeName())){
 				AsyncCallback<AttributeInfo> propertyInfoCall= new AsyncCallback<AttributeInfo>() {
@@ -86,8 +85,19 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 			view.addStaticAttribute(constants.givenName(), victim.getName());
 			view.addStaticAttribute(constants.surname(), victim.getSurname());
 			view.setPicture(victim.getPictureURL());
+		}else if(item instanceof Vehicle){
+			Vehicle vehicle = (Vehicle) item;
+			view.addStaticAttribute("Priority",vehicle.getPriority().toString());
+			view.setPicture(vehicle.getImageURL());
+		}else if(item instanceof Agent){
+			Agent agent = (Agent) item;
+			view.addStaticAttribute(constants.givenName(), agent.getName());
+			view.addStaticAttribute(constants.surname(), agent.getSurname());
+			view.setPicture(agent.getPictureURL());
 		}
 		
+		container.clear();
+		container.add(view.asWidget());
 		
 		bind();
 	}

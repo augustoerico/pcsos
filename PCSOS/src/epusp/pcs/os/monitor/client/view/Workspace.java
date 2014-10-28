@@ -76,6 +76,8 @@ public class Workspace extends Composite implements Display{
 		
 		mapsArea.setWidth(width-40 + "px");
 		mapsArea.setHeight(0.9*height-20 + "px");
+		infoArea.setWidth(width-40 + "px");
+		infoArea.setHeight(0.9*height-20 + "px");
 		
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
@@ -85,6 +87,8 @@ public class Workspace extends Composite implements Display{
 				
 				mapsArea.setWidth(width-40 + "px");
 				mapsArea.setHeight(0.9*height-20 + "px");
+				infoArea.setWidth(width-40 + "px");
+				infoArea.setHeight(0.9*height-20 + "px");
 			}
 		});
 		

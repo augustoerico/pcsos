@@ -1,5 +1,6 @@
 package epusp.pcs.os.monitor.client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,8 +15,8 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
-import epusp.pcs.os.monitor.client.event.LoadedVehiclesEvent;
-import epusp.pcs.os.monitor.client.event.LoadedVehiclesEvent.LoadedVehiclesHandler;
+import epusp.pcs.os.monitor.client.event.LoadedInfoEvent;
+import epusp.pcs.os.monitor.client.event.LoadedInfoEvent.LoadedInfoHandler;
 import epusp.pcs.os.monitor.client.presenter.CallInfoPresenter;
 import epusp.pcs.os.monitor.client.presenter.GoogleMapsPresenter;
 import epusp.pcs.os.monitor.client.presenter.WorkspacePresenter;
@@ -32,9 +33,10 @@ import epusp.pcs.os.shared.model.oncall.EmergencyCall;
 import epusp.pcs.os.shared.model.oncall.Position;
 import epusp.pcs.os.shared.model.oncall.VehicleOnCall;
 import epusp.pcs.os.shared.model.person.Victim;
+import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
-public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
+public class WorkspaceController implements Presenter, LoadedInfoHandler {
 
 	private IMonitorWorkspaceServiceAsync monitorService;
 	private MonitorWorkspaceConstants constants;
@@ -53,6 +55,8 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 	private RPCRequestTracker tracker;
 
 	private final HashMap<String, Vehicle> vehicles = new HashMap<String, Vehicle>();
+	
+	private final HashMap<String, Agent> agents = new HashMap<String, Agent>();
 
 	private Timer timer = new Timer() {
 		@Override
@@ -68,7 +72,7 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 		preferencesPopup.setStyleName("preferencesPopupPanel");
 		preferencesPopup.setGlassStyleName("preferencesPopupGlassPanel");
 
-		EventBus.get().addHandler(LoadedVehiclesEvent.TYPE, this);
+		EventBus.get().addHandler(LoadedInfoEvent.TYPE, this);
 
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
@@ -145,7 +149,7 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 
 				@Override
 				public void onSuccess(EmergencyCall result) {					
-					loadVehicles(result);
+					loadInfo(result);
 					
 					if(!callInfoPresenter.hasVictim()){
 						loadVictim(result.getVictimEmail());
@@ -184,8 +188,8 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 		});
 	}
 	
-	private void loadVehicles(final EmergencyCall emergencyCall){
-		tracker = new RPCRequestTracker(new LoadedVehiclesEvent(emergencyCall));
+	private void loadInfo(final EmergencyCall emergencyCall){
+		tracker = new RPCRequestTracker(new LoadedInfoEvent(emergencyCall));
 		for(VehicleOnCall vehicle : emergencyCall.getVehicles()){
 			if(!vehicles.containsKey(vehicle.getVehicleIdTag())){
 				
@@ -210,7 +214,33 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 				tracker.add(vehicleCall);
 				
 				monitorService.getVehicle(vehicle.getVehicleIdTag(), vehicleCall);
-			}			
+			}
+			
+			for(String agent : vehicle.getAgents()){
+				if(!agents.containsKey(agent)){
+					AsyncCallback<Agent> agentCall = new AsyncCallback<Agent>() {
+						@Override
+						public void onFailure(Throwable caught) {
+							if(tracker.hasCall(this))
+								tracker.remove(this);
+						}
+
+						@Override
+						public void onSuccess(Agent result) {
+							if(tracker.hasCall(this)){
+								if(result != null){
+									agents.put(result.getId(), result);
+								}
+								tracker.remove(this);
+							}
+						}
+					};
+
+					tracker.add(agentCall);
+					
+					monitorService.getFullAgent(agent, agentCall);
+				}
+			}
 		}
 		
 		if(tracker.isEmpty())
@@ -218,9 +248,19 @@ public class WorkspaceController implements Presenter, LoadedVehiclesHandler {
 	}
 
 	@Override
-	public void onVehiclesLoaded(LoadedVehiclesEvent loadedVehiclesEvent) {
-		EmergencyCall emergencyCall = loadedVehiclesEvent.getEmergencyCall();
+	public void onInfoLoaded(LoadedInfoEvent loadedInfoEvent) {
+		EmergencyCall emergencyCall = loadedInfoEvent.getEmergencyCall();
 		for(VehicleOnCall vehicle : emergencyCall.getVehicles()){
+			
+			if(!callInfoPresenter.hasInfo(vehicle.getVehicleIdTag())){
+				List<Agent> agents = new ArrayList<Agent>();
+				for(String id : vehicle.getAgents()){
+					Agent agent = this.agents.get(id);
+					if(agent != null)
+						agents.add(agent);
+				}
+				callInfoPresenter.addInfo(vehicles.get(vehicle.getVehicleIdTag()), agents);
+			}
 			
 			List<Position> vehiclePositions = emergencyCall.getVehiclePositions(vehicle.getVehicleIdTag());
 			if(!vehiclePositions.isEmpty()){				
