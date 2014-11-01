@@ -276,7 +276,7 @@ public enum EmergencyCallWorkflow {
 		if(emergencyCall != null && emergencyCall.getEmergencyCallLifecycle().equals(EmergencyCallLifecycle.Finished)){
 			monitorsOnCall.remove(monitorId);
 			Monitor monitor = activeMonitors.get(monitorId);
-			finish(emergencyCall);
+
 			AcknowledgmentTracker tracker = ackControl.get(emergencyCall.getVictimEmail());
 			tracker.remove(monitorId);
 			if(tracker.isEmpty())
@@ -447,13 +447,18 @@ public enum EmergencyCallWorkflow {
 		}
 		return null;
 	}
-	
-	public void monitorLeaving(String monitorId){
+
+	public Boolean monitorLeaving(String monitorId){
 		if(freeMonitors.contains(monitorId)){
 			Monitor monitor = activeMonitors.get(monitorId);
-			activeMonitors.remove(monitorId);
-			freeMonitors.remove(monitor);
+			if(!monitorsOnCall.containsKey(monitorId)){
+				activeMonitors.remove(monitorId);
+				freeMonitors.remove(monitor);
+				return true;
+			}else
+				return false;
 		}
+		return true;
 	}
 	
 	public void vehicleLeaving(String vehicleIdTag){

@@ -1,5 +1,7 @@
 package epusp.pcs.os.server.monitor;
 
+import java.util.List;
+
 import javax.servlet.ServletException;
 
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceService;
@@ -38,8 +40,8 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 			
 //			test();
 			
-			if(t)
-				test2();
+//			if(t)
+//				test2();
 			
 			if(specs.getVictimLastPositionIndex() == -1 && specs.getVehiclesLastPositionsIndex().isEmpty())
 				return workflow.getMonitorEmergencyCall(monitor.getId());
@@ -73,10 +75,30 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 	public static Boolean t = true;
 	public void test2(){
 		t = false;
-		workflow.addVehicleToCall("augusto.ericosilva@gmail.com", "TAG002");
+		workflow.addVehicleToCall("augusto.ericosilva@gmail.com", "TAG00X");
 	}
-	/*************************************************************/
+	/**
+	 * @return ***********************************************************/
 	
+	@Override
+	public List<Vehicle> getAvailableSupportVehicles(){
+		if(isLoggedIn()){
+			return workflow.getAvailableSupportVehicles();
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public void addVehiclesToCall(List<String> vehiclesIdTag){
+		if(isLoggedIn()){
+			for(String vehicleIdTag : vehiclesIdTag){
+				Monitor monitor = (Monitor) getSessionAttibute(userSessionAttribute);
+				EmergencyCall emergencyCall = workflow.getMonitorEmergencyCall(monitor.getId());
+				workflow.addVehicleToCall(emergencyCall.getVictimEmail(), vehicleIdTag);
+			}
+		}
+	}
 	
 	@Override
 	public void addFreeMonitor(){
@@ -96,6 +118,34 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 			return onCall;
 		}
 		return null;
+	}
+	
+	@Override
+	public void finishCall(){
+		if(isLoggedIn()){
+			Monitor monitor = (Monitor) getSessionAttibute(userSessionAttribute);
+			
+			EmergencyCall emergencyCall = workflow.getMonitorEmergencyCall(monitor.getId());
+			
+			workflow.finishCall(emergencyCall.getVictimEmail());
+		}
+	}
+	
+	@Override
+	public Boolean monitorLeaving(){
+		if(isLoggedIn()){
+			Monitor monitor = (Monitor) getSessionAttibute(userSessionAttribute);
+			return workflow.monitorLeaving(monitor.getId());
+		}
+		return null;
+	}
+	
+	@Override
+	public void finishCallAcknowledgment(){
+		if(isLoggedIn()){
+			Monitor monitor = (Monitor) getSessionAttibute(userSessionAttribute);
+			workflow.monitorFinishedCallAcknowledgment(monitor.getId());
+		}
 	}
 	
 	@Override

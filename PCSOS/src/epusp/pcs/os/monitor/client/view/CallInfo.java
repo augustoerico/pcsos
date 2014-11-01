@@ -90,4 +90,11 @@ public class CallInfo extends Composite implements Display {
 		return this;
 	}
 
+	@Override
+	public void clear() {
+		victimPanel.clear();
+		control.clear();
+		infoPanel.clear();
+	}
+
 }

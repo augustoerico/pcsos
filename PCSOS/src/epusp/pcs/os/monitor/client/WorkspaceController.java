@@ -15,13 +15,19 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
+import epusp.pcs.os.monitor.client.event.AcceptRejectCallEvent;
+import epusp.pcs.os.monitor.client.event.AcceptRejectCallEvent.AcceptRejectCallHandler;
+import epusp.pcs.os.monitor.client.event.FinishCallEvent;
 import epusp.pcs.os.monitor.client.event.LoadedInfoEvent;
+import epusp.pcs.os.monitor.client.event.FinishCallEvent.FinishCallHandler;
 import epusp.pcs.os.monitor.client.event.LoadedInfoEvent.LoadedInfoHandler;
 import epusp.pcs.os.monitor.client.presenter.CallInfoPresenter;
 import epusp.pcs.os.monitor.client.presenter.GoogleMapsPresenter;
+import epusp.pcs.os.monitor.client.presenter.ReinforcementsPresenter;
 import epusp.pcs.os.monitor.client.presenter.WorkspacePresenter;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
 import epusp.pcs.os.monitor.client.view.CallInfo;
+import epusp.pcs.os.monitor.client.view.Reinforcements;
 import epusp.pcs.os.monitor.client.view.Workspace;
 import epusp.pcs.os.monitor.shared.EmergencyCallSpecs;
 import epusp.pcs.os.shared.client.event.EventBus;
@@ -36,7 +42,7 @@ import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
-public class WorkspaceController implements Presenter, LoadedInfoHandler {
+public class WorkspaceController implements Presenter, LoadedInfoHandler, FinishCallHandler, AcceptRejectCallHandler {
 
 	private IMonitorWorkspaceServiceAsync monitorService;
 	private MonitorWorkspaceConstants constants;
@@ -45,10 +51,11 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler {
 	private GoogleMapsPresenter googleMapsPresenter;
 	private PreferencesPresenter preferencesPresenter;
 	private CallInfoPresenter callInfoPresenter;
+	private ReinforcementsPresenter reinforcementsPresenter;
 
 	PopupPanel preferencesPopup = new PopupPanel(true);
 
-	private MonitorStatusLifecycle monitorStatus = MonitorStatusLifecycle.Begin;
+	private MonitorStatusLifecycle monitorStatus = MonitorStatusLifecycle.Unavailable;
 
 	private EmergencyCallSpecs emergencyCallSpecs = new EmergencyCallSpecs();
 
@@ -73,6 +80,8 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler {
 		preferencesPopup.setGlassStyleName("preferencesPopupGlassPanel");
 
 		EventBus.get().addHandler(LoadedInfoEvent.TYPE, this);
+		EventBus.get().addHandler(FinishCallEvent.TYPE, this);
+		EventBus.get().addHandler(AcceptRejectCallEvent.TYPE, this);
 
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
@@ -110,13 +119,19 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler {
 		callInfoPresenter.go(workspacePresenter.getInfoArea());
 		preferencesPresenter = new PreferencesPresenter(monitorService, new Preferences(), constants);
 		preferencesPresenter.go(preferencesPopup);
-		timer.scheduleRepeating(2*1000);
+		reinforcementsPresenter = new ReinforcementsPresenter(monitorService, new Reinforcements(), constants);
+		reinforcementsPresenter.go(workspacePresenter.getReinforcementsArea());
+		timer.scheduleRepeating(2_000);
 		bind();
 	}
 
 	private void updateMonitorStatus(){
 		switch (monitorStatus) {
+		case Unavailable:
+			workspacePresenter.setOnCall(false);
+			break;
 		case Begin:
+			workspacePresenter.setOnCall(false);
 			monitorService.addFreeMonitor(new AsyncCallback<Void>() {
 
 				@Override
@@ -136,6 +151,7 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler {
 				public void onSuccess(Boolean result) {
 					if(result){
 						monitorStatus = MonitorStatusLifecycle.OnCall;
+						workspacePresenter.setOnCall(true);
 					}
 				}
 
@@ -160,10 +176,26 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler {
 						emergencyCallSpecs.setVictimLastPositionIndex(0);
 					}
 					
+					reinforcementsPresenter.update();
+					
 					emergencyCallSpecs.setVictimLastPositionIndex(emergencyCallSpecs.getVictimLastPositionIndex() + result.getVictimPositionSize());
 					googleMapsPresenter.updateVictimPosition(result.getVictimPositions());					
 				}
 
+				@Override
+				public void onFailure(Throwable caught) {
+				}
+			});
+			break;
+		
+		case FinishingCall:
+			monitorService.finishCallAcknowledgment(new AsyncCallback<Void>() {
+				
+				@Override
+				public void onSuccess(Void result) {
+					monitorStatus = MonitorStatusLifecycle.Begin;
+				}
+				
 				@Override
 				public void onFailure(Throwable caught) {
 				}
@@ -275,6 +307,47 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler {
 			
 			googleMapsPresenter.updateVehiclePosition(vehicle.getVehicleIdTag(), vehiclePositions);
 		}
+	}
+
+	@Override
+	public void onFinishCall(FinishCallEvent finishCallEvent) {
+		monitorService.finishCall(new AsyncCallback<Void>() {
+			
+			@Override
+			public void onSuccess(Void result) {
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+			}
+		});
+		
+		monitorStatus = MonitorStatusLifecycle.FinishingCall;
+	}
+
+	@Override
+	public void onAcceptingRejectingCalls(
+			AcceptRejectCallEvent acceptRejectCallEvent) {
+		if(acceptRejectCallEvent.isAccepting()){
+			monitorStatus = MonitorStatusLifecycle.Begin;
+		}else{
+			if(monitorStatus.equals(MonitorStatusLifecycle.Begin) || monitorStatus.equals(MonitorStatusLifecycle.WaitingCall)){
+				monitorService.monitorLeaving(new AsyncCallback<Boolean>() {
+					
+					@Override
+					public void onSuccess(Boolean result) {
+						if(result){
+							monitorStatus = MonitorStatusLifecycle.Unavailable;
+						}
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+					}
+				});
+			}
+		}
+		
 	}
 
 }

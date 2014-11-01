@@ -15,6 +15,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.monitor.client.MonitorResources;
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
+import epusp.pcs.os.monitor.client.event.AcceptRejectCallEvent;
+import epusp.pcs.os.monitor.client.event.FinishCallEvent;
 import epusp.pcs.os.monitor.client.event.HideShowTrafficEvent;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.event.EventBus;
@@ -39,14 +41,26 @@ public class WorkspacePresenter implements Presenter {
 		Widget asWidget();
 		HasWidgets getMapsArea();
 		HasWidgets getInfoArea();
+		HasWidgets getReinforcementsArea();
 		ToggleButton getTrafficButton();
 		Image getLogout();
 		Image getPreferences();
+		void addMapClickHandler(ClickHandler handler);
+		void setMapBullet();
+		void addInfoClickHandler(ClickHandler handler);
+		void setInfoBullet();
+		void addReinforcementsClickHandler(ClickHandler handler);
+		void setReinforcementsBullet();
+		void addPhoneClickHandler(ClickHandler handler);
+		Boolean phoneIsDown();
+		void showEndCall();
 	}
 
 	private final IMonitorWorkspaceServiceAsync rpcService;
 	private final Display display;
 	private final MonitorWorkspaceConstants constants;
+	
+	private Boolean onCall = false;
 	
 	private final MonitorResources resources = MonitorResources.INSTANCE;
 
@@ -80,26 +94,29 @@ public class WorkspacePresenter implements Presenter {
 	    bind();
 	}
 
-	private void bind() {
-		display.getMapButton().addClickHandler(new ClickHandler() {
+	private void bind() {		
+		display.addMapClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				display.setMapBullet();
 				display.showMap();
 				display.getTrafficButton().setVisible(true);
 			}
 		});
 		
-		display.getInfoButton().addClickHandler(new ClickHandler() {
+		display.addInfoClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				display.setInfoBullet();
 				display.showCallInfo();
 				display.getTrafficButton().setVisible(false);
 			}
 		});
 		
-		display.getReinforcementsButton().addClickHandler(new ClickHandler() {
+		display.addReinforcementsClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				display.setReinforcementsBullet();
 				display.showAvailableReinforcements();
 				display.getTrafficButton().setVisible(false);
 			}
@@ -110,6 +127,18 @@ public class WorkspacePresenter implements Presenter {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
 				EventBus.get().fireEvent(new HideShowTrafficEvent(event.getValue()));
+			}
+		});
+		
+		display.addPhoneClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				if(!onCall){
+					EventBus.get().fireEvent(new AcceptRejectCallEvent(display.phoneIsDown()));
+				}else{
+					EventBus.get().fireEvent(new FinishCallEvent());
+				}
 			}
 		});
 		
@@ -147,8 +176,18 @@ public class WorkspacePresenter implements Presenter {
 		return display.getInfoArea();
 	}
 	
+	public HasWidgets getReinforcementsArea(){
+		return display.getReinforcementsArea();
+	}
+	
 	public Image getPreferencesButton() {
 		return display.getPreferences();
+	}
+	
+	public void setOnCall(Boolean onCall){
+		if(onCall)
+			display.showEndCall();
+		this.onCall = onCall;
 	}
 
 }

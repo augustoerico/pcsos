@@ -9,6 +9,7 @@
 
 	<ui:image field='phoneOn' src='../images/accepting-calls.png' />
 	<ui:image field='phoneOff' src='../images/denying-calls.png' />
+	<ui:image field='endCall' src='../images/end-call.gif' />
 
 	<ui:style type="epusp.pcs.os.monitor.client.view.Workspace.TrafficSytle">
 	@sprite .backgroundPicture {
@@ -29,6 +30,10 @@
 	
 	@sprite .phoneOff {
 		gwt-image: 'phoneOff';
+	}
+	
+	@sprite .endCall {
+		gwt-image: 'endCall';
 	}
 	
 	.phone {
@@ -165,6 +170,14 @@
 		-webkit-transform-origin: 50% 50% 0;
 		transform-origin: 50% 50% 0;
 	}
+	
+	.controlImage{
+		cursor: pointer;
+	}
+	
+	input[type=radio] {  
+   		cursor: pointer;  
+	}	
 	</ui:style>
 
 	<g:AbsolutePanel width="100%" height="100%"
@@ -177,7 +190,8 @@
 						styleName="{style.panel}" />
 					<g:AbsolutePanel title="Emergency Call Info View" ui:field="infoArea"
 						styleName="{style.panel}" />
-					<g:Label styleName="{style.tmp}">backup goes here</g:Label>
+					<g:AbsolutePanel title="Reinforcements View" ui:field="reinforcementsArea"
+						styleName="{style.panel}" />
 				</g:DeckLayoutPanel>
 			</g:south>
 
@@ -226,30 +240,32 @@
 				<g:FlowPanel width="100%" height="100%" styleName="{style.controlPanel}">
 					<g:VerticalPanel styleName="{style.controlItem}"
 						verticalAlignment="middle" horizontalAlignment="right">
-						<g:cell>
-							<g:Image height="30px" width="auto" ui:field="map" />
+						<g:cell verticalAlignment="top" horizontalAlignment="center">
+							<g:Image styleName="{style.controlImage}" height="30px" width="auto" ui:field="map" />
 						</g:cell>
-						<g:cell>
+						<g:cell verticalAlignment="bottom" horizontalAlignment="center">
 							<g:RadioButton ui:field="mapRadio" name="control"
 								enabled="true" checked="true" />
 						</g:cell>
 					</g:VerticalPanel>
+					
 					<g:VerticalPanel styleName="{style.controlItem}"
 						verticalAlignment="middle" horizontalAlignment="center">
-						<g:cell>
-							<g:Image height="30px" width="auto" ui:field="info" />
+						<g:cell verticalAlignment="top" horizontalAlignment="center">
+							<g:Image styleName="{style.controlImage}" height="30px" width="auto" ui:field="info" />
 						</g:cell>
-						<g:cell>
+						<g:cell verticalAlignment="bottom" horizontalAlignment="center">
 							<g:RadioButton ui:field="infoRadio" name="control"
 								enabled="true" checked="false" />
 						</g:cell>
 					</g:VerticalPanel>
+					
 					<g:VerticalPanel styleName="{style.controlItem}"
 						verticalAlignment="middle" horizontalAlignment="left">
-						<g:cell>
-							<g:Image height="30px" width="auto" ui:field="reinforcements" />
+						<g:cell verticalAlignment="top" horizontalAlignment="center">
+							<g:Image styleName="{style.controlImage}" height="30px" width="auto" ui:field="reinforcements" />
 						</g:cell>
-						<g:cell>
+						<g:cell verticalAlignment="bottom" horizontalAlignment="center">
 							<g:RadioButton ui:field="reinforcementsRadio" name="control"
 								enabled="true" checked="false" />
 						</g:cell>

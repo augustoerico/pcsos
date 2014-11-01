@@ -29,6 +29,8 @@ import com.google.gwt.user.client.ui.HasWidgets;
 
 import epusp.pcs.os.monitor.client.MonitorResources;
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
+import epusp.pcs.os.monitor.client.event.FinishCallEvent.FinishCallHandler;
+import epusp.pcs.os.monitor.client.event.FinishCallEvent;
 import epusp.pcs.os.monitor.client.event.HideShowTrafficEvent;
 import epusp.pcs.os.monitor.client.event.HideShowTrafficEvent.HideShowTrafficHandler;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
@@ -37,7 +39,7 @@ import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.model.oncall.Position;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
-public class GoogleMapsPresenter implements Presenter {
+public class GoogleMapsPresenter implements Presenter, FinishCallHandler {
 
 	private static final String mapsAPIKey = "AIzaSyDNVvFn0tU2jIjWsOj4oiGaWACX6BgF7Eo";
 	private static final String mapsVersion = "2";
@@ -48,6 +50,8 @@ public class GoogleMapsPresenter implements Presenter {
 	private IMonitorWorkspaceServiceAsync monitorService;
 	
 	private MonitorWorkspaceConstants constants;
+	
+	private HasWidgets container;
 
 	private Marker victim;
 	private List<Polyline> victimRoute = new ArrayList<Polyline>();
@@ -63,10 +67,13 @@ public class GoogleMapsPresenter implements Presenter {
 	public GoogleMapsPresenter(IMonitorWorkspaceServiceAsync monitorService, MonitorWorkspaceConstants constants){
 		this.monitorService = monitorService;
 		this.constants = constants;
+		
+		EventBus.get().addHandler(FinishCallEvent.TYPE, this);
 	}
 
 	@Override
 	public void go(final HasWidgets container) {
+		this.container = container;
 		container.clear();
 		Maps.loadMapsApi(mapsAPIKey, mapsVersion, false, new Runnable() {
 			@Override
@@ -307,5 +314,10 @@ public class GoogleMapsPresenter implements Presenter {
 	
 	public Boolean hasVehicle(String idTag){
 		return vehicles.containsKey(idTag);
+	}
+
+	@Override
+	public void onFinishCall(FinishCallEvent finishCallEvent) {
+		this.go(container);
 	}
 }

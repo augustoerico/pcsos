@@ -53,7 +53,7 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 	}
 
 	@Override
-	public void go(HasWidgets container) {				
+	public void go(HasWidgets container) {
 		for(IAttribute attribute : item.getAllAttributes()){
 			if(!attributeInfo.containsKey(attribute.getAttributeName())){
 				AsyncCallback<AttributeInfo> propertyInfoCall= new AsyncCallback<AttributeInfo>() {
@@ -112,6 +112,5 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 			AttributeInfo info = attributeInfo.get(attribute.getAttributeName());
 			view.addDynamicAttribute(info.getCategory(), info.getLabel(locale), attribute.getValue().toString());
 		}
-	}
-	
+	}	
 }

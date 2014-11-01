@@ -9,19 +9,21 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
+import epusp.pcs.os.monitor.client.event.FinishCallEvent;
+import epusp.pcs.os.monitor.client.event.FinishCallEvent.FinishCallHandler;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
 import epusp.pcs.os.monitor.client.view.Details;
+import epusp.pcs.os.monitor.client.view.PictureTagItem;
+import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
-public class CallInfoPresenter implements Presenter{
+public class CallInfoPresenter implements Presenter, FinishCallHandler{
 
 	public interface Display{
 		HasWidgets getVictimPanel();
@@ -30,6 +32,7 @@ public class CallInfoPresenter implements Presenter{
 		void addInfo(Widget w);
 		void addControl(Widget w);
 		Widget asWidget();
+		void clear();
 	}
 	
 	private IMonitorWorkspaceServiceAsync rpcService; 
@@ -40,12 +43,14 @@ public class CallInfoPresenter implements Presenter{
 	private DetailsPresenter victim;
 	private HashMap<String, Vehicle> vehicles = new HashMap<String, Vehicle>();
 	
-	private HashMap<Integer, FlowPanel> controlPanel = new HashMap<Integer, FlowPanel>();
+	private HashMap<Integer, Widget> controlPanel = new HashMap<Integer, Widget>();
 
 	public CallInfoPresenter(IMonitorWorkspaceServiceAsync rpcService, Display view, MonitorWorkspaceConstants constants) {
 		this.constants = constants;
 		this.rpcService = rpcService;
 		this.view = view;
+		
+		EventBus.get().addHandler(FinishCallEvent.TYPE, this);
 	}
 
 	@Override
@@ -82,45 +87,31 @@ public class CallInfoPresenter implements Presenter{
 		
 		container.add(infoPanel);
 		
-		FlowPanel fp = new FlowPanel();
-		fp.addStyleName("controlPanel");
-		Image picture = new Image(vehicle.getImageURL());
-		picture.addStyleName("controlPicture");
-		fp.add(picture);
-		Label control = new Label(vehicle.getIdTag());
-		control.addStyleName("controlIdText");
-		fp.add(control);
-		view.addControl(fp);
+		PictureTagItem controlItem = new PictureTagItem();
+		controlItem.setText(vehicle.getIdTag());
+		controlItem.setImage(vehicle.getImageURL());
+		controlItem.addPanelStyleName("controlPanel");
+		controlItem.addImageStyleName("controlPicture");
+		controlItem.addLabelStyleName("controlIdText");
+		
+		view.addControl(controlItem);
 		
 		view.addInfo(container);
 		
 		final int i = view.getControlPanel().getWidgetCount()-1;
 		
-		controlPanel.put(i, fp);
+		controlPanel.put(i, controlItem);
 		
-		control.addClickHandler(new ClickHandler() {
+		controlItem.addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent event) {
 				view.getInfoPanel().showWidget(i);
-				FlowPanel fp = controlPanel.get(i);
-				for(FlowPanel p : controlPanel.values()){
+				Widget pti = controlPanel.get(i);
+				for(Widget p : controlPanel.values()){
 					p.removeStyleDependentName("view");
 				}
-				fp.addStyleDependentName("view");
-			}
-		});
-		
-		picture.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				view.getInfoPanel().showWidget(i);
-				FlowPanel fp = controlPanel.get(i);
-				for(FlowPanel p : controlPanel.values()){
-					p.removeStyleDependentName("view");
-				}
-				fp.addStyleDependentName("view");
+				pti.addStyleDependentName("view");
 			}
 		});
 	}
@@ -133,5 +124,10 @@ public class CallInfoPresenter implements Presenter{
 
 	public Boolean hasVictim(){
 		return hasVictim;
+	}
+
+	@Override
+	public void onFinishCall(FinishCallEvent finishCallEvent) {
+		view.clear();
 	}
 }

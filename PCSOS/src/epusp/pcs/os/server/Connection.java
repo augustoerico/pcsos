@@ -217,7 +217,7 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 			pm.close();
 		}
 		
-		Helicopter h = new Helicopter("TAG002");
+		Helicopter h = new Helicopter("TAG00X");
 		h.setPrioraty(Priority.SUPPORT);
 		h.setImageURL("http://3.bp.blogspot.com/-nPMJ8lbBR-Q/UVc42PBUfbI/AAAAAAAAAIc/r4pyz4NTEPI/s320/Helicoptero+Aguia+11+PMESP1.jpg");
 		Helicopter detachedH = null;
@@ -258,7 +258,127 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 			pm.close();
 		}
 		
+		//-----------------------------------------------------------------------------------//
 		
+		Car cX = new Car("TAG003", "XPT-0001");
+		cX.setPrioraty(Priority.SUPPORT);
+		cX.setImageURL("http://ecx.images-amazon.com/images/I/81cOTyQZbEL._SL1500_.jpg");
+		Car detachedCX = null;
+		
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(cX);
+			detachedCX = pm.detachCopy(cX);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+		
+		Agent chuck = new Agent("Chuck", "Norris", "chuck.norris@gmail.com");
+		chuck.setIsActive(true);
+		chuck.setPictureURL("http://img2.wikia.nocookie.net/__cb20081118030612/tesfanon/images/5/5c/Chuck_Norris.jpg");
+		Agent detachedChuck = null; 
+		
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(chuck);
+			detachedChuck = pm.detachCopy(chuck);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+		//-------------------------------------------------------------//
+		Car c1 = new Car("TAG004", "XPT-0001");
+		c1.setPrioraty(Priority.SUPPORT);
+		c1.setImageURL("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQOuABFcPm1W7stgmlpAwb9EqUHqIImJJvhSm6SKikl6WJdO1dr");
+		Car detachedC1 = null;
+		
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(c1);
+			detachedC1 = pm.detachCopy(c1);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+		
+		Agent robocop = new Agent("Alex", "Murphy", "alex.murphy@gmail.com");
+		robocop.setIsActive(true);
+		robocop.setPictureURL("http://1.bp.blogspot.com/-33CQjwC7Wws/UKUA_ZXEDrI/AAAAAAAAT28/k7DS77DD0vI/s1600/robocop_peter-weller.jpg");
+		Agent detachedRobocop = null; 
+		
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(robocop);
+			detachedRobocop = pm.detachCopy(robocop);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+		//-------------------------------------------------------------//
+		Helicopter c2 = new Helicopter("TAG005");
+		c2.setPrioraty(Priority.SUPPORT);
+		c2.setImageURL("http://upload.wikimedia.org/wikipedia/commons/0/01/Blackhawk.jpg");
+		Helicopter detachedC2 = null;
+		
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(c2);
+			detachedC2 = pm.detachCopy(c2);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+		
+		Agent arrow = new Agent("Oliver", "Queen", "oliver.queen@gmail.com");
+		arrow.setIsActive(true);
+		arrow.setPictureURL("http://media.dcentertainment.com/sites/default/files/TV_Gallery_Arrow01_53712d787bb741.46013658.jpg");
+		Agent detachedArrow = null; 
+		
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(arrow);
+			detachedArrow = pm.detachCopy(arrow);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
 
 		
 		/*************************************************************************************************************************/
@@ -279,6 +399,18 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		l.add(detachedAgent);
 		workflow.addFreeVehicle(detachedH.getIdTag(), l);
 		workflow.addVehiclePosition(detachedH.getIdTag(), ATLANTA);
+		
+		l.clear();
+		l.add(detachedChuck);
+		workflow.addFreeVehicle(detachedCX.getIdTag(), l);
+		
+		l.clear();
+		l.add(detachedArrow);
+		workflow.addFreeVehicle(detachedC2.getIdTag(), l);
+		
+		l.clear();
+		l.add(detachedRobocop);
+		workflow.addFreeVehicle(detachedC1.getIdTag(), l);
 		/*************************************************************************************************************************/
 		
 		

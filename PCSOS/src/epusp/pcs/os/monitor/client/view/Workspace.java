@@ -38,7 +38,7 @@ public class Workspace extends Composite implements Display{
 	RadioButton mapRadio, infoRadio, reinforcementsRadio;
 	
 	@UiField
-	AbsolutePanel mapsArea, infoArea;
+	AbsolutePanel mapsArea, infoArea, reinforcementsArea;
 
 	@UiField
 	ToggleButton trafficButton, phoneButton;
@@ -51,6 +51,7 @@ public class Workspace extends Composite implements Display{
 		String hideTraffic();
 		String phoneOn();
 		String phoneOff();
+		String endCall();
 	}
 
 	@UiField 
@@ -110,13 +111,14 @@ public class Workspace extends Composite implements Display{
 			
 			@Override
 			public void onClick(ClickEvent event) {
-
 				if(phoneButton.isDown()){
 					phoneButton.removeStyleName(style.phoneOff());
 					phoneButton.addStyleName(style.phoneOn());
+					phoneButton.removeStyleName(style.endCall());
 				}else{
 					phoneButton.removeStyleName(style.phoneOn());
 					phoneButton.addStyleName(style.phoneOff());
+					phoneButton.removeStyleName(style.endCall());
 				}
 			}
 		});
@@ -156,6 +158,40 @@ public class Workspace extends Composite implements Display{
 	public ToggleButton getTrafficButton() {
 		return trafficButton;
 	}
+	
+	@Override
+	public void addMapClickHandler(ClickHandler handler){
+		mapRadio.addClickHandler(handler);
+		map.addClickHandler(handler);
+	}
+	
+	@Override
+	public void setMapBullet(){
+		mapRadio.setValue(true);
+	}
+	
+	@Override
+	public void addInfoClickHandler(ClickHandler handler){
+		infoRadio.addClickHandler(handler);
+		info.addClickHandler(handler);
+	}
+	
+	@Override
+	public void setInfoBullet(){
+		infoRadio.setValue(true);
+	}
+	
+	@Override
+	public void addReinforcementsClickHandler(ClickHandler handler){
+		reinforcementsRadio.addClickHandler(handler);
+		reinforcements.addClickHandler(handler);
+	}
+	
+	@Override
+	public void setReinforcementsBullet(){
+		reinforcementsRadio.setValue(true);
+	}
+	
 
 	@Override
 	public Widget asWidget(){
@@ -211,6 +247,26 @@ public class Workspace extends Composite implements Display{
 	public Image getPreferences() {
 		return preferences;
 	}
+
+	@Override
+	public HasWidgets getReinforcementsArea() {
+		return reinforcementsArea;
+	}
 	
+	@Override
+	public void addPhoneClickHandler(ClickHandler handler){
+		phoneButton.addClickHandler(handler);
+	}
 	
+	@Override
+	public void showEndCall(){
+		phoneButton.removeStyleName(style.phoneOn());
+		phoneButton.removeStyleName(style.phoneOff());
+		phoneButton.addStyleName(style.endCall());
+	}
+	
+	@Override
+	public Boolean phoneIsDown(){
+		return phoneButton.isDown();
+	}
 }

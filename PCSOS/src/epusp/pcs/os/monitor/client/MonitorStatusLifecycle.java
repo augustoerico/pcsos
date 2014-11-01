@@ -1,5 +1,5 @@
 package epusp.pcs.os.monitor.client;
 
 public enum MonitorStatusLifecycle {
-	Begin, WaitingCall, OnCall;
+	Unavailable, Begin, WaitingCall, OnCall, FinishingCall;
 }

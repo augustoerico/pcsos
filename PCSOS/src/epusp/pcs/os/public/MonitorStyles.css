@@ -20,7 +20,7 @@
 	background-color: rgb(204, 204, 204);
 	opacity: 0.5;
 	-moz-opacity: 0.5;
-	filter: alpha(opacity =     50); /* For IE8 and earlier */
+	filter: alpha(opacity =       50); /* For IE8 and earlier */
 	margin: 0px;
 	padding: 0px;
 	color: black;
@@ -30,15 +30,15 @@
 	font-family: Arial Unicode MS, Arial, sans-serif;
 }
 
-.controlPanel{
+.controlPanel {
 	opacity: 0.4;
 }
 
-.controlPanel:HOVER{
+.controlPanel:HOVER {
 	opacity: 0.7;
 }
 
-.controlPanel-view{
+.controlPanel-view {
 	opacity: 1.0 !important;
 }
 
@@ -54,6 +54,19 @@
 	border-radius: 50%;
 }
 
+.reinforcementsItem {
+	opacity: 0.4;
+	padding: 5px;
+}
+
+.reinforcementsItem:HOVER {
+	opacity: 0.7;
+}
+
+.reinforcementsItem-selected {
+	opacity: 1.0 !important;
+}
+
 .controlIdText {
 	font-family: Perpetua, Baskerville, "Big Caslon", "Palatino Linotype",
 		Palatino, "URW Palladio L", "Nimbus Roman No9 L", serif;
@@ -64,11 +77,27 @@
 	text-shadow: 1px -1px 3px #D4D2D2;
 }
 
-.infoItem{
+.infoItem {
 	padding-left: 10px;
 	float: left;
 }
 
 .detailsPanel {
 	padding-top: 10px;
+}
+
+.background {
+	position: fixed !important;
+	background-color: black;
+	border-radius: 20px;
+	opacity: 0.95;
+	-webkit-filter: blur(5px);
+	-moz-filter: blur(5px);
+	-o-filter: blur(5px);
+	-ms-filter: blur(5px);
+	filter: blur(5px);
+}
+
+.gwt-StackLayoutPanel .gwt-StackLayoutPanelContent{
+	background-color: transparent !important;
 }
