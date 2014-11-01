@@ -190,7 +190,7 @@ public class LoginConnection extends Connection implements ILoginService{
 					switch(user.getType()){
 					case Admin:
 						System.out.println("Admin " + user.getEmail() + " has logged in.");
-						config.setUrlPath("todo");
+						config.setUrlPath("AdminWorkspace.html");
 						return config;
 					case Auditor:
 						System.out.println("Aditor " + user.getEmail() + " has logged in.");

@@ -22,6 +22,7 @@ import epusp.pcs.os.shared.model.attribute.types.StringAttribute;
 import epusp.pcs.os.shared.model.exception.AttributeCastException;
 import epusp.pcs.os.shared.model.oncall.Position;
 import epusp.pcs.os.shared.model.person.Victim;
+import epusp.pcs.os.shared.model.person.user.Admin;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.person.user.AvailableLanguages;
 import epusp.pcs.os.shared.model.person.user.Monitor;
@@ -55,6 +56,26 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		try{
 			pm.currentTransaction().begin();
 			pm.makePersistent(monitor);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+		
+		Admin admin = new Admin("Giovanni", "Gatti Pinheiro", "giovanni.pinheiro@vilt-group.com");
+		admin.setIsActive(true);
+		admin.setGoogleUserId("112302574104571853734");
+		admin.setPictureURL("https://lh6.googleusercontent.com/-XqK5qQExPEI/U2tpiPFfp9I/AAAAAAAAAB4/sKELQ1P8JMk/w901-h903-no/2014-05-06%2B13.17.58.jpg");
+		admin.setPreferedLanguage(AvailableLanguages.ENGLISH);
+	
+		pm = PMF.get().getPersistenceManager();
+		
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(admin);
 			pm.currentTransaction().commit();
 		}catch (Exception e){
 			e.printStackTrace();
