@@ -86,18 +86,6 @@
 	padding-top: 10px;
 }
 
-.background {
-	position: fixed !important;
-	background-color: black;
-	border-radius: 20px;
-	opacity: 0.95;
-	-webkit-filter: blur(5px);
-	-moz-filter: blur(5px);
-	-o-filter: blur(5px);
-	-ms-filter: blur(5px);
-	filter: blur(5px);
-}
-
 .gwt-StackLayoutPanel .gwt-StackLayoutPanelContent{
 	background-color: transparent !important;
 }

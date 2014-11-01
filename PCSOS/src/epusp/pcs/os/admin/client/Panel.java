@@ -18,7 +18,7 @@ public class Panel implements EntryPoint {
 	public void onModuleLoad() {
 		AdminWorkspaceConstants constants = GWT.create(AdminWorkspaceConstants.class);
 		IAdminWorkspaceServiceAsync adminService = GWT.create(IAdminWorkspaceService.class);
-		final WorkspaceController workspaceController = new WorkspaceController();
+		final WorkspaceController workspaceController = new WorkspaceController(adminService, constants);
 		
 		adminService.identifySession(Cookies.getCookie("pcs.os-login"), new AsyncCallback<Void>() {
 			

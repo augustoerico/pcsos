@@ -4,5 +4,16 @@ import com.google.gwt.i18n.client.Constants;
 
 public interface CommonWorkspaceConstants extends Constants{
 
+	@DefaultStringValue("Given Name")
+	String name();
+	
+	@DefaultStringValue("Family Name")
+	String surname();
+	
+	@DefaultStringValue("Email")
+	String email();
+	
+	@DefaultStringValue("Picture")
+	String picture();
 	
 }

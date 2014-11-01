@@ -12,6 +12,8 @@
 	<source path="admin/client" />
 	<source path="shared" />
 
+	<stylesheet src="CommonStyles.css" />
+
 	<entry-point class="epusp.pcs.os.admin.client.Panel" />
 
 	<extend-property name="locale" values="pt" />

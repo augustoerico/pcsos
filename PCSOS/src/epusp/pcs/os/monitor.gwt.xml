@@ -13,6 +13,7 @@
 	<source path="monitor/shared" />
 	<source path="shared" />
 	
+	<stylesheet src="CommonStyles.css" />
 	<stylesheet src="MonitorStyles.css" />
 
 	<entry-point class="epusp.pcs.os.monitor.client.Panel" />

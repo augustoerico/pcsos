@@ -858,7 +858,7 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 	}
 	
 	protected Object getSessionAttibute(String attribute){
-		return this.getThreadLocalRequest().getSession(true).getAttribute(userSessionAttribute);
+		return this.getThreadLocalRequest().getSession(true).getAttribute(attribute);
 	}
 
 }

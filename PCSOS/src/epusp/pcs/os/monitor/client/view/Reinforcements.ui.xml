@@ -35,6 +35,7 @@
 
 	.optionsPanel {
 		display: inline-flex;
+		background: transparent !important;
 	}
 
 	.panel {
