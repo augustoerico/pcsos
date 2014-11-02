@@ -5,6 +5,7 @@ import java.util.Collection;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import epusp.pcs.os.shared.client.rpc.IConnectionService;
+import epusp.pcs.os.shared.general.MoveCursor;
 import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
 
@@ -13,6 +14,5 @@ public interface IAdminWorkspaceService extends IConnectionService {
 
 	Collection<Victim> getVictims();
 
-	Collection<Agent> getAgents();
-
+	Collection<Agent> getAgents(MoveCursor move);
 }

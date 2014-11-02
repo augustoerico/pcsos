@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.gwt.cell.client.ImageCell;
 import com.google.gwt.cell.client.Cell.Context;
+import com.google.gwt.cell.client.ImageCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
@@ -20,11 +20,15 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.AsyncDataProvider;
+import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.Range;
 
 import epusp.pcs.os.admin.client.AdminResources;
 import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
+import epusp.pcs.os.shared.general.MoveCursor;
 import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.person.user.User;
@@ -58,9 +62,13 @@ public class WorkspacePresenter implements Presenter {
 	
 	private SimplePager victimPager = new SimplePager();
 	
+//	private DynamicPagerPanel agentPager = new DynamicPagerPanel();
+	
 	private SimplePager agentPager = new SimplePager();
 	
 	private SimplePager vehiclePager = new SimplePager();
+	
+	private int agentStartRange = -1;
 
 	public WorkspacePresenter(IAdminWorkspaceServiceAsync rpcService, Display view, AdminWorkspaceConstants constants) {
 		this.rpcService = rpcService;
@@ -106,22 +114,87 @@ public class WorkspacePresenter implements Presenter {
 			}
 		});
 		
-		rpcService.getAgents(new AsyncCallback<Collection<Agent>>() {
-
+//		rpcService.getAgents(null, new AsyncCallback<Collection<Agent>>() {
+//
+//			@Override
+//			public void onSuccess(Collection<Agent> result) {
+//				List<Agent> agents = new ArrayList<Agent>();
+//				agents.addAll(result);
+//				agentTable.setRowCount(result.size(), true);
+//				agentTable.setRowData(0, agents);				
+//			}
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//			}
+//		});
+		
+		
+		//Make this provider generic and move to shared package
+		AsyncDataProvider<Agent> dataProvider = new AsyncDataProvider<Agent>() {			
 			@Override
-			public void onSuccess(Collection<Agent> result) {
-				List<Agent> agents = new ArrayList<Agent>();
-				agents.addAll(result);
-				agentTable.setRowCount(result.size(), true);
-				agentTable.setRowData(0, agents);				
-			}
+			protected void onRangeChanged(HasData<Agent> display) {
+				final Range range = display.getVisibleRange();
+				final int start = range.getStart();
+				int end = start + range.getLength();
+				final int totalNumberOfRows = display.getRowCount();
+				
+				System.out.println("**************************************");
 
-			@Override
-			public void onFailure(Throwable caught) {
-			}
-		});	    
+				System.out.println("start: " + start);
+				System.out.println("end: " + end);
+				System.out.println("row count: " + totalNumberOfRows);
+				
+				MoveCursor move = null;
+				
+				if(start == 0){
+					move = MoveCursor.FIRST;
+				}/*else if(end == totalNumberOfRows){
+					move = MoveCursor.LAST;
+				}*/else if(start > agentStartRange){
+					move = MoveCursor.FORWARD;
+				}else{
+					move = MoveCursor.BACKWARD;
+				}
+				
+				agentStartRange = start;
 
-//		agentTable.setPageSize(3);
+				rpcService.getAgents(move, new AsyncCallback<Collection<Agent>>() {
+
+					@Override
+					public void onSuccess(Collection<Agent> result) {
+						List<Agent> agents = new ArrayList<Agent>();
+						agents.addAll(result);
+						
+						for(Agent agent : agents){
+							System.out.println("agent: " + agent);
+						}
+						
+						//I have to take care when the last page has excatly the same number as it fits at the page
+						
+						if(result.size() < range.getLength()){
+							agentTable.setRowCount(8, true); //it has to be multiple of page size
+						}
+						
+						if(!result.isEmpty())
+							agentTable.setRowData(start, agents);
+						else
+							agentPager.firstPage(); //better change to last one.
+						
+						System.out.println(agentTable.getRowCount());
+						
+						System.out.println("**************************************");
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+					}
+				});
+			}
+		};
+		
+		agentTable.setPageSize(2);
+		dataProvider.addDataDisplay(agentTable);
 		
 		victimPager.setDisplay(vehicleTable);
 		agentPager.setDisplay(agentTable);
@@ -147,10 +220,16 @@ public class WorkspacePresenter implements Presenter {
 		TextColumn<Agent> agentNameColumn = new TextColumn<Agent>() {
 			@Override
 			public String getValue(Agent object) {
+				try{
+					System.out.println(object);
 				if(object.getSecondName() != null)
 					return object.getName() + " " + object.getSecondName();
 				else
 					return object.getName();
+			}catch(NullPointerException e){
+				e.printStackTrace();
+				return "";
+			}
 			}
 		};
 
@@ -164,21 +243,40 @@ public class WorkspacePresenter implements Presenter {
 		TextColumn<Agent> agentSurnameColumn = new TextColumn<Agent>() {
 			@Override
 			public String getValue(Agent object) {
+				try{
+					System.out.println(object);
 				return object.getSurname();
+			}catch(NullPointerException e){
+				e.printStackTrace();
+				return "";
+			}
 			}
 		};
 		
 		TextColumn<Victim> victimEmailColumn = new TextColumn<Victim>() {
 			@Override
 			public String getValue(Victim object) {
-				return object.getEmail();
+				try{
+					System.out.println(object);
+					return object.getEmail();
+				}catch(NullPointerException e){
+					e.printStackTrace();
+					return "";
+				}
+				
 			}
 		};
 		
 		TextColumn<Agent> agentEmailColumn = new TextColumn<Agent>() {
 			@Override
 			public String getValue(Agent object) {
-				return object.getEmail();
+				try{
+					System.out.println(object);
+					return object.getEmail();
+				}catch(NullPointerException e){
+					e.printStackTrace();
+					return "";
+				}
 			}
 		};
 
@@ -206,8 +304,13 @@ public class WorkspacePresenter implements Presenter {
 		    @Override
 		    public void render(Context context, Agent object,
 		    		SafeHtmlBuilder sb) {
+				try{
+					System.out.println(object);
 				super.render(context, object, sb);
 				 sb.appendHtmlConstant("<img src = '"+object.getPictureURL()+"' height = '50px' />");
+			}catch(NullPointerException e){
+				e.printStackTrace();
+			}
 		    }
 		};
 		
