@@ -400,6 +400,49 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		}finally{
 			pm.close();
 		}
+		
+		//-----------------------------
+		
+		Victim v1 = new Victim("Eike", "Batista", "eike.batista@gmail.com");
+		v1.setIsActive(true);
+		v1.setPictureURL("http://cdn1.valuewalk.com/wp-content/uploads/2013/09/Eike-Batista.jpg");
+		v1.setGoogleUserId("0000005");
+		
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(v1);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+		
+		Victim v2 = new Victim("Gato", "de Botas", "el.gato@gmail.com");
+		v2.setIsActive(true);
+		v2.setPictureURL("http://4.bp.blogspot.com/-8MbMe--7J4o/Uc05PZLUZ0I/AAAAAAAACv0/FB_K0kbo2OQ/s1600/Gato-com-cara-de-coitado.jpg");
+		v2.setGoogleUserId("0000005");
+		
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(v2);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+		
+		
+		//-----------------------------
 
 		
 		/*************************************************************************************************************************/

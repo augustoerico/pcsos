@@ -12,7 +12,7 @@ import epusp.pcs.os.shared.model.person.user.Agent;
 @RemoteServiceRelativePath("adminWorkspaceService")
 public interface IAdminWorkspaceService extends IConnectionService {
 
-	Collection<Victim> getVictims();
+	Collection<Victim> getVictims(MoveCursor move, int pageSize);
 
 	Collection<Agent> getAgents(MoveCursor move, int range);
 }

@@ -26,14 +26,14 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String victimCursorSessionAttribute = "victimCursorSessionAttribute";
-
-	private static final String vehicleCursorPositionSessionAttribute = "vehicleCursorPositionSessionAttribute";
-	private static final String vehicleCursorsListSessionAttribute = "vehicleCursorsListSessionAttribute";
-
-
+	private static final String victimCursorPositionSessionAttribute = "victimCursorPositionSessionAttribute";
+	private static final String victimCursorsListSessionAttribute = "victimCursorsListSessionAttribute";
+	
 	private static final String agentCursorPositionSessionAttribute = "agentCursorPositionSessionAttribute";
 	private static final String agentCursorsListSessionAttribute = "agentCursorsListSessionAttribute";
+	
+	private static final String vehicleCursorPositionSessionAttribute = "vehicleCursorPositionSessionAttribute";
+	private static final String vehicleCursorsListSessionAttribute = "vehicleCursorsListSessionAttribute";
 
 	@Override
 	public void init() throws ServletException{}
@@ -51,19 +51,40 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<Victim> getVictims(){
+	public Collection<Victim> getVictims(MoveCursor move, int range){
 		if(isLoggedIn()){
-
-			String cursorString = (String) getSessionAttibute(victimCursorSessionAttribute);
+			Integer cursorPosition = (Integer) getSessionAttibute(victimCursorPositionSessionAttribute);
+			List<Cursor> cursors = (List<Cursor>) getSessionAttibute(victimCursorsListSessionAttribute);
 
 			PersistenceManager pm = PMF.get().getPersistenceManager();
-			
+
 			Query q = pm.newQuery(Victim.class);
-			q.setRange(0, 10);
+			q.setRange(0, range);
 
-			if(cursorString != null){
-				Cursor cursor = Cursor.fromWebSafeString(cursorString);
+			//Initializing
+			if(cursorPosition == null && cursors == null){
+				cursorPosition = -1;
+				cursors = new ArrayList<Cursor>();
+			}
 
+			switch(move){
+			case BACKWARD:
+				if(cursorPosition > 0){
+					cursorPosition--;
+				}
+				break;
+			case FORWARD:
+				cursorPosition++;
+				break;
+			case FIRST:
+				cursorPosition = -1;
+				break;
+			default:
+				break;
+			}
+
+			if(!move.equals(MoveCursor.FIRST)){
+				Cursor cursor = cursors.get(cursorPosition);
 				Map<String, Object> extensionMap = new HashMap<String, Object>();
 				extensionMap.put(JDOCursorHelper.CURSOR_EXTENSION, cursor);
 				q.setExtensions(extensionMap);
@@ -79,13 +100,18 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 				q.closeAll();
 			}
 
-			Cursor cursor = JDOCursorHelper.getCursor(victims);
+			if((detachedVictims != null && !detachedVictims.isEmpty() && move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) 
+					|| (cursors.isEmpty() && cursorPosition == -1)){
+				Cursor cursor = JDOCursorHelper.getCursor(victims);
+				cursors.add(cursor);
+			}
 
-			setSessionAttribute(victimCursorSessionAttribute, cursor.toWebSafeString());
+			setSessionAttribute(victimCursorPositionSessionAttribute, cursorPosition);
+			setSessionAttribute(victimCursorsListSessionAttribute, cursors);
 
 			if(detachedVictims == null)
 				return new ArrayList<Victim>();
-
+			
 			return detachedVictims;
 		}
 		return null;

@@ -1,9 +1,5 @@
 package epusp.pcs.os.admin.client.presenter;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.cell.client.ImageCell;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -26,6 +22,7 @@ import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.general.AsyncAgentProvider;
+import epusp.pcs.os.shared.general.AsyncVictimProvider;
 import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.person.user.User;
@@ -94,27 +91,17 @@ public class WorkspacePresenter implements Presenter {
 			}
 		});
 
-		rpcService.getVictims(new AsyncCallback<Collection<Victim>>() {
-
-			@Override
-			public void onSuccess(Collection<Victim> result) {
-				List<Victim> victims = new ArrayList<Victim>();
-				victims.addAll(result);
-				victimTable.setRowCount(result.size(), true);
-				victimTable.setRowData(0, victims);				
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-			}
-		});
+		AsyncVictimProvider victimProvider = new AsyncVictimProvider(victimTable, victimPager, rpcService, pageSize);
 
 		AsyncAgentProvider agentProvider = new AsyncAgentProvider(agentTable, agentPager, rpcService, pageSize);
 
 		agentTable.setPageSize(pageSize);
+		victimTable.setPageSize(pageSize);
+		
+		victimProvider.addDataDisplay(victimTable);
 		agentProvider.addDataDisplay(agentTable);
 
-		victimPager.setDisplay(vehicleTable);
+		victimPager.setDisplay(victimTable);
 		agentPager.setDisplay(agentTable);
 		vehiclePager.setDisplay(vehicleTable);
 
