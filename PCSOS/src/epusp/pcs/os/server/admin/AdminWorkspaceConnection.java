@@ -57,10 +57,7 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 			String cursorString = (String) getSessionAttibute(victimCursorSessionAttribute);
 
 			PersistenceManager pm = PMF.get().getPersistenceManager();
-
-			pm.getFetchPlan().addGroup("all_system_object_attributes");
-			pm.getFetchPlan().setMaxFetchDepth(-1);
-
+			
 			Query q = pm.newQuery(Victim.class);
 			q.setRange(0, 10);
 
@@ -96,27 +93,21 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<Agent> getAgents(MoveCursor move){
+	public Collection<Agent> getAgents(MoveCursor move, int range){
 		if(isLoggedIn()){
-			System.out.println("---------------");
 			Integer cursorPosition = (Integer) getSessionAttibute(agentCursorPositionSessionAttribute);
 			List<Cursor> cursors = (List<Cursor>) getSessionAttibute(agentCursorsListSessionAttribute);
 
 			PersistenceManager pm = PMF.get().getPersistenceManager();
 
-			pm.getFetchPlan().addGroup("all_system_object_attributes");
-			pm.getFetchPlan().setMaxFetchDepth(-1);
-
 			Query q = pm.newQuery(Agent.class);
-			q.setRange(0, 2);
+			q.setRange(0, range);
 
 			//Initializing
 			if(cursorPosition == null && cursors == null){
 				cursorPosition = -1;
 				cursors = new ArrayList<Cursor>();
 			}
-			
-			System.out.println("start cursor position: " + cursorPosition);
 
 			switch(move){
 			case BACKWARD:
@@ -132,10 +123,7 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 				break;
 			default:
 				break;
-			}
-
-			System.out.println(move);
-			
+			}			
 
 			if(!move.equals(MoveCursor.FIRST)){
 				Cursor cursor = cursors.get(cursorPosition);
@@ -154,8 +142,6 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 				q.closeAll();
 			}
 
-			System.out.println("if: " + ((detachedAgents != null && !detachedAgents.isEmpty() && move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) || (cursors.isEmpty() && cursorPosition == -1)));
-
 			if((detachedAgents != null && !detachedAgents.isEmpty() && move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) 
 					|| (cursors.isEmpty() && cursorPosition == -1)){
 				Cursor cursor = JDOCursorHelper.getCursor(agents);
@@ -167,10 +153,7 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 
 			if(detachedAgents == null)
 				return new ArrayList<Agent>();
-
-			System.out.println("has agents: " + !detachedAgents.isEmpty());
-			System.out.println("end cursor position: " + cursorPosition);
-			System.out.println("---------------");
+			
 			return detachedAgents;
 		}
 		return null;

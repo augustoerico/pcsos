@@ -14,5 +14,5 @@ public interface IAdminWorkspaceService extends IConnectionService {
 
 	Collection<Victim> getVictims();
 
-	Collection<Agent> getAgents(MoveCursor move);
+	Collection<Agent> getAgents(MoveCursor move, int range);
 }

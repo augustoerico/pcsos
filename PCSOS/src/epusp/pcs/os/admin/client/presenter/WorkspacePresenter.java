@@ -20,15 +20,12 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.Range;
 
 import epusp.pcs.os.admin.client.AdminResources;
 import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
-import epusp.pcs.os.shared.general.MoveCursor;
+import epusp.pcs.os.shared.general.AsyncAgentProvider;
 import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.person.user.User;
@@ -59,16 +56,14 @@ public class WorkspacePresenter implements Presenter {
 	private final CellTable<Vehicle> vehicleTable = new CellTable<Vehicle>();
 
 	private final CellTable<Agent> agentTable = new CellTable<Agent>();
-	
+
 	private SimplePager victimPager = new SimplePager();
-	
-//	private DynamicPagerPanel agentPager = new DynamicPagerPanel();
-	
+
 	private SimplePager agentPager = new SimplePager();
-	
+
 	private SimplePager vehiclePager = new SimplePager();
-	
-	private int agentStartRange = -1;
+
+	private final int pageSize = 2;
 
 	public WorkspacePresenter(IAdminWorkspaceServiceAsync rpcService, Display view, AdminWorkspaceConstants constants) {
 		this.rpcService = rpcService;
@@ -113,93 +108,16 @@ public class WorkspacePresenter implements Presenter {
 			public void onFailure(Throwable caught) {
 			}
 		});
-		
-//		rpcService.getAgents(null, new AsyncCallback<Collection<Agent>>() {
-//
-//			@Override
-//			public void onSuccess(Collection<Agent> result) {
-//				List<Agent> agents = new ArrayList<Agent>();
-//				agents.addAll(result);
-//				agentTable.setRowCount(result.size(), true);
-//				agentTable.setRowData(0, agents);				
-//			}
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//			}
-//		});
-		
-		
-		//Make this provider generic and move to shared package
-		AsyncDataProvider<Agent> dataProvider = new AsyncDataProvider<Agent>() {			
-			@Override
-			protected void onRangeChanged(HasData<Agent> display) {
-				final Range range = display.getVisibleRange();
-				final int start = range.getStart();
-				int end = start + range.getLength();
-				final int totalNumberOfRows = display.getRowCount();
-				
-				System.out.println("**************************************");
 
-				System.out.println("start: " + start);
-				System.out.println("end: " + end);
-				System.out.println("row count: " + totalNumberOfRows);
-				
-				MoveCursor move = null;
-				
-				if(start == 0){
-					move = MoveCursor.FIRST;
-				}/*else if(end == totalNumberOfRows){
-					move = MoveCursor.LAST;
-				}*/else if(start > agentStartRange){
-					move = MoveCursor.FORWARD;
-				}else{
-					move = MoveCursor.BACKWARD;
-				}
-				
-				agentStartRange = start;
+		AsyncAgentProvider agentProvider = new AsyncAgentProvider(agentTable, agentPager, rpcService, pageSize);
 
-				rpcService.getAgents(move, new AsyncCallback<Collection<Agent>>() {
+		agentTable.setPageSize(pageSize);
+		agentProvider.addDataDisplay(agentTable);
 
-					@Override
-					public void onSuccess(Collection<Agent> result) {
-						List<Agent> agents = new ArrayList<Agent>();
-						agents.addAll(result);
-						
-						for(Agent agent : agents){
-							System.out.println("agent: " + agent);
-						}
-						
-						//I have to take care when the last page has excatly the same number as it fits at the page
-						
-						if(result.size() < range.getLength()){
-							agentTable.setRowCount(8, true); //it has to be multiple of page size
-						}
-						
-						if(!result.isEmpty())
-							agentTable.setRowData(start, agents);
-						else
-							agentPager.firstPage(); //better change to last one.
-						
-						System.out.println(agentTable.getRowCount());
-						
-						System.out.println("**************************************");
-					}
-
-					@Override
-					public void onFailure(Throwable caught) {
-					}
-				});
-			}
-		};
-		
-		agentTable.setPageSize(2);
-		dataProvider.addDataDisplay(agentTable);
-		
 		victimPager.setDisplay(vehicleTable);
 		agentPager.setDisplay(agentTable);
 		vehiclePager.setDisplay(vehicleTable);
-		
+
 		display.addType(Victim.class.getName(), new Label(constants.client()), victimTable);
 		display.addControl(Victim.class.getName(), victimPager);
 		display.addType(Agent.class.getName(), new Label(constants.agent()), agentTable);
@@ -216,20 +134,14 @@ public class WorkspacePresenter implements Presenter {
 					return object.getName();
 			}
 		};
-		
+
 		TextColumn<Agent> agentNameColumn = new TextColumn<Agent>() {
 			@Override
 			public String getValue(Agent object) {
-				try{
-					System.out.println(object);
 				if(object.getSecondName() != null)
 					return object.getName() + " " + object.getSecondName();
 				else
 					return object.getName();
-			}catch(NullPointerException e){
-				e.printStackTrace();
-				return "";
-			}
 			}
 		};
 
@@ -239,93 +151,69 @@ public class WorkspacePresenter implements Presenter {
 				return object.getSurname();
 			}
 		};
-		
+
 		TextColumn<Agent> agentSurnameColumn = new TextColumn<Agent>() {
 			@Override
 			public String getValue(Agent object) {
-				try{
-					System.out.println(object);
 				return object.getSurname();
-			}catch(NullPointerException e){
-				e.printStackTrace();
-				return "";
-			}
 			}
 		};
-		
+
 		TextColumn<Victim> victimEmailColumn = new TextColumn<Victim>() {
 			@Override
 			public String getValue(Victim object) {
-				try{
-					System.out.println(object);
-					return object.getEmail();
-				}catch(NullPointerException e){
-					e.printStackTrace();
-					return "";
-				}
-				
+				return object.getEmail();
 			}
 		};
-		
+
 		TextColumn<Agent> agentEmailColumn = new TextColumn<Agent>() {
 			@Override
 			public String getValue(Agent object) {
-				try{
-					System.out.println(object);
-					return object.getEmail();
-				}catch(NullPointerException e){
-					e.printStackTrace();
-					return "";
-				}
+				return object.getEmail();
 			}
 		};
 
 		Column<Victim, String> victimPictureColumn = new Column<Victim, String>(new ImageCell()) {
-		    @Override
-		    public String getValue(Victim object) {
-		        return "";      
-		    }
-		    
-		    @Override
-		    public void render(Context context, Victim object,
-		    		SafeHtmlBuilder sb) {
-				super.render(context, object, sb);
-				 sb.appendHtmlConstant("<img src = '"+object.getPictureURL()+"' height = '50px' />");
-		    }
-		
-		};
-		
-		Column<Agent, String> agentPictureColumn = new Column<Agent, String>(new ImageCell()) {
-		    @Override
-		    public String getValue(Agent object) {
-		        return "";      
-		    }
-		    
-		    @Override
-		    public void render(Context context, Agent object,
-		    		SafeHtmlBuilder sb) {
-				try{
-					System.out.println(object);
-				super.render(context, object, sb);
-				 sb.appendHtmlConstant("<img src = '"+object.getPictureURL()+"' height = '50px' />");
-			}catch(NullPointerException e){
-				e.printStackTrace();
+			@Override
+			public String getValue(Victim object) {
+				return "";      
 			}
-		    }
+
+			@Override
+			public void render(Context context, Victim object,
+					SafeHtmlBuilder sb) {
+				super.render(context, object, sb);
+				sb.appendHtmlConstant("<img src = '"+object.getPictureURL()+"' height = '50px' />");
+			}
+
 		};
-		
+
+		Column<Agent, String> agentPictureColumn = new Column<Agent, String>(new ImageCell()) {
+			@Override
+			public String getValue(Agent object) {
+				return "";      
+			}
+
+			@Override
+			public void render(Context context, Agent object,
+					SafeHtmlBuilder sb) {
+				super.render(context, object, sb);
+				sb.appendHtmlConstant("<img src = '"+object.getPictureURL()+"' height = '50px' />");
+			}
+		};
+
 		agentPictureColumn.setCellStyleNames("picture");
 		victimPictureColumn.setCellStyleNames("picture");
-		
+
 		agentTable.addColumn(agentSurnameColumn, constants.surname());
 		victimTable.addColumn(victimSurnameColumn, constants.surname());
 
 		agentTable.addColumn(agentNameColumn, constants.name());
 		victimTable.addColumn(victimNameColumn, constants.name());
-		
+
 		agentTable.addColumn(agentEmailColumn, constants.email());
 		victimTable.addColumn(victimEmailColumn, constants.email());
-		
+
 		agentTable.addColumn(agentPictureColumn, constants.picture());
 		victimTable.addColumn(victimPictureColumn, constants.picture());
 
@@ -352,13 +240,6 @@ public class WorkspacePresenter implements Presenter {
 				});
 			}
 		});
-
-		//		CellTable<T>
-		//		
-		//		display.addType("SoBaiano", new Label("Só Baiano"));
-		//		display.addType("SoPaulista", new Label("Só Paulista"));
-		//		display.addItem("SoBaiano", new Label("Baianão"));
-		//		display.addItem("SoPaulista", new Label("Seca da Morte"));
 
 	}
 

@@ -13,6 +13,7 @@ public interface IAdminWorkspaceServiceAsync extends IConnectionServiceAsync {
 
 	void getVictims(AsyncCallback<Collection<Victim>> callback);
 
-	void getAgents(MoveCursor move, AsyncCallback<Collection<Agent>> callback);
+	void getAgents(MoveCursor move, int range,
+			AsyncCallback<Collection<Agent>> callback);
 
 }
