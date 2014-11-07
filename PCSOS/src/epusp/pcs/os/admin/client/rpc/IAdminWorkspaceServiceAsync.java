@@ -8,6 +8,8 @@ import epusp.pcs.os.shared.client.rpc.IConnectionServiceAsync;
 import epusp.pcs.os.shared.general.MoveCursor;
 import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.vehicle.Car;
+import epusp.pcs.os.shared.model.vehicle.Helicopter;
 
 public interface IAdminWorkspaceServiceAsync extends IConnectionServiceAsync {
 
@@ -15,5 +17,11 @@ public interface IAdminWorkspaceServiceAsync extends IConnectionServiceAsync {
 
 	void getAgents(MoveCursor move, int range,
 			AsyncCallback<Collection<Agent>> callback);
+
+	void getCars(MoveCursor move, int range,
+			AsyncCallback<Collection<Car>> callback);
+
+	void getHelicopters(MoveCursor move, int range,
+			AsyncCallback<Collection<Helicopter>> callback);
 
 }

@@ -16,4 +16,12 @@ public interface CommonWorkspaceConstants extends Constants{
 	@DefaultStringValue("Picture")
 	String picture();
 	
+	@DefaultStringValue("Plate")
+	String plate();
+	
+	@DefaultStringValue("Priority")
+	String priority();
+	
+	@DefaultStringValue("Tag")
+	String tag();	
 }

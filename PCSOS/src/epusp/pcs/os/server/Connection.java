@@ -94,7 +94,7 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		System.out.println("Create Cars...");
 		Car car = new Car("TAG001", "PCS-0505");
 		car.setPrioraty(Priority.PRIMARY);
-		car.setImageURL("http://upload.wikimedia.org/wikipedia/commons/1/17/'74_Ford_Gran_Torino_Starsky_%26_Hutch_(Auto_classique_Jukebox_Burgers_'11).JPG");
+		car.setImageURL("http://www.landmarkhire.com/images/starsky-and-hutch-car.jpg");
 //
 //		Car supportCar = new Car("PCS-0506");
 //		supportCar.setPrioraty(Priority.SUPPORT);
@@ -281,7 +281,7 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		
 		//-----------------------------------------------------------------------------------//
 		
-		Car cX = new Car("TAG003", "XPT-0001");
+		Car cX = new Car("TAG003", "XPT-0002");
 		cX.setPrioraty(Priority.SUPPORT);
 		cX.setImageURL("http://ecx.images-amazon.com/images/I/81cOTyQZbEL._SL1500_.jpg");
 		Car detachedCX = null;
@@ -321,7 +321,7 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 			pm.close();
 		}
 		//-------------------------------------------------------------//
-		Car c1 = new Car("TAG004", "XPT-0001");
+		Car c1 = new Car("TAG004", "XPT-0003");
 		c1.setPrioraty(Priority.SUPPORT);
 		c1.setImageURL("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQOuABFcPm1W7stgmlpAwb9EqUHqIImJJvhSm6SKikl6WJdO1dr");
 		Car detachedC1 = null;

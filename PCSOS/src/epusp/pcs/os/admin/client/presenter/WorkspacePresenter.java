@@ -1,15 +1,8 @@
 package epusp.pcs.os.admin.client.presenter;
 
-import com.google.gwt.cell.client.Cell.Context;
-import com.google.gwt.cell.client.ImageCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -21,8 +14,6 @@ import epusp.pcs.os.admin.client.AdminResources;
 import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
-import epusp.pcs.os.shared.general.AsyncAgentProvider;
-import epusp.pcs.os.shared.general.AsyncVictimProvider;
 import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.person.user.User;
@@ -38,8 +29,7 @@ public class WorkspacePresenter implements Presenter {
 		Image getLogout();
 		Image getPreferences();
 		Boolean hasType(String type);
-		void addType(String type, Widget header, Widget body);
-		void addControl(String type, Widget control);
+		HasWidgets addType(String type, Widget header);
 	}
 
 	private final IAdminWorkspaceServiceAsync rpcService;
@@ -47,18 +37,6 @@ public class WorkspacePresenter implements Presenter {
 	private final AdminWorkspaceConstants constants;
 
 	private final AdminResources resources = AdminResources.INSTANCE;
-
-	private final CellTable<Victim> victimTable = new CellTable<Victim>();
-
-	private final CellTable<Vehicle> vehicleTable = new CellTable<Vehicle>();
-
-	private final CellTable<Agent> agentTable = new CellTable<Agent>();
-
-	private SimplePager victimPager = new SimplePager();
-
-	private SimplePager agentPager = new SimplePager();
-
-	private SimplePager vehiclePager = new SimplePager();
 
 	private final int pageSize = 2;
 
@@ -90,119 +68,18 @@ public class WorkspacePresenter implements Presenter {
 				System.out.println(caught.getMessage());
 			}
 		});
-
-		AsyncVictimProvider victimProvider = new AsyncVictimProvider(victimTable, victimPager, rpcService, pageSize);
-
-		AsyncAgentProvider agentProvider = new AsyncAgentProvider(agentTable, agentPager, rpcService, pageSize);
-
-		agentTable.setPageSize(pageSize);
-		victimTable.setPageSize(pageSize);
 		
-		victimProvider.addDataDisplay(victimTable);
-		agentProvider.addDataDisplay(agentTable);
+		VictimTablePresenter victimTablePresenter = new VictimTablePresenter(rpcService, constants, pageSize);
+		HasWidgets victimContainer = display.addType(Victim.class.getName(), new Label(constants.client()));
+		victimTablePresenter.go(victimContainer);
 
-		victimPager.setDisplay(victimTable);
-		agentPager.setDisplay(agentTable);
-		vehiclePager.setDisplay(vehicleTable);
-
-		display.addType(Victim.class.getName(), new Label(constants.client()), victimTable);
-		display.addControl(Victim.class.getName(), victimPager);
-		display.addType(Agent.class.getName(), new Label(constants.agent()), agentTable);
-		display.addControl(Agent.class.getName(), agentPager);
-		display.addType(Vehicle.class.getName(), new Label(constants.vehicle()), vehicleTable);
-		display.addControl(Vehicle.class.getName(), vehiclePager);
-
-		TextColumn<Victim> victimNameColumn = new TextColumn<Victim>() {
-			@Override
-			public String getValue(Victim object) {
-				if(object.getSecondName() != null)
-					return object.getName() + " " + object.getSecondName();
-				else
-					return object.getName();
-			}
-		};
-
-		TextColumn<Agent> agentNameColumn = new TextColumn<Agent>() {
-			@Override
-			public String getValue(Agent object) {
-				if(object.getSecondName() != null)
-					return object.getName() + " " + object.getSecondName();
-				else
-					return object.getName();
-			}
-		};
-
-		TextColumn<Victim> victimSurnameColumn = new TextColumn<Victim>() {
-			@Override
-			public String getValue(Victim object) {
-				return object.getSurname();
-			}
-		};
-
-		TextColumn<Agent> agentSurnameColumn = new TextColumn<Agent>() {
-			@Override
-			public String getValue(Agent object) {
-				return object.getSurname();
-			}
-		};
-
-		TextColumn<Victim> victimEmailColumn = new TextColumn<Victim>() {
-			@Override
-			public String getValue(Victim object) {
-				return object.getEmail();
-			}
-		};
-
-		TextColumn<Agent> agentEmailColumn = new TextColumn<Agent>() {
-			@Override
-			public String getValue(Agent object) {
-				return object.getEmail();
-			}
-		};
-
-		Column<Victim, String> victimPictureColumn = new Column<Victim, String>(new ImageCell()) {
-			@Override
-			public String getValue(Victim object) {
-				return "";      
-			}
-
-			@Override
-			public void render(Context context, Victim object,
-					SafeHtmlBuilder sb) {
-				super.render(context, object, sb);
-				sb.appendHtmlConstant("<img src = '"+object.getPictureURL()+"' height = '50px' />");
-			}
-
-		};
-
-		Column<Agent, String> agentPictureColumn = new Column<Agent, String>(new ImageCell()) {
-			@Override
-			public String getValue(Agent object) {
-				return "";      
-			}
-
-			@Override
-			public void render(Context context, Agent object,
-					SafeHtmlBuilder sb) {
-				super.render(context, object, sb);
-				sb.appendHtmlConstant("<img src = '"+object.getPictureURL()+"' height = '50px' />");
-			}
-		};
-
-		agentPictureColumn.setCellStyleNames("picture");
-		victimPictureColumn.setCellStyleNames("picture");
-
-		agentTable.addColumn(agentSurnameColumn, constants.surname());
-		victimTable.addColumn(victimSurnameColumn, constants.surname());
-
-		agentTable.addColumn(agentNameColumn, constants.name());
-		victimTable.addColumn(victimNameColumn, constants.name());
-
-		agentTable.addColumn(agentEmailColumn, constants.email());
-		victimTable.addColumn(victimEmailColumn, constants.email());
-
-		agentTable.addColumn(agentPictureColumn, constants.picture());
-		victimTable.addColumn(victimPictureColumn, constants.picture());
+		AgentTablePresenter agentTablePresenter = new AgentTablePresenter(rpcService, constants, pageSize);
+		HasWidgets agentContainer = display.addType(Agent.class.getName(), new Label(constants.agent()));
+		agentTablePresenter.go(agentContainer);
+		
+		VehicleTablePresenter vehicleTablePresenter = new VehicleTablePresenter(rpcService, constants, pageSize);
+		HasWidgets vehicleContainer = display.addType(Vehicle.class.getName(), new Label(constants.vehicle()));
+		vehicleTablePresenter.go(vehicleContainer);
 
 		bind();
 	}

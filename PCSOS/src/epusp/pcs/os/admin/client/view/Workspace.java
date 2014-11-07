@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.admin.client.AdminResources;
@@ -120,21 +119,18 @@ public class Workspace extends Composite implements Display{
 	}
 	
 	@Override
-	public void addType(String type, Widget header, Widget body) {
-		if(!hasType(type)){
-			VerticalPanel verticalPanel = new VerticalPanel();
-			verticalPanel.setSize("100%", "100%");
-			verticalPanel.addStyleName(style.optionsPanel());
-			verticalPanel.add(body);
-			options.add(verticalPanel, header, 40);
-			containers.put(type, verticalPanel);
+	public HasWidgets addType(String type, Widget header) {
+		if(!hasType(type)){			
+			AbsolutePanel absolutePanel = new AbsolutePanel();
+			absolutePanel.setSize("100%", "100%");
+			absolutePanel.addStyleName(style.optionsPanel());
+			options.add(absolutePanel, header, 40);
+			containers.put(type, absolutePanel);
+			
+			return absolutePanel;
 		}
-	}
-	
-	@Override
-	public void addControl(String type, Widget control){
-		if(hasType(type))
-			containers.get(type).add(control);
+		
+		return null;
 	}
 	
 	@Override

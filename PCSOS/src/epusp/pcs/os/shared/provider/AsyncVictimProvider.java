@@ -1,4 +1,4 @@
-package epusp.pcs.os.shared.general;
+package epusp.pcs.os.shared.provider;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,6 +12,7 @@ import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.Range;
 
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
+import epusp.pcs.os.shared.general.MoveCursor;
 import epusp.pcs.os.shared.model.person.Victim;
 
 public class AsyncVictimProvider extends AsyncDataProvider<Victim> {

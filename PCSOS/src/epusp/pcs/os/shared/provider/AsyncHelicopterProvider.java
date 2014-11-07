@@ -1,4 +1,4 @@
-package epusp.pcs.os.shared.general;
+package epusp.pcs.os.shared.provider;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,9 +12,10 @@ import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.Range;
 
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
-import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.general.MoveCursor;
+import epusp.pcs.os.shared.model.vehicle.Helicopter;
 
-public class AsyncAgentProvider extends AsyncDataProvider<Agent> {
+public class AsyncHelicopterProvider  extends AsyncDataProvider<Helicopter> {
 	
 	private int startRange = -1;
 	
@@ -22,11 +23,11 @@ public class AsyncAgentProvider extends AsyncDataProvider<Agent> {
 
 	private final IAdminWorkspaceServiceAsync rpcService;
 	
-	private final CellTable<Agent> table;
+	private final CellTable<Helicopter> table;
 	
 	private SimplePager pager;
 	
-	public AsyncAgentProvider(CellTable<Agent> table, SimplePager pager, IAdminWorkspaceServiceAsync rpcService, int pageSize){
+	public AsyncHelicopterProvider(CellTable<Helicopter> table, SimplePager pager, IAdminWorkspaceServiceAsync rpcService, int pageSize){
 		this.table = table;
 		this.pager = pager;
 		this.rpcService = rpcService;
@@ -35,7 +36,7 @@ public class AsyncAgentProvider extends AsyncDataProvider<Agent> {
 
 
 	@Override
-	protected void onRangeChanged(HasData<Agent> display) {
+	protected void onRangeChanged(HasData<Helicopter> display) {
 		final Range range = display.getVisibleRange();
 		final int start = range.getStart();
 		final int totalNumberOfRows = display.getRowCount();
@@ -52,18 +53,18 @@ public class AsyncAgentProvider extends AsyncDataProvider<Agent> {
 		
 		startRange = start;
 
-		rpcService.getAgents(move, pageSize, new AsyncCallback<Collection<Agent>>() {
+		rpcService.getHelicopters(move, pageSize, new AsyncCallback<Collection<Helicopter>>() {
 
 			@Override
-			public void onSuccess(Collection<Agent> result) {
-				List<Agent> agents = new ArrayList<Agent>();
-				agents.addAll(result);
+			public void onSuccess(Collection<Helicopter> result) {
+				List<Helicopter> helicopter = new ArrayList<Helicopter>();
+				helicopter.addAll(result);
 
 				if(!result.isEmpty()){
 					if(!table.isRowCountExact() && result.size() < range.getLength()){
 						table.setRowCount(totalNumberOfRows+pageSize, true); //it has to be multiple of page size
 					}
-					table.setRowData(start, agents);
+					table.setRowData(start, helicopter);
 				}else{
 					if(!table.isRowCountExact())
 						table.setRowCount(totalNumberOfRows, true);
