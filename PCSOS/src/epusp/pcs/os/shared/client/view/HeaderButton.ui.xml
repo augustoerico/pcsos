@@ -1,0 +1,27 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	
+	.label {
+		color: rgb(0, 0, 0);
+		font-family: 'Arial Unicode MS', Arial, sans-serif;
+		font-size: 17px;
+		font-weight: bold;
+		cursor: default;
+	}
+	
+	.panel {
+		display: inline-flex;
+	}
+	</ui:style>
+
+	<g:AbsolutePanel height="100%" width="100%">
+
+		<g:FlowPanel styleName="{style.panel}">
+			<g:Image styleName="headerImage" ui:field="image" />
+			<g:Label styleName="{style.label}" ui:field="label" />
+		</g:FlowPanel>
+
+	</g:AbsolutePanel>
+</ui:UiBinder>

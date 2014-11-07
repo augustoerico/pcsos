@@ -12,7 +12,7 @@
 	filter: blur(5px);
 }
 
-.picture{
+.picture {
 	height: 50px;
 }
 
@@ -48,4 +48,23 @@
 	font-weight: bold;
 	font-variant: small-caps;
 	text-shadow: 1px -1px 3px #D4D2D2;
+}
+
+.headerImage {
+	height: 35px;
+	width: auto;
+	cursor: pointer;
+	padding-right: 10px;
+	opacity: 0.6;
+}
+
+.headerImage:HOVER {
+	opacity: 1.0;
+}
+
+.headerImage-disabled {
+	opacity: 1.0;
+	-webkit-filter: grayscale(100%);
+	-moz-filter: grayscale(100%);
+	filter: grayscale(100%);
 }

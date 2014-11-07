@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -125,6 +126,7 @@ public class Workspace extends Composite implements Display{
 			absolutePanel.setSize("100%", "100%");
 			absolutePanel.addStyleName(style.optionsPanel());
 			options.add(absolutePanel, header, 40);
+			
 			containers.put(type, absolutePanel);
 			
 			return absolutePanel;
@@ -136,5 +138,10 @@ public class Workspace extends Composite implements Display{
 	@Override
 	public Boolean hasType(String type){
 		return containers.containsKey(type);
+	}
+	
+	@Override
+	public void addSelectionHandler(SelectionHandler<Integer> handler){
+		options.addSelectionHandler(handler);
 	}
 }

@@ -2,12 +2,13 @@ package epusp.pcs.os.admin.client.presenter;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.admin.client.AdminResources;
@@ -15,6 +16,7 @@ import epusp.pcs.os.admin.client.VehicleTableController;
 import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
+import epusp.pcs.os.shared.client.view.HeaderButton;
 import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.person.user.User;
@@ -31,6 +33,7 @@ public class WorkspacePresenter implements Presenter {
 		Image getPreferences();
 		Boolean hasType(String type);
 		HasWidgets addType(String type, Widget header);
+		void addSelectionHandler(SelectionHandler<Integer> handler);
 	}
 
 	private final IAdminWorkspaceServiceAsync rpcService;
@@ -41,10 +44,18 @@ public class WorkspacePresenter implements Presenter {
 
 	private final int pageSize = 2;
 
+	private final HeaderButton victimHeaderButton;
+	private final HeaderButton agentHeaderButton;
+	private final HeaderButton vehicleHeaderButton;
+
 	public WorkspacePresenter(IAdminWorkspaceServiceAsync rpcService, Display view, AdminWorkspaceConstants constants) {
 		this.rpcService = rpcService;
 		this.display = view;
 		this.constants = constants;
+
+		victimHeaderButton = new HeaderButton(constants.client(), resources.newClient().getSafeUri());
+		agentHeaderButton = new HeaderButton(constants.agent(), resources.newPolice().getSafeUri());
+		vehicleHeaderButton = new HeaderButton(constants.vehicle(), resources.newVehicle().getSafeUri());
 	}
 
 	@Override
@@ -69,23 +80,27 @@ public class WorkspacePresenter implements Presenter {
 				System.out.println(caught.getMessage());
 			}
 		});
-		
+
 		VictimTablePresenter victimTablePresenter = new VictimTablePresenter(rpcService, constants, pageSize);
-		HasWidgets victimContainer = display.addType(Victim.class.getName(), new Label(constants.client()));
+		HasWidgets victimContainer = display.addType(Victim.class.getName(), victimHeaderButton);
 		victimTablePresenter.go(victimContainer);
 
 		AgentTablePresenter agentTablePresenter = new AgentTablePresenter(rpcService, constants, pageSize);
-		HasWidgets agentContainer = display.addType(Agent.class.getName(), new Label(constants.agent()));
+		HasWidgets agentContainer = display.addType(Agent.class.getName(), agentHeaderButton);
 		agentTablePresenter.go(agentContainer);
-		
-		VehicleTableController vehicleTablePresenter = new VehicleTableController(rpcService, constants, pageSize);
-		HasWidgets vehicleContainer = display.addType(Vehicle.class.getName(), new Label(constants.vehicle()));
-		vehicleTablePresenter.go(vehicleContainer);
 
+		VehicleTableController vehicleTablePresenter = new VehicleTableController(rpcService, constants, pageSize);
+		HasWidgets vehicleContainer = display.addType(Vehicle.class.getName(), vehicleHeaderButton);
+		vehicleTablePresenter.go(vehicleContainer);
+		
+		victimHeaderButton.enable();
+		agentHeaderButton.disable();
+		vehicleHeaderButton.disable();
+		
 		bind();
 	}
 
-	private void bind() {		
+	private void bind() {
 		display.getLogout().addClickHandler(new ClickHandler() {
 
 			@Override
@@ -103,6 +118,58 @@ public class WorkspacePresenter implements Presenter {
 					public void onFailure(Throwable caught) {	
 					}
 				});
+			}
+		});
+
+		victimHeaderButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if(victimHeaderButton.isEnabled()){
+					System.out.println("Add Client");
+					//Todo
+				}
+			}
+		});
+
+		agentHeaderButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if(agentHeaderButton.isEnabled()){
+					System.out.println("Add Agent");
+					//Todo
+				}
+			}
+		});
+
+		vehicleHeaderButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if(vehicleHeaderButton.isEnabled()){
+					System.out.println("Add Vehicle");
+					//Todo
+				}
+			}
+		});
+
+		display.addSelectionHandler(new SelectionHandler<Integer>() {
+
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				Integer i = event.getSelectedItem();
+
+				victimHeaderButton.disable();
+				agentHeaderButton.disable();
+				vehicleHeaderButton.disable();
+
+				if(i == 0)
+					victimHeaderButton.enable();
+				else if(i == 1)
+					agentHeaderButton.enable();
+				else if(i == 2)
+					vehicleHeaderButton.enable();
 			}
 		});
 
