@@ -16,9 +16,9 @@ import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
 import epusp.pcs.os.monitor.client.event.FinishCallEvent;
 import epusp.pcs.os.monitor.client.event.FinishCallEvent.FinishCallHandler;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
-import epusp.pcs.os.monitor.client.view.PictureTagItem;
 import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.Presenter;
+import epusp.pcs.os.shared.client.view.PictureTagItem;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 public class ReinforcementsPresenter implements Presenter, FinishCallHandler {

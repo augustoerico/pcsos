@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.admin.client.AdminResources;
+import epusp.pcs.os.admin.client.VehicleTableController;
 import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
@@ -77,7 +78,7 @@ public class WorkspacePresenter implements Presenter {
 		HasWidgets agentContainer = display.addType(Agent.class.getName(), new Label(constants.agent()));
 		agentTablePresenter.go(agentContainer);
 		
-		VehicleTablePresenter vehicleTablePresenter = new VehicleTablePresenter(rpcService, constants, pageSize);
+		VehicleTableController vehicleTablePresenter = new VehicleTableController(rpcService, constants, pageSize);
 		HasWidgets vehicleContainer = display.addType(Vehicle.class.getName(), new Label(constants.vehicle()));
 		vehicleTablePresenter.go(vehicleContainer);
 

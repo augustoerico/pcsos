@@ -30,30 +30,6 @@
 	font-family: Arial Unicode MS, Arial, sans-serif;
 }
 
-.controlPanel {
-	opacity: 0.4;
-}
-
-.controlPanel:HOVER {
-	opacity: 0.7;
-}
-
-.controlPanel-view {
-	opacity: 1.0 !important;
-}
-
-.controlItem {
-	padding-right: 15px;
-	cursor: pointer;
-	padding-top: 10px;
-}
-
-.controlPicture {
-	height: 50px;
-	width: 50px;
-	border-radius: 50%;
-}
-
 .reinforcementsItem {
 	opacity: 0.4;
 	padding: 5px;
@@ -65,16 +41,6 @@
 
 .reinforcementsItem-selected {
 	opacity: 1.0 !important;
-}
-
-.controlIdText {
-	font-family: Perpetua, Baskerville, "Big Caslon", "Palatino Linotype",
-		Palatino, "URW Palladio L", "Nimbus Roman No9 L", serif;
-	color: #FFFFFF;
-	font-size: 16px;
-	font-weight: bold;
-	font-variant: small-caps;
-	text-shadow: 1px -1px 3px #D4D2D2;
 }
 
 .infoItem {

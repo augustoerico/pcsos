@@ -1,4 +1,4 @@
-package epusp.pcs.os.monitor.client.view;
+package epusp.pcs.os.shared.client.view;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
