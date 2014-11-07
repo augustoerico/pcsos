@@ -41,7 +41,7 @@ public class ImageTabPanel extends Composite implements Display {
 	@Override
 	public void addInfo(Widget w) {
 		AbsolutePanel p = new AbsolutePanel();
-		p.setSize("100%", "500px");
+		p.setSize("100%", "100%");
 		p.addStyleName("detailsPanel");
 		p.add(w);
 		infoPanel.add(p);

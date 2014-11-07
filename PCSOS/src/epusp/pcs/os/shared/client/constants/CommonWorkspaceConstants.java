@@ -23,5 +23,11 @@ public interface CommonWorkspaceConstants extends Constants{
 	String priority();
 	
 	@DefaultStringValue("Tag")
-	String tag();	
+	String tag();
+	
+	@DefaultStringValue("Car")
+	String car();
+	
+	@DefaultStringValue("Helicopter")
+	String helicopter();
 }

@@ -20,7 +20,7 @@
 						<g:FlowPanel ui:field="control" styleName="{style.controlPanel}" />
 					</g:cell>
 					<g:cell width="100%">
-						<g:DeckLayoutPanel width="400px" height="400px"
+						<g:DeckLayoutPanel width="100%" height="100%"
 							ui:field="infoPanel" />
 					</g:cell>
 				</g:VerticalPanel>

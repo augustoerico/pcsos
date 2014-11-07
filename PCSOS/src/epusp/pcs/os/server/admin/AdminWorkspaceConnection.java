@@ -256,7 +256,7 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 	}
 
 	private static final String helicopterCursorPositionSessionAttribute = "helicopterCursorPositionSessionAttribute";
-	private static final String helicopterCursorsListSessionAttribute = "helicopterCursorPositionSessionAttribute";
+	private static final String helicopterCursorsListSessionAttribute = "helicopterCursorsListSessionAttribute";
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -304,7 +304,7 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 		try {
 			helicopter = (List<Helicopter>) q.execute();
 			if(helicopter != null)
-				detachedHelicopter = pm.detachCopyAll(detachedHelicopter);
+				detachedHelicopter = pm.detachCopyAll(helicopter);
 		} finally {
 			q.closeAll();
 		}

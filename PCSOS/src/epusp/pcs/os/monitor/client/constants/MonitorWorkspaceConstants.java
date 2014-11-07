@@ -1,20 +1,14 @@
 package epusp.pcs.os.monitor.client.constants;
 
-import com.google.gwt.i18n.client.Constants;
+import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
 
-public interface MonitorWorkspaceConstants extends Constants{
+public interface MonitorWorkspaceConstants extends CommonWorkspaceConstants{
 
 	@DefaultStringValue("Welcome to Monitor Workspace!")
 	String welcome();
 	
 	@DefaultStringValue("Victim")
 	String victim();
-
-	@DefaultStringValue("Car")
-	String car();
-	
-	@DefaultStringValue("Helicopter")
-	String helicopter();
 	
 	@DefaultStringValue("Show or hide traffic details")
 	String showHideTraffic();
