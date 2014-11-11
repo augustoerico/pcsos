@@ -1,0 +1,20 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:h="urn:import:gwtupload.client">
+	<ui:style>
+	.panel {
+		display: inline-flex;
+	}
+	
+	.button {
+		font-size: 10px;
+		min-height: 15px;
+	}
+	</ui:style>
+	<g:AbsolutePanel width="100%" height="100%">
+		<g:FlowPanel styleName="{style.panel}">
+			<h:SingleUploader ui:field="singleUploader" type="BUTTON" />
+			<g:Button styleName="{style.button}" ui:field="cancel" />
+		</g:FlowPanel>
+	</g:AbsolutePanel>
+</ui:UiBinder> 

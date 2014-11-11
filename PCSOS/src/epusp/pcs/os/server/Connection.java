@@ -20,6 +20,8 @@ import epusp.pcs.os.shared.model.attribute.Category;
 import epusp.pcs.os.shared.model.attribute.types.IntegerAttribute;
 import epusp.pcs.os.shared.model.attribute.types.StringAttribute;
 import epusp.pcs.os.shared.model.exception.AttributeCastException;
+import epusp.pcs.os.shared.model.licence.DrivingCategories;
+import epusp.pcs.os.shared.model.licence.DrivingLicence;
 import epusp.pcs.os.shared.model.oncall.Position;
 import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Admin;
@@ -104,6 +106,13 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		agent1.setIsActive(true);
 		agent1.setGoogleUserId("0000002");
 		agent1.setPictureURL("https://lh5.googleusercontent.com/Z59ZqJ392vBnwHtcgrm-h_c8ZPZGl-CXrmzgRmoW-_E=s207-p-no");
+		
+		DrivingLicence drivingLicence =  new DrivingLicence("123123321", new Date());
+		drivingLicence.setCategory(DrivingCategories.B);
+		drivingLicence.setHasAcategory(true);
+		drivingLicence.setAgent(agent1);
+		agent1.addLicence(drivingLicence);
+		
 //		
 //		Agent agent2 = new Agent("Ken", "Hutchinson", "ken.hutchinson@gmail.com");
 //		agent2.setIsActive(true);

@@ -19,7 +19,7 @@ public class Victim extends Person implements Serializable {
 	public Victim(String name, String secondName, String surname, String email){
 		super(name, secondName, surname, email);
 	}
-	
+
 	/*
 	 * Seen by Serializable
 	 */

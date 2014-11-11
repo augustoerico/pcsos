@@ -20,4 +20,6 @@ public interface SharedResources extends ClientBundle {
 	@Source("images/logout.png")
 	ImageResource logout();
 
+	@Source("images/add.png")
+	ImageResource add();
 }

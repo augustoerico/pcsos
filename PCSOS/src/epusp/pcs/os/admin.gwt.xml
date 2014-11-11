@@ -5,6 +5,9 @@
 
 	<inherits name="com.google.gwt.user.theme.clean.Clean" />
 
+	<!-- Include GWTUpload library -->
+	<inherits name="gwtupload.GWTUpload" />
+
 	<inherits name="com.google.gwt.logging.Logging" />
 	<set-property name="gwt.logging.logLevel" value="ALL" />
 	<set-property name="gwt.logging.popupHandler" value="DISABLED" />
@@ -13,6 +16,10 @@
 	<source path="shared" />
 
 	<stylesheet src="CommonStyles.css" />
+
+	<!-- Load dinamically predefined styles in the library when the application 
+		starts -->
+	<stylesheet src="Upload.css" />
 
 	<entry-point class="epusp.pcs.os.admin.client.Panel" />
 

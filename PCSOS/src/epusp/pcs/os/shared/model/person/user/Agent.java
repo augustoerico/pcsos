@@ -19,7 +19,7 @@ public class Agent extends User implements Serializable {
 	@NotPersistent
 	private static final long serialVersionUID = 1L;
 	
-	@Persistent(mappedBy="agent")
+	@Persistent(defaultFetchGroup="true")
 	private DrivingLicence drivingLicence;
 	
 	public Agent(String name, String surname, String email){

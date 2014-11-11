@@ -10,6 +10,7 @@ import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.vehicle.Car;
 import epusp.pcs.os.shared.model.vehicle.Helicopter;
+import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 @RemoteServiceRelativePath("adminWorkspaceService")
 public interface IAdminWorkspaceService extends IConnectionService {
@@ -21,4 +22,10 @@ public interface IAdminWorkspaceService extends IConnectionService {
 	Collection<Car> getCars(MoveCursor move, int range);
 
 	Collection<Helicopter> getHelicopters(MoveCursor move, int range);
+
+	void createVictim(Victim victim);
+
+	void createAgent(Agent agent);
+
+	void createVehicle(Vehicle vehicle);
 }

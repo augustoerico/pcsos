@@ -23,6 +23,7 @@ import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.person.user.User;
 import epusp.pcs.os.shared.model.vehicle.Car;
 import epusp.pcs.os.shared.model.vehicle.Helicopter;
+import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 public class AdminWorkspaceConnection extends Connection implements IAdminWorkspaceService{
 
@@ -322,5 +323,76 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 			return new ArrayList<Helicopter>();
 
 		return detachedHelicopter;
+	}
+	
+	@Override
+	public void createVictim(Victim victim){
+	
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		
+		System.out.println("Storing new Victim " + victim.getEmail());
+		
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(victim);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+	}
+	
+	@Override
+	public void createAgent(Agent agent){
+	
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		
+		System.out.println("Storing new Agent " + agent.getEmail());
+		
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(agent);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+	}
+	
+	@Override
+	public void createVehicle(Vehicle vehicle){
+	
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		
+		System.out.println("Storing new Vehicle " + vehicle.getIdTag());
+		
+		try{
+			pm.currentTransaction().begin();
+
+			switch (vehicle.getType()) {
+			case Car:
+				pm.makePersistent((Car) vehicle);
+				break;
+			case Helicopter:
+				pm.makePersistent((Helicopter) vehicle);
+				break;
+			default:
+				break;
+			};
+			
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
 	}
 }

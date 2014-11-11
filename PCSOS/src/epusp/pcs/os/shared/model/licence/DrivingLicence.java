@@ -19,7 +19,7 @@ public class DrivingLicence extends Licence implements Serializable{
 	@NotPersistent
 	public static final LicenceTypes licenceType = LicenceTypes.DrivingLicence;
 	
-    @Persistent(defaultFetchGroup="true")
+    @Persistent(mappedBy="drivingLicence")
     private Agent agent;
 	
 	@Persistent
@@ -52,13 +52,17 @@ public class DrivingLicence extends Licence implements Serializable{
 		this.hasAcategory = hasAcategory;
 	}
 	
+	@Override
+	public LicenceTypes getLicenceType() {
+		return licenceType;
+	}
+	
 	public Agent getAgent(){
 		return agent;
 	}
 	
-	@Override
-	public LicenceTypes getLicenceType() {
-		return licenceType;
+	public void setAgent(Agent agent){
+		this.agent = agent;
 	}
 	
 	/*

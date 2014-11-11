@@ -30,4 +30,34 @@ public interface CommonWorkspaceConstants extends Constants{
 	
 	@DefaultStringValue("Helicopter")
 	String helicopter();
+	
+	@DefaultStringValue("Cancel")
+	String cancel();
+	
+	@DefaultStringValue("Save")
+	String save();
+	
+	@DefaultStringValue("Google ID")
+	String googleId();
+	
+	@DefaultStringValue("Is Active?")
+	String active();
+	
+	@DefaultStringValue("Register Code")
+	String registerCode();
+	
+	@DefaultStringValue("Effective Until")
+	String effectiveUntil();
+	
+	@DefaultStringValue("Licence Type")
+	String licence();
+	
+	@DefaultStringValue("Driving Category")
+	String drivingCategory();
+	
+	@DefaultStringValue("A")
+	String isA();
+	
+	@DefaultStringValue("Vehicle Type")
+	String vehicleType();
 }

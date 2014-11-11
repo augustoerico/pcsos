@@ -10,6 +10,7 @@ import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.vehicle.Car;
 import epusp.pcs.os.shared.model.vehicle.Helicopter;
+import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 public interface IAdminWorkspaceServiceAsync extends IConnectionServiceAsync {
 
@@ -23,5 +24,11 @@ public interface IAdminWorkspaceServiceAsync extends IConnectionServiceAsync {
 
 	void getHelicopters(MoveCursor move, int range,
 			AsyncCallback<Collection<Helicopter>> callback);
+
+	void createVictim(Victim victim, AsyncCallback<Void> callback);
+
+	void createAgent(Agent agent, AsyncCallback<Void> callback);
+
+	void createVehicle(Vehicle vehicle, AsyncCallback<Void> callback);
 
 }

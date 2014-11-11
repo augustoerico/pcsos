@@ -25,18 +25,12 @@ public interface MonitorWorkspaceConstants extends CommonWorkspaceConstants{
 	@DefaultStringValue("Preferred language")
 	String preferredLanguage();
 	
-	@DefaultStringValue("Cancel")
-	String cancel();
-	
-	@DefaultStringValue("Save")
-	String save();
-	
 	@DefaultStringValue("Victim Details")
 	String victimHeader();
 	
 	@DefaultStringValue("Given Name")
 	String givenName();
 	
-	@DefaultStringValue("Surname")
+	@DefaultStringValue("Last Name")
 	String surname();
 }

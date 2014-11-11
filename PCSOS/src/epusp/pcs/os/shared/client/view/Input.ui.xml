@@ -1,0 +1,15 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	.fwp {
+		display: inline-table;
+	}
+	</ui:style>
+	<g:AbsolutePanel width="100%" height="100%">
+		<g:FlowPanel width="100%" height="100%" styleName="{style.fwp}">
+			<g:Label ui:field="label" />
+			<g:Widget ui:field="widget" />
+		</g:FlowPanel>
+	</g:AbsolutePanel>
+</ui:UiBinder> 

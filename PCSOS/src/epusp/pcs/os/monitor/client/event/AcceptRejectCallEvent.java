@@ -5,7 +5,7 @@ import com.google.web.bindery.event.shared.Event;
 
 import epusp.pcs.os.monitor.client.event.AcceptRejectCallEvent.AcceptRejectCallHandler;
 
-public class AcceptRejectCallEvent  extends Event<AcceptRejectCallHandler> {
+public class AcceptRejectCallEvent extends Event<AcceptRejectCallHandler> {
 	public static final Type<AcceptRejectCallHandler> TYPE = new Type<AcceptRejectCallHandler>();
 
 	public interface AcceptRejectCallHandler extends EventHandler {

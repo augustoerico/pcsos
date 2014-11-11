@@ -2,6 +2,8 @@ package epusp.pcs.os.admin.client.presenter;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.resources.client.ImageResource;
@@ -9,20 +11,26 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.admin.client.AdminResources;
 import epusp.pcs.os.admin.client.VehicleTableController;
 import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
+import epusp.pcs.os.shared.client.event.ClosePopupEvent;
+import epusp.pcs.os.shared.client.event.ClosePopupEvent.ClosePopupHandler;
+import epusp.pcs.os.shared.client.event.EventBus;
+import epusp.pcs.os.shared.client.presenter.CreateUpdatePresenter;
 import epusp.pcs.os.shared.client.presenter.Presenter;
+import epusp.pcs.os.shared.client.view.CreateUpdate;
 import epusp.pcs.os.shared.client.view.HeaderButton;
 import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.person.user.User;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
-public class WorkspacePresenter implements Presenter {
+public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 
 	public interface Display {
 		void setUserImage(String url);
@@ -48,6 +56,8 @@ public class WorkspacePresenter implements Presenter {
 	private final HeaderButton agentHeaderButton;
 	private final HeaderButton vehicleHeaderButton;
 
+	private final PopupPanel popup = new PopupPanel(false, false);
+
 	public WorkspacePresenter(IAdminWorkspaceServiceAsync rpcService, Display view, AdminWorkspaceConstants constants) {
 		this.rpcService = rpcService;
 		this.display = view;
@@ -56,6 +66,16 @@ public class WorkspacePresenter implements Presenter {
 		victimHeaderButton = new HeaderButton(constants.client(), resources.newClient().getSafeUri());
 		agentHeaderButton = new HeaderButton(constants.agent(), resources.newPolice().getSafeUri());
 		vehicleHeaderButton = new HeaderButton(constants.vehicle(), resources.newVehicle().getSafeUri());
+
+		EventBus.get().addHandler(ClosePopupEvent.TYPE, this);
+		
+		Window.addResizeHandler(new ResizeHandler() {
+			@Override
+			public void onResize(ResizeEvent event) {
+				if(popup.isShowing())
+					popup.center();
+			}
+		});
 	}
 
 	@Override
@@ -92,11 +112,11 @@ public class WorkspacePresenter implements Presenter {
 		VehicleTableController vehicleTablePresenter = new VehicleTableController(rpcService, constants, pageSize);
 		HasWidgets vehicleContainer = display.addType(Vehicle.class.getName(), vehicleHeaderButton);
 		vehicleTablePresenter.go(vehicleContainer);
-		
+
 		victimHeaderButton.enable();
 		agentHeaderButton.disable();
 		vehicleHeaderButton.disable();
-		
+
 		bind();
 	}
 
@@ -126,8 +146,10 @@ public class WorkspacePresenter implements Presenter {
 			@Override
 			public void onClick(ClickEvent event) {
 				if(victimHeaderButton.isEnabled()){
-					System.out.println("Add Client");
-					//Todo
+					popup.setSize("800px", "500px");
+					CreateUpdateVictimPresenter createUpdatePresenter = new CreateUpdateVictimPresenter(rpcService, new CreateUpdate(), constants, true);
+					createUpdatePresenter.go(popup);
+					popup.center();
 				}
 			}
 		});
@@ -137,8 +159,10 @@ public class WorkspacePresenter implements Presenter {
 			@Override
 			public void onClick(ClickEvent event) {
 				if(agentHeaderButton.isEnabled()){
-					System.out.println("Add Agent");
-					//Todo
+					popup.setSize("800px", "500px");
+					CreateUpdatePresenter createUpdatePresenter = new CreateUpdateAgentPresenter(rpcService, new CreateUpdate(), constants, true);
+					createUpdatePresenter.go(popup);
+					popup.center();
 				}
 			}
 		});
@@ -148,8 +172,10 @@ public class WorkspacePresenter implements Presenter {
 			@Override
 			public void onClick(ClickEvent event) {
 				if(vehicleHeaderButton.isEnabled()){
-					System.out.println("Add Vehicle");
-					//Todo
+					popup.setSize("800px", "500px");
+					CreateUpdatePresenter createUpdatePresenter = new CreateUpdateVehiclePresenter(rpcService, new CreateUpdate(), constants, true);
+					createUpdatePresenter.go(popup);
+					popup.center();
 				}
 			}
 		});
@@ -179,5 +205,9 @@ public class WorkspacePresenter implements Presenter {
 		return display.getPreferences();
 	}
 
-
+	@Override
+	public void onClosingPopup(ClosePopupEvent closePopupEvent) {
+		popup.clear();
+		popup.hide();
+	}
 }
