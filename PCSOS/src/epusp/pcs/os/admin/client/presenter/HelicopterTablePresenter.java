@@ -10,10 +10,15 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionChangeEvent.Handler;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
+import epusp.pcs.os.shared.general.SelectedRowHandler;
 import epusp.pcs.os.shared.model.vehicle.Helicopter;
 import epusp.pcs.os.shared.provider.AsyncHelicopterProvider;
 
@@ -29,10 +34,20 @@ public class HelicopterTablePresenter implements Presenter{
 	
 	private final DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Unit.PX);
 	
-	public HelicopterTablePresenter(IAdminWorkspaceServiceAsync rpcService, AdminWorkspaceConstants constants, int pageSize){
+	private final SingleSelectionModel<Helicopter> selectionModel = new SingleSelectionModel<Helicopter>(new ProvidesKey<Helicopter>() {
+		@Override
+		public Object getKey(Helicopter item) {
+			return item == null ? null : item.getId();
+		}
+	});
+	
+	private final SelectedRowHandler<Helicopter> handler;
+	
+	public HelicopterTablePresenter(IAdminWorkspaceServiceAsync rpcService, AdminWorkspaceConstants constants, int pageSize, SelectedRowHandler<Helicopter> handler){
 		this.rpcService = rpcService;
 		this.constants = constants;
 		this.pageSize = pageSize;
+		this.handler = handler;
 	}
 
 	@Override
@@ -70,6 +85,15 @@ public class HelicopterTablePresenter implements Presenter{
 			}
 
 		};
+		
+		table.setSelectionModel(selectionModel);
+		selectionModel.addSelectionChangeHandler(new Handler() {
+			
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				handler.onSelectedRow(selectionModel.getSelectedObject());
+			}
+		});
 		
 		pictureColumn.setCellStyleNames("picture");
 		

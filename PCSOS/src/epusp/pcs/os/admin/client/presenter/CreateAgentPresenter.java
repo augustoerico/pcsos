@@ -22,12 +22,12 @@ import epusp.pcs.os.shared.model.licence.Licence;
 import epusp.pcs.os.shared.model.licence.LicenceTypes;
 import epusp.pcs.os.shared.model.person.user.Agent;
 
-public class CreateUpdateAgentPresenter extends CreateUpdatePresenter {
+public class CreateAgentPresenter extends CreateUpdatePresenter {
 
 	
-	public CreateUpdateAgentPresenter(IAdminWorkspaceServiceAsync rpcService,
-			Display view, CommonWorkspaceConstants constants, Boolean create) {
-		super(rpcService, view, constants, create);
+	public CreateAgentPresenter(IAdminWorkspaceServiceAsync rpcService,
+			Display view, CommonWorkspaceConstants constants) {
+		super(rpcService, view, constants);
 	}
 	
 	private TextBox registerCode, givenName, surname, email, googleId;

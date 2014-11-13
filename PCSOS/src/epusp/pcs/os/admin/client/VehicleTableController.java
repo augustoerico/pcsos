@@ -10,6 +10,9 @@ import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.ImageTabPresenter;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.client.view.ImageTabPanel;
+import epusp.pcs.os.shared.general.SelectedRowHandler;
+import epusp.pcs.os.shared.model.vehicle.Car;
+import epusp.pcs.os.shared.model.vehicle.Helicopter;
 import epusp.pcs.os.shared.model.vehicle.VehicleTypes;
 
 public class VehicleTableController implements Presenter{
@@ -36,12 +39,26 @@ public class VehicleTableController implements Presenter{
 			panel.setSize("100%", "100%");
 			switch (type) {
 			case Car:
-				CarTablePresenter carTablePresenter = new CarTablePresenter(rpcService, constants, pageSize);
+				CarTablePresenter carTablePresenter = new CarTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Car>() {
+					
+					@Override
+					public void onSelectedRow(Car objectSelected) {
+						// TODO Auto-generated method stub
+						System.out.println("todo");
+					}
+				});
 				carTablePresenter.go(panel);
 				imageTabPresenter.addInfo(constants.car(), resources.car().getSafeUri().asString(), panel);
 				break;
 			case Helicopter:
-				HelicopterTablePresenter helicopterTablePresenter = new HelicopterTablePresenter(rpcService, constants, pageSize);
+				HelicopterTablePresenter helicopterTablePresenter = new HelicopterTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Helicopter>() {
+					
+					@Override
+					public void onSelectedRow(Helicopter objectSelected) {
+						// TODO Auto-generated method stub
+						System.out.println("todo");
+					}
+				});
 				helicopterTablePresenter.go(panel);
 				imageTabPresenter.addInfo(constants.helicopter(), resources.helicopter().getSafeUri().asString(), panel);
 				break;

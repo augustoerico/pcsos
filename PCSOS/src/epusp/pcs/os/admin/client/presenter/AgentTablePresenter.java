@@ -10,10 +10,15 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionChangeEvent.Handler;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
+import epusp.pcs.os.shared.general.SelectedRowHandler;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.provider.AsyncAgentProvider;
 
@@ -29,10 +34,20 @@ public class AgentTablePresenter implements Presenter{
 	
 	private final DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Unit.PX);
 	
-	public AgentTablePresenter(IAdminWorkspaceServiceAsync rpcService, AdminWorkspaceConstants constants, int pageSize){
+	private final SingleSelectionModel<Agent> selectionModel = new SingleSelectionModel<Agent>(new ProvidesKey<Agent>() {
+		@Override
+		public Object getKey(Agent item) {
+			return item == null ? null : item.getId();
+		}
+	});
+	
+	private final SelectedRowHandler<Agent> handler;
+	
+	public AgentTablePresenter(IAdminWorkspaceServiceAsync rpcService, AdminWorkspaceConstants constants, int pageSize, SelectedRowHandler<Agent> handler){
 		this.rpcService = rpcService;
 		this.constants = constants;
 		this.pageSize = pageSize;
+		this.handler = handler;
 	}
 
 	@Override
@@ -81,6 +96,15 @@ public class AgentTablePresenter implements Presenter{
 		};
 		
 		agentPictureColumn.setCellStyleNames("picture");
+		
+		table.setSelectionModel(selectionModel);
+		selectionModel.addSelectionChangeHandler(new Handler() {
+			
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				handler.onSelectedRow(selectionModel.getSelectedObject());
+			}
+		});
 		
 		table.addColumn(agentSurnameColumn, constants.surname());
 		

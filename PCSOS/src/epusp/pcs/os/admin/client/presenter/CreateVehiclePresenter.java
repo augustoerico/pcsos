@@ -21,11 +21,11 @@ import epusp.pcs.os.shared.model.vehicle.Priority;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 import epusp.pcs.os.shared.model.vehicle.VehicleTypes;
 
-public class CreateUpdateVehiclePresenter extends CreateUpdatePresenter{
+public class CreateVehiclePresenter extends CreateUpdatePresenter{
 
-	public CreateUpdateVehiclePresenter(IConnectionServiceAsync rpcService,
-			Display view, CommonWorkspaceConstants constants, Boolean create) {
-		super(rpcService, view, constants, create);
+	public CreateVehiclePresenter(IConnectionServiceAsync rpcService,
+			Display view, CommonWorkspaceConstants constants) {
+		super(rpcService, view, constants);
 	}
 	
 	private TextBox idTag, plate;

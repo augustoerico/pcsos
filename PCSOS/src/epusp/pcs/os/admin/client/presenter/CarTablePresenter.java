@@ -10,10 +10,15 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionChangeEvent.Handler;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
+import epusp.pcs.os.shared.general.SelectedRowHandler;
 import epusp.pcs.os.shared.model.vehicle.Car;
 import epusp.pcs.os.shared.provider.AsyncCarProvider;
 
@@ -27,12 +32,22 @@ public class CarTablePresenter implements Presenter{
 	
 	private final SimplePager pager = new SimplePager();
 	
+	private final SingleSelectionModel<Car> selectionModel = new SingleSelectionModel<Car>(new ProvidesKey<Car>() {
+		@Override
+		public Object getKey(Car item) {
+			return item == null ? null : item.getId();
+		}
+	});
+	
+	private final SelectedRowHandler<Car> handler;
+	
 	private final DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Unit.PX);
 	
-	public CarTablePresenter(IAdminWorkspaceServiceAsync rpcService, AdminWorkspaceConstants constants, int pageSize){
+	public CarTablePresenter(IAdminWorkspaceServiceAsync rpcService, AdminWorkspaceConstants constants, int pageSize, SelectedRowHandler<Car> handler){
 		this.rpcService = rpcService;
 		this.constants = constants;
 		this.pageSize = pageSize;
+		this.handler = handler;
 	}
 
 	@Override
@@ -81,6 +96,15 @@ public class CarTablePresenter implements Presenter{
 			}
 
 		};
+		
+		table.setSelectionModel(selectionModel);
+		selectionModel.addSelectionChangeHandler(new Handler() {
+			
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				handler.onSelectedRow(selectionModel.getSelectedObject());
+			}
+		});
 		
 		pictureColumn.setCellStyleNames("picture");
 		

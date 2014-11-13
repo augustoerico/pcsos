@@ -10,29 +10,44 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionChangeEvent.Handler;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
+import epusp.pcs.os.shared.general.SelectedRowHandler;
 import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.provider.AsyncVictimProvider;
 
 public class VictimTablePresenter implements Presenter{
-	
+
 	private final IAdminWorkspaceServiceAsync rpcService;
 	private final AdminWorkspaceConstants constants;
 	private final int pageSize;
-	
+
 	private final CellTable<Victim> table = new CellTable<Victim>();
-	
+
 	private final SimplePager pager = new SimplePager();
-	
+
 	private final DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Unit.PX);
 	
-	public VictimTablePresenter(IAdminWorkspaceServiceAsync rpcService, AdminWorkspaceConstants constants, int pageSize){
+	private final SingleSelectionModel<Victim> selectionModel = new SingleSelectionModel<Victim>(new ProvidesKey<Victim>() {
+		@Override
+		public Object getKey(Victim item) {
+			return item == null ? null : item.getId();
+		}
+	});
+	
+	private final SelectedRowHandler<Victim> handler;
+
+	public VictimTablePresenter(IAdminWorkspaceServiceAsync rpcService, AdminWorkspaceConstants constants, int pageSize, SelectedRowHandler<Victim> handler){
 		this.rpcService = rpcService;
 		this.constants = constants;
 		this.pageSize = pageSize;
+		this.handler = handler;
 	}
 
 	@Override
@@ -41,7 +56,7 @@ public class VictimTablePresenter implements Presenter{
 		table.setPageSize(pageSize);
 		victimProvider.addDataDisplay(table);
 		pager.setDisplay(table);
-		
+
 		TextColumn<Victim> victimNameColumn = new TextColumn<Victim>() {
 			@Override
 			public String getValue(Victim object) {
@@ -85,26 +100,39 @@ public class VictimTablePresenter implements Presenter{
 
 		};
 		
+		table.setSelectionModel(selectionModel);
+		selectionModel.addSelectionChangeHandler(new Handler() {
+			
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				handler.onSelectedRow(selectionModel.getSelectedObject());
+			}
+		});
+
 		victimPictureColumn.setCellStyleNames("picture");
-		
+
 		table.addColumn(victimSurnameColumn, constants.surname());
-		
+
 		table.addColumn(victimNameColumn, constants.name());
-		
+
 		table.addColumn(victimEmailColumn, constants.email());
 
 		table.addColumn(victimPictureColumn, constants.picture());
-		
+
 		dockLayoutPanel.setSize("100%", "100%");
 		dockLayoutPanel.addSouth(pager, 35);
 		dockLayoutPanel.add(table);
-		
+
 		container.add(dockLayoutPanel);
-		
+
 		bind();
 	}
-	
+	    
 	private void bind(){
-		
+
+	}
+	
+	public SingleSelectionModel<Victim> getSelectionModel(){
+		return selectionModel;
 	}
 }

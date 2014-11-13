@@ -330,7 +330,7 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 	
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
-		System.out.println("Storing new Victim " + victim.getEmail());
+		System.out.println("Creating/updating Victim " + victim.getEmail());
 		
 		try{
 			pm.currentTransaction().begin();
@@ -350,7 +350,7 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 	
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
-		System.out.println("Storing new Agent " + agent.getEmail());
+		System.out.println("Creating/updating new Agent " + agent.getEmail());
 		
 		try{
 			pm.currentTransaction().begin();
@@ -370,7 +370,7 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 	
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
-		System.out.println("Storing new Vehicle " + vehicle.getIdTag());
+		System.out.println("Creating/updating new Vehicle " + vehicle.getIdTag());
 		
 		try{
 			pm.currentTransaction().begin();

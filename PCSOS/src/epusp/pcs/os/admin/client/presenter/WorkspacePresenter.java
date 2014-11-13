@@ -25,6 +25,7 @@ import epusp.pcs.os.shared.client.presenter.CreateUpdatePresenter;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.client.view.CreateUpdate;
 import epusp.pcs.os.shared.client.view.HeaderButton;
+import epusp.pcs.os.shared.general.SelectedRowHandler;
 import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.person.user.User;
@@ -100,12 +101,29 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 				System.out.println(caught.getMessage());
 			}
 		});
-
-		VictimTablePresenter victimTablePresenter = new VictimTablePresenter(rpcService, constants, pageSize);
+		
+		final VictimTablePresenter victimTablePresenter = new VictimTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Victim>() {
+			
+			@Override
+			public void onSelectedRow(Victim objectSelected) {
+				popup.setSize("800px", "500px");
+				CreateUpdatePresenter createUpdatePresenter = new UpdateVictimPresenter(rpcService, new CreateUpdate(), constants, objectSelected);
+				createUpdatePresenter.go(popup);
+				popup.center();
+			}
+		});
+		
 		HasWidgets victimContainer = display.addType(Victim.class.getName(), victimHeaderButton);
 		victimTablePresenter.go(victimContainer);
 
-		AgentTablePresenter agentTablePresenter = new AgentTablePresenter(rpcService, constants, pageSize);
+		AgentTablePresenter agentTablePresenter = new AgentTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Agent>() {
+			
+			@Override
+			public void onSelectedRow(Agent objectSelected) {
+				// TODO Auto-generated method stub
+				System.out.println("todo");
+			}
+		});
 		HasWidgets agentContainer = display.addType(Agent.class.getName(), agentHeaderButton);
 		agentTablePresenter.go(agentContainer);
 
@@ -147,7 +165,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 			public void onClick(ClickEvent event) {
 				if(victimHeaderButton.isEnabled()){
 					popup.setSize("800px", "500px");
-					CreateUpdateVictimPresenter createUpdatePresenter = new CreateUpdateVictimPresenter(rpcService, new CreateUpdate(), constants, true);
+					CreateUpdatePresenter createUpdatePresenter = new CreateVictimPresenter(rpcService, new CreateUpdate(), constants);
 					createUpdatePresenter.go(popup);
 					popup.center();
 				}
@@ -160,7 +178,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 			public void onClick(ClickEvent event) {
 				if(agentHeaderButton.isEnabled()){
 					popup.setSize("800px", "500px");
-					CreateUpdatePresenter createUpdatePresenter = new CreateUpdateAgentPresenter(rpcService, new CreateUpdate(), constants, true);
+					CreateUpdatePresenter createUpdatePresenter = new CreateAgentPresenter(rpcService, new CreateUpdate(), constants);
 					createUpdatePresenter.go(popup);
 					popup.center();
 				}
@@ -173,7 +191,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 			public void onClick(ClickEvent event) {
 				if(vehicleHeaderButton.isEnabled()){
 					popup.setSize("800px", "500px");
-					CreateUpdatePresenter createUpdatePresenter = new CreateUpdateVehiclePresenter(rpcService, new CreateUpdate(), constants, true);
+					CreateUpdatePresenter createUpdatePresenter = new CreateVehiclePresenter(rpcService, new CreateUpdate(), constants);
 					createUpdatePresenter.go(popup);
 					popup.center();
 				}

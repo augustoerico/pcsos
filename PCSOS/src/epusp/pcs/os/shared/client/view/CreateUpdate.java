@@ -41,7 +41,8 @@ public class CreateUpdate extends Composite implements Display {
 
 	@Override
 	public void setPictureUrl(String safeUri){
-		picture.setUrl(safeUri);
+		if(safeUri != null)
+			picture.setUrl(safeUri);
 	}
 
 	@Override

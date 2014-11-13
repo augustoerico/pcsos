@@ -14,11 +14,11 @@ import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.CreateUpdatePresenter;
 import epusp.pcs.os.shared.model.person.Victim;
 
-public class CreateUpdateVictimPresenter extends CreateUpdatePresenter{
+public class CreateVictimPresenter extends CreateUpdatePresenter{
 	
-	public CreateUpdateVictimPresenter(IAdminWorkspaceServiceAsync rpcService,
-			Display view, CommonWorkspaceConstants constants, Boolean create) {
-		super(rpcService, view, constants, create);
+	public CreateVictimPresenter(IAdminWorkspaceServiceAsync rpcService,
+			Display view, CommonWorkspaceConstants constants) {
+		super(rpcService, view, constants);
 	}
 	
 	private TextBox givenName, surname, email, googleId;
@@ -83,9 +83,28 @@ public class CreateUpdateVictimPresenter extends CreateUpdatePresenter{
 		});
 	}
 	
+	protected TextBox getGivenNameTextBox(){
+		return givenName;
+	}
+	
+	protected TextBox getSurnameTextBox(){
+		return surname;
+	}
+	
+	protected TextBox getEmailTextBox(){
+		return email;
+	}
+	
+	protected TextBox getGoogleIdTextBox(){
+		return googleId;
+	}
+	
+	protected CheckBox getActiveCheckBox(){
+		return active;
+	}
+
 	@Override
 	protected IAdminWorkspaceServiceAsync getRpcService(){
 		return (IAdminWorkspaceServiceAsync) super.getRpcService();
 	}
-
 }

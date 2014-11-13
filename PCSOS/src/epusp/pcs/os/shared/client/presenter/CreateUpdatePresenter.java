@@ -43,18 +43,16 @@ public class CreateUpdatePresenter implements Presenter{
 
 	private final IConnectionServiceAsync rpcService;
 	private final Display view;
-	private final Boolean create;
 	private final CommonWorkspaceConstants constants;
 
 	private final DecoratedPopupPanel popup = new DecoratedPopupPanel(false, false);
 	
 	private String url;
 
-	public CreateUpdatePresenter(IConnectionServiceAsync rpcService, Display view, CommonWorkspaceConstants constants, Boolean create){
+	public CreateUpdatePresenter(IConnectionServiceAsync rpcService, Display view, CommonWorkspaceConstants constants){
 		this.rpcService = rpcService;
 		this.view = view;
 		this.constants = constants;
-		this.create = create;
 		popup.setGlassEnabled(true);
 	}	
 
@@ -129,10 +127,6 @@ public class CreateUpdatePresenter implements Presenter{
 			}
 		}
 	};
-
-	public Boolean isCreate(){
-		return create;
-	}
 	
 	protected IConnectionServiceAsync getRpcService(){
 		return rpcService;
@@ -148,5 +142,9 @@ public class CreateUpdatePresenter implements Presenter{
 	
 	protected String getPictureUrl(){
 		return url;
+	}
+	
+	protected void setPictureUrl(String url){
+		this.url = url;
 	}
 }
