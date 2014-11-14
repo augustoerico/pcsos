@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.admin.client.AdminResources;
-import epusp.pcs.os.admin.client.VehicleTableController;
 import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.event.ClosePopupEvent;
@@ -163,8 +162,10 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 					
 					@Override
 					public void onSelectedRow(Helicopter objectSelected) {
-						// TODO Auto-generated method stub
-						System.out.println("todo");
+						popup.setSize("800px", "500px");
+						CreateUpdatePresenter createUpdatePresenter = new UpdateHelicopterPresenter(rpcService, new CreateUpdate(), constants, objectSelected);
+						createUpdatePresenter.go(popup);
+						popup.center();
 					}
 				});
 				helicopterTablePresenter.go(panel);
