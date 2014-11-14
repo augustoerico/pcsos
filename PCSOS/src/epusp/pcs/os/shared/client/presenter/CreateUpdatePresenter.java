@@ -8,6 +8,7 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
@@ -142,6 +143,17 @@ public class CreateUpdatePresenter implements Presenter{
 	
 	protected String getPictureUrl(){
 		return url;
+	}
+	
+	protected int getItemIndex(ListBox listBox, String item){;
+		int indexToFind = -1;
+		for (int i=0; i<listBox.getItemCount(); i++) {
+		    if (listBox.getItemText(i).equals(item)) {
+		        indexToFind = i;
+		        break;
+		    }
+		}
+		return indexToFind;
 	}
 	
 	protected void setPictureUrl(String url){

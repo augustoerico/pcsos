@@ -115,6 +115,22 @@ public class CreateVehiclePresenter extends CreateUpdatePresenter{
 		});
 	}
 	
+	protected TextBox getIdTagTextBox(){
+		return idTag;
+	}
+	
+	protected TextBox getPlateTextBox(){
+		return plate;
+	}
+	
+	protected ListBox getVehicleTypesListBox(){
+		return vehicleTypes;
+	}
+	
+	protected ListBox getPriorityListBox(){
+		return priority;
+	}
+	
 	@Override
 	protected IAdminWorkspaceServiceAsync getRpcService(){
 		return (IAdminWorkspaceServiceAsync) super.getRpcService();

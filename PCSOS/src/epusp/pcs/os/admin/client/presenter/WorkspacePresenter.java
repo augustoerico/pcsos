@@ -9,6 +9,7 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -22,14 +23,19 @@ import epusp.pcs.os.shared.client.event.ClosePopupEvent;
 import epusp.pcs.os.shared.client.event.ClosePopupEvent.ClosePopupHandler;
 import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.CreateUpdatePresenter;
+import epusp.pcs.os.shared.client.presenter.ImageTabPresenter;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.client.view.CreateUpdate;
 import epusp.pcs.os.shared.client.view.HeaderButton;
+import epusp.pcs.os.shared.client.view.ImageTabPanel;
 import epusp.pcs.os.shared.general.SelectedRowHandler;
 import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.person.user.User;
+import epusp.pcs.os.shared.model.vehicle.Car;
+import epusp.pcs.os.shared.model.vehicle.Helicopter;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
+import epusp.pcs.os.shared.model.vehicle.VehicleTypes;
 
 public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 
@@ -129,9 +135,45 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 		HasWidgets agentContainer = display.addType(Agent.class.getName(), agentHeaderButton);
 		agentTablePresenter.go(agentContainer);
 
-		VehicleTableController vehicleTablePresenter = new VehicleTableController(rpcService, constants, pageSize);
+		
 		HasWidgets vehicleContainer = display.addType(Vehicle.class.getName(), vehicleHeaderButton);
-		vehicleTablePresenter.go(vehicleContainer);
+		ImageTabPresenter imageTabPresenter = new ImageTabPresenter(new ImageTabPanel());
+		imageTabPresenter.go(vehicleContainer);
+		
+		for(VehicleTypes type : VehicleTypes.values()){
+			AbsolutePanel panel = new AbsolutePanel();
+			panel.setSize("100%", "100%");
+			switch (type) {
+			case Car:
+				CarTablePresenter carTablePresenter = new CarTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Car>() {
+					
+					@Override
+					public void onSelectedRow(Car objectSelected) {
+						popup.setSize("800px", "500px");
+						CreateUpdatePresenter createUpdatePresenter = new UpdateCarPresenter(rpcService, new CreateUpdate(), constants, objectSelected);
+						createUpdatePresenter.go(popup);
+						popup.center();
+					}
+				});
+				carTablePresenter.go(panel);
+				imageTabPresenter.addInfo(constants.car(), resources.car().getSafeUri().asString(), panel);
+				break;
+			case Helicopter:
+				HelicopterTablePresenter helicopterTablePresenter = new HelicopterTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Helicopter>() {
+					
+					@Override
+					public void onSelectedRow(Helicopter objectSelected) {
+						// TODO Auto-generated method stub
+						System.out.println("todo");
+					}
+				});
+				helicopterTablePresenter.go(panel);
+				imageTabPresenter.addInfo(constants.helicopter(), resources.helicopter().getSafeUri().asString(), panel);
+				break;
+			default:
+				break;
+			}
+		}
 
 		victimHeaderButton.enable();
 		agentHeaderButton.disable();

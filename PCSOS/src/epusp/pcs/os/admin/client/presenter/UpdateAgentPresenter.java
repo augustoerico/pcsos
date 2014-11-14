@@ -37,6 +37,7 @@ public class UpdateAgentPresenter extends CreateAgentPresenter{
 
 		setPictureUrl(agent.getPictureURL());
 		getView().setPictureUrl(agent.getPictureURL());
+		getView().showPicture();
 
 		if(!agent.getLicences().isEmpty()){
 			getRegisterCodeTextBox().setText(agent.getLicences().get(0).getRegisterCode());

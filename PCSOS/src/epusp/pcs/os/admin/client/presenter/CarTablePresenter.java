@@ -99,7 +99,6 @@ public class CarTablePresenter implements Presenter{
 		
 		table.setSelectionModel(selectionModel);
 		selectionModel.addSelectionChangeHandler(new Handler() {
-			
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
 				handler.onSelectedRow(selectionModel.getSelectedObject());

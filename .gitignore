@@ -11,8 +11,8 @@ local.properties
 .loadpath
 endpoint-libs/
 *.class
-*.jar
 *.war
+*.jar
 *.ear
 *.api
 # External tool builders
