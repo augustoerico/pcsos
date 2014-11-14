@@ -153,7 +153,47 @@ public class CreateAgentPresenter extends CreateUpdatePresenter {
 			}
 		});
 	}
+	
+	protected TextBox getRegisterCodeTextBox(){
+		return registerCode;
+	}
+	
+	protected TextBox getGivenNameTextBox(){
+		return givenName;
+	}
+	
+	protected TextBox getSurnameTextBox(){
+		return surname;
+	}
+	
+	protected TextBox getEmailTextBox(){
+		return email;
+	}
 
+	protected TextBox getGoogleIdTextBox(){
+		return googleId;
+	}
+	
+	protected CheckBox getIsAcategoryCheckBox(){
+		return isAcategory;
+	}
+	
+	protected DatePicker getEffectiveUntilDatePicker(){
+		return effectiveUntil;
+	}
+	
+	protected ListBox getLicenceListBox(){
+		return licence;
+	}
+	
+	protected ListBox getCategoryListBox(){
+		return category;
+	}
+	
+	protected CheckBox getActiveCheckBox(){
+		return active;
+	}
+	
 	@Override
 	protected IAdminWorkspaceServiceAsync getRpcService(){
 		return (IAdminWorkspaceServiceAsync) super.getRpcService();

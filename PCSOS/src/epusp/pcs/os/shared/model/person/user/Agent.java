@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.annotations.FetchGroup;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
@@ -13,13 +14,13 @@ import epusp.pcs.os.shared.model.licence.DrivingLicence;
 import epusp.pcs.os.shared.model.licence.Licence;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
-//@FetchGroup(name = "licences", members = { @Persistent(name = "licences") })
+@FetchGroup(name = "licences", members = { @Persistent(name = "drivingLicence") })
 public class Agent extends User implements Serializable {
 
 	@NotPersistent
 	private static final long serialVersionUID = 1L;
 	
-	@Persistent(defaultFetchGroup="true")
+	@Persistent
 	private DrivingLicence drivingLicence;
 	
 	public Agent(String name, String surname, String email){
@@ -46,7 +47,8 @@ public class Agent extends User implements Serializable {
 	
 	public List<Licence> getLicences(){
 		List<Licence> licences = new ArrayList<Licence>();
-		licences.add(drivingLicence);
+		if(drivingLicence !=  null)
+			licences.add(drivingLicence);
 		return licences;
 	}
 	

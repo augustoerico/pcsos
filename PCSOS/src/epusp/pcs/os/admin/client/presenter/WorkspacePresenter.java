@@ -120,8 +120,10 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 			
 			@Override
 			public void onSelectedRow(Agent objectSelected) {
-				// TODO Auto-generated method stub
-				System.out.println("todo");
+				popup.setSize("800px", "500px");
+				CreateUpdatePresenter createUpdatePresenter = new UpdateAgentPresenter(rpcService, new CreateUpdate(), constants, objectSelected);
+				createUpdatePresenter.go(popup);
+				popup.center();
 			}
 		});
 		HasWidgets agentContainer = display.addType(Agent.class.getName(), agentHeaderButton);

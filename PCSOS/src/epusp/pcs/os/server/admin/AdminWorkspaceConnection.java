@@ -127,6 +127,9 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 
 			PersistenceManager pm = PMF.get().getPersistenceManager();
 
+			pm.getFetchPlan().addGroup("licences");
+			pm.getFetchPlan().setMaxFetchDepth(-1);
+			
 			Query q = pm.newQuery(Agent.class);
 			q.setRange(0, range);
 

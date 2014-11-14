@@ -20,18 +20,18 @@ public class UpdateVictimPresenter extends CreateVictimPresenter {
 	public void go(HasWidgets container){
 		super.go(container);
 		
-		getGivenNameTextBox().setEnabled(false);
+		getGivenNameTextBox().setReadOnly(false);
 		getGivenNameTextBox().setText(victim.getName() + " " + victim.getSecondName());
 		
 		getActiveCheckBox().setValue(victim.isActive());
 		
-		getEmailTextBox().setEnabled(false);
+		getEmailTextBox().setReadOnly(false);
 		getEmailTextBox().setText(victim.getEmail());
 		
-		getSurnameTextBox().setEnabled(false);
+		getSurnameTextBox().setReadOnly(false);
 		getSurnameTextBox().setText(victim.getSurname());
 		
-		getGoogleIdTextBox().setEnabled(false);
+		getGoogleIdTextBox().setReadOnly(false);
 		getGoogleIdTextBox().setText(victim.getGoogleUserId());
 		
 		getView().setPictureUrl(victim.getPictureURL());
