@@ -202,7 +202,7 @@ public class LoginConnection extends Connection implements ILoginService{
 						return config;
 					case SuperUser:
 						System.out.println("Super user " + user.getEmail() + " has logged in.");
-						config.setUrlPath("todo");
+						config.setUrlPath("SuperUserWorkspace.html");
 						return config;
 					default:
 						System.out.println("Denied access to " + user.getEmail());

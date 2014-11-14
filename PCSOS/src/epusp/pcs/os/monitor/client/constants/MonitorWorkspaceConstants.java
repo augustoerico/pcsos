@@ -22,9 +22,6 @@ public interface MonitorWorkspaceConstants extends CommonWorkspaceConstants{
 	@DefaultStringValue("Emergency call info")
 	String info();
 	
-	@DefaultStringValue("Preferred language")
-	String preferredLanguage();
-	
 	@DefaultStringValue("Victim Details")
 	String victimHeader();
 	

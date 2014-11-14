@@ -1,4 +1,4 @@
-package epusp.pcs.os.admin.client;
+package epusp.pcs.os.superuser.client;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -8,25 +8,26 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.PopupPanel;
 
-import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
-import epusp.pcs.os.admin.client.presenter.WorkspacePresenter;
-import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
-import epusp.pcs.os.admin.client.view.Workspace;
 import epusp.pcs.os.shared.client.presenter.PreferencesPresenter;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.client.view.Preferences;
+import epusp.pcs.os.superuser.client.constants.SuperUserWorkspaceConstants;
+import epusp.pcs.os.superuser.client.presenter.WorkspacePresenter;
+import epusp.pcs.os.superuser.client.rpc.ISuperUserWorkspaceServiceAsync;
+import epusp.pcs.os.superuser.client.view.Workspace;
 
-public class WorkspaceController implements Presenter{
-
-	private final IAdminWorkspaceServiceAsync rpcService;
-	private final AdminWorkspaceConstants constants;
+public class WorkspaceController  implements Presenter{
 	
-	private PopupPanel preferencesPopup = new PopupPanel(true);
+	private final ISuperUserWorkspaceServiceAsync rpcService;
+	private final SuperUserWorkspaceConstants constants;
 	
-	private PreferencesPresenter preferencesPresenter;
 	private WorkspacePresenter workspacePresenter;
 	
-	public WorkspaceController(IAdminWorkspaceServiceAsync rpcService, AdminWorkspaceConstants constants){
+	private PreferencesPresenter preferencesPresenter;
+	
+	PopupPanel preferencesPopup = new PopupPanel(true);
+	
+	public WorkspaceController(ISuperUserWorkspaceServiceAsync rpcService, SuperUserWorkspaceConstants constants){
 		this.rpcService = rpcService;
 		this.constants = constants;
 		
@@ -69,5 +70,4 @@ public class WorkspaceController implements Presenter{
 			}
 		});
 	}
-
 }

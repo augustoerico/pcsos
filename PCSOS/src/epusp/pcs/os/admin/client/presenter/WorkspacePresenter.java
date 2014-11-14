@@ -263,7 +263,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 		});
 
 	}
-
+	
 	public Image getPreferencesButton() {
 		return display.getPreferences();
 	}

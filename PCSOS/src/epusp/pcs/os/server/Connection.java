@@ -28,6 +28,7 @@ import epusp.pcs.os.shared.model.person.user.Admin;
 import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.person.user.AvailableLanguages;
 import epusp.pcs.os.shared.model.person.user.Monitor;
+import epusp.pcs.os.shared.model.person.user.SuperUser;
 import epusp.pcs.os.shared.model.person.user.User;
 import epusp.pcs.os.shared.model.vehicle.Car;
 import epusp.pcs.os.shared.model.vehicle.Helicopter;
@@ -452,6 +453,68 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		
 		
 		//-----------------------------
+		SuperUser superUser = new SuperUser("SuperUser", "PCS.O.S", "superuser.pcsos@gmail.com");
+		superUser.setGoogleUserId("114093975308550875649");
+		superUser.setPreferedLanguage(AvailableLanguages.ENGLISH);
+		superUser.setIsActive(true);
+		
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(superUser);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+		
+		
+		
+		//-----------------------------
+		Admin adm = new Admin("Admin", "PCS.O.S", "kimjongun.pcsos@gmail.com");
+		adm.setGoogleUserId("110537040925689244070");
+		adm.setPreferedLanguage(AvailableLanguages.ENGLISH);
+		adm.setIsActive(true);
+		
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(adm);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+		
+		
+		
+		//-----------------------------
+		Monitor mon = new Monitor("Monitor", "PCS.O.S", "monitor.pcsos@gmail.com");
+		mon.setGoogleUserId("101441169719979331358");
+		mon.setPreferedLanguage(AvailableLanguages.ENGLISH);
+		mon.setIsActive(true);
+		
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(mon);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
 
 		
 		/*************************************************************************************************************************/

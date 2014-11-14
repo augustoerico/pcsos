@@ -12,15 +12,15 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
-import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
+import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
+import epusp.pcs.os.shared.client.rpc.IConnectionServiceAsync;
 import epusp.pcs.os.shared.model.person.user.AvailableLanguages;
 
 public class PreferencesPresenter implements Presenter{
 
-	private final IMonitorWorkspaceServiceAsync rpcService;
+	private final IConnectionServiceAsync rpcService;
 	private final Display view;
-	private final MonitorWorkspaceConstants constants;
+	private final CommonWorkspaceConstants constants;
 	
 	private RegExp regex = RegExp.compile("(locale=[a-z]+)");
 
@@ -32,7 +32,7 @@ public class PreferencesPresenter implements Presenter{
 		ListBox getLanguages();
 	}
 
-	public PreferencesPresenter(IMonitorWorkspaceServiceAsync rpcService, Display view, MonitorWorkspaceConstants constants){
+	public PreferencesPresenter(IConnectionServiceAsync rpcService, Display view, CommonWorkspaceConstants constants){
 		this.rpcService = rpcService;
 		this.view = view;
 		this.constants = constants;

@@ -60,4 +60,7 @@ public interface CommonWorkspaceConstants extends Constants{
 	
 	@DefaultStringValue("Vehicle Type")
 	String vehicleType();
+	
+	@DefaultStringValue("Preferred language")
+	String preferredLanguage();
 }

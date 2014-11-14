@@ -71,6 +71,16 @@
 		<servlet-name>adminWorkspaceService</servlet-name>
 		<url-pattern>/admin/adminWorkspaceService</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>superUserWorkspaceService</servlet-name>
+		<servlet-class>epusp.pcs.os.server.superuser.SuperUserWorkspaceConnection</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>superUserWorkspaceService</servlet-name>
+		<url-pattern>/superuser/superUserWorkspaceService</url-pattern>
+	</servlet-mapping>
+	
 
 	<servlet>
 		<servlet-name>SystemServiceServlet</servlet-name>
