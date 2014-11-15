@@ -21,4 +21,10 @@ public interface ISuperUserWorkspaceServiceAsync extends IConnectionServiceAsync
 	void getSuperUsers(MoveCursor move, int range,
 			AsyncCallback<Collection<SuperUser>> callback);
 
+	void createMonitor(Monitor monitor, AsyncCallback<Void> callback);
+
+	void createAdmin(Admin admin, AsyncCallback<Void> callback);
+
+	void createSuperUser(SuperUser superUser, AsyncCallback<Void> callback);
+
 }

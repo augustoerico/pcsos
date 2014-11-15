@@ -17,7 +17,9 @@ import epusp.pcs.os.shared.client.WorkspaceStyles;
 import epusp.pcs.os.shared.client.event.ClosePopupEvent;
 import epusp.pcs.os.shared.client.event.ClosePopupEvent.ClosePopupHandler;
 import epusp.pcs.os.shared.client.event.EventBus;
+import epusp.pcs.os.shared.client.presenter.CreateUpdatePresenter;
 import epusp.pcs.os.shared.client.presenter.Presenter;
+import epusp.pcs.os.shared.client.view.CreateUpdate;
 import epusp.pcs.os.shared.client.view.HeaderButton;
 import epusp.pcs.os.shared.general.Display;
 import epusp.pcs.os.shared.model.person.user.Admin;
@@ -29,20 +31,20 @@ import epusp.pcs.os.superuser.client.constants.SuperUserWorkspaceConstants;
 import epusp.pcs.os.superuser.client.rpc.ISuperUserWorkspaceServiceAsync;
 
 public class WorkspacePresenter implements Presenter, ClosePopupHandler{
-	
+
 	private ISuperUserWorkspaceServiceAsync rpcService;
 	private Display display;
 	private SuperUserWorkspaceConstants constants;
-	
+
 	private SuperUserResources resources = SuperUserResources.INSTANCE;
-	
+
 	private WorkspaceStyles backgroundResources = WorkspaceStyles.INSTANCE;
-	
+
 	private final int pageSize = 2;
 	private final PopupPanel popup = new PopupPanel(false, false);
-	
+
 	private final HeaderButton adminHeaderButton, superHeaderButton, monitorHeaderButton;
-	
+
 	public WorkspacePresenter(ISuperUserWorkspaceServiceAsync rpcService, Display view, SuperUserWorkspaceConstants constants){
 		this.rpcService = rpcService;
 		this.display = view;
@@ -51,9 +53,9 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 		adminHeaderButton = new HeaderButton(constants.admin(), resources.newAdmin().getSafeUri());
 		superHeaderButton = new HeaderButton(constants.superUser(), resources.newSuperUser().getSafeUri());
 		monitorHeaderButton = new HeaderButton(constants.monitor(), resources.newMonitor().getSafeUri());
-		
+
 		EventBus.get().addHandler(ClosePopupEvent.TYPE, this);
-		
+
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
 			public void onResize(ResizeEvent event) {
@@ -61,11 +63,11 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 					popup.center();
 			}
 		});
-		
+
 		GWT.<WorkspaceStyles> create(WorkspaceStyles.class).backgroundStyles().ensureInjected();
 	}
-	
-	
+
+
 	@Override
 	public void go(HasWidgets container) {
 		container.clear();
@@ -88,22 +90,22 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 				System.out.println(caught.getMessage());
 			}
 		});
-		
+
 		display.setBackgroundStyleName(backgroundResources.backgroundStyles().superuserBackground());
-		
+
 		HasWidgets monitorContainer = display.addType(Monitor.class.getName(), monitorHeaderButton);
 		HasWidgets adminContainer = display.addType(Admin.class.getName(), adminHeaderButton);
 		HasWidgets superUserContainer = display.addType(SuperUser.class.getName(), superHeaderButton);
-		
+
 		UserTablePresenter monitorTablePresenter = new MonitorTablePresenter(rpcService, constants, pageSize);
 		monitorTablePresenter.go(monitorContainer);
-		
+
 		UserTablePresenter adminTablePresenter = new AdminTablePresenter(rpcService, constants, pageSize);
 		adminTablePresenter.go(adminContainer);
-	
+
 		UserTablePresenter superUserTablePresenter = new SuperUserTablePresenter(rpcService, constants, pageSize);
 		superUserTablePresenter.go(superUserContainer);
-		
+
 		monitorHeaderButton.enable();
 		adminHeaderButton.disable();
 		superHeaderButton.disable();
@@ -130,12 +132,17 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 				});
 			}
 		});
-		
+
 		adminHeaderButton.addClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
-				System.out.println("todo: create new admin");
+				if(adminHeaderButton.isEnabled()){
+					popup.setSize("800px", "500px");
+					CreateUpdatePresenter createUpdatePresenter = new CreateAdminPresenter(rpcService, new CreateUpdate(), constants);
+					createUpdatePresenter.go(popup);
+					popup.center();
+				}
 			}
 		});
 
@@ -143,7 +150,12 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				System.out.println("todo: create new superuser");
+				if(superHeaderButton.isEnabled()){
+					popup.setSize("800px", "500px");
+					CreateUpdatePresenter createUpdatePresenter = new CreateSuperUserPresenter(rpcService, new CreateUpdate(), constants);
+					createUpdatePresenter.go(popup);
+					popup.center();
+				}
 			}
 		});
 
@@ -151,10 +163,15 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				System.out.println("todo: create new monitor");
+				if(monitorHeaderButton.isEnabled()){
+					popup.setSize("800px", "500px");
+					CreateUpdatePresenter createUpdatePresenter = new CreateMonitorPresenter(rpcService, new CreateUpdate(), constants);
+					createUpdatePresenter.go(popup);
+					popup.center();
+				}
 			}
 		});
-		
+
 		display.addSelectionHandler(new SelectionHandler<Integer>() {
 
 			@Override
@@ -174,7 +191,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 			}
 		});
 	}
-	
+
 	public Image getPreferencesButton() {
 		return display.getPreferences();
 	}

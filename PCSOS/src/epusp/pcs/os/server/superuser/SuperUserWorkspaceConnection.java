@@ -258,4 +258,66 @@ public class SuperUserWorkspaceConnection extends Connection implements ISuperUs
 		return null;
 	}
 	
+	@Override
+	public void createMonitor(Monitor monitor){
+		if(isLoggedIn()){
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+
+			System.out.println("Creating/updating Monitor " + monitor.getEmail());
+
+			try{
+				pm.currentTransaction().begin();
+				pm.makePersistent(monitor);
+				pm.currentTransaction().commit();
+			}catch (Exception e){
+				e.printStackTrace();
+				if(pm.currentTransaction().isActive())
+					pm.currentTransaction().rollback();
+			}finally{
+				pm.close();
+			}
+		}
+	}
+	
+	@Override
+	public void createAdmin(Admin admin){
+		if(isLoggedIn()){
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+
+			System.out.println("Creating/updating Admin " + admin.getEmail());
+
+			try{
+				pm.currentTransaction().begin();
+				pm.makePersistent(admin);
+				pm.currentTransaction().commit();
+			}catch (Exception e){
+				e.printStackTrace();
+				if(pm.currentTransaction().isActive())
+					pm.currentTransaction().rollback();
+			}finally{
+				pm.close();
+			}
+		}
+	}
+	
+	@Override
+	public void createSuperUser(SuperUser superUser){
+		if(isLoggedIn()){
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+
+			System.out.println("Creating/updating Admin " + superUser.getEmail());
+
+			try{
+				pm.currentTransaction().begin();
+				pm.makePersistent(superUser);
+				pm.currentTransaction().commit();
+			}catch (Exception e){
+				e.printStackTrace();
+				if(pm.currentTransaction().isActive())
+					pm.currentTransaction().rollback();
+			}finally{
+				pm.close();
+			}
+		}
+	}
 }

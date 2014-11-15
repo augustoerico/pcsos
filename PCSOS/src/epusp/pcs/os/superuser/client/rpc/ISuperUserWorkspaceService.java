@@ -19,4 +19,10 @@ public interface ISuperUserWorkspaceService extends IConnectionService{
 
 	Collection<SuperUser> getSuperUsers(MoveCursor move, int range);
 
+	void createMonitor(Monitor monitor);
+
+	void createAdmin(Admin admin);
+
+	void createSuperUser(SuperUser superUser);
+
 }

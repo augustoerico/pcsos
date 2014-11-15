@@ -1,20 +1,21 @@
-package epusp.pcs.os.admin.client.presenter;
+package epusp.pcs.os.superuser.client.presenter;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 
-import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
 import epusp.pcs.os.shared.client.event.ClosePopupEvent;
 import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.CreatePersonPresenter;
-import epusp.pcs.os.shared.model.person.Victim;
+import epusp.pcs.os.shared.client.rpc.IConnectionServiceAsync;
+import epusp.pcs.os.shared.model.person.user.Admin;
+import epusp.pcs.os.superuser.client.rpc.ISuperUserWorkspaceServiceAsync;
 
-public class CreateVictimPresenter extends CreatePersonPresenter{
-	
-	public CreateVictimPresenter(IAdminWorkspaceServiceAsync rpcService,
+public class CreateAdminPresenter extends CreatePersonPresenter{
+
+	public CreateAdminPresenter(IConnectionServiceAsync rpcService,
 			Display view, CommonWorkspaceConstants constants) {
 		super(rpcService, view, constants);
 	}
@@ -25,7 +26,7 @@ public class CreateVictimPresenter extends CreatePersonPresenter{
 		bind();
 	}
 	
-	private void bind(){
+	public void bind(){
 		getView().addSaveClickHandler(new ClickHandler() {
 			
 			@Override
@@ -38,18 +39,18 @@ public class CreateVictimPresenter extends CreatePersonPresenter{
 						secondName = secondName.concat(" ");
 				}
 				
-				Victim victim = null;
+				Admin admin = null;
 				if(!secondName.equals(""))
-					victim = new Victim(firstName, getSurnameTextBox().getText(), getEmailTextBox().getText());
+					admin = new Admin(firstName, getSurnameTextBox().getText(), getEmailTextBox().getText());
 				else
-					victim = new Victim(firstName, secondName, getSurnameTextBox().getText(), getEmailTextBox().getText());
+					admin = new Admin(firstName, secondName, getSurnameTextBox().getText(), getEmailTextBox().getText());
 				
-				victim.setGoogleUserId(getGoogleIdTextBox().getText());
-				victim.setIsActive(getActiveCheckBox().getValue());
+				admin.setGoogleUserId(getGoogleIdTextBox().getText());
+				admin.setIsActive(getActiveCheckBox().getValue());
 				
-				victim.setPictureURL(getPictureUrl());
+				admin.setPictureURL(getPictureUrl());
 				
-				getRpcService().createVictim(victim, new AsyncCallback<Void>() {
+				getRpcService().createAdmin(admin, new AsyncCallback<Void>() {
 					
 					@Override
 					public void onSuccess(Void result) {
@@ -63,9 +64,9 @@ public class CreateVictimPresenter extends CreatePersonPresenter{
 			}
 		});
 	}
-
+	
 	@Override
-	protected IAdminWorkspaceServiceAsync getRpcService(){
-		return (IAdminWorkspaceServiceAsync) super.getRpcService();
+	protected ISuperUserWorkspaceServiceAsync getRpcService(){
+		return (ISuperUserWorkspaceServiceAsync) super.getRpcService();
 	}
 }

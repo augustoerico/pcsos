@@ -15,14 +15,14 @@ import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
 import epusp.pcs.os.shared.client.event.ClosePopupEvent;
 import epusp.pcs.os.shared.client.event.EventBus;
-import epusp.pcs.os.shared.client.presenter.CreateUpdatePresenter;
+import epusp.pcs.os.shared.client.presenter.CreatePersonPresenter;
 import epusp.pcs.os.shared.model.licence.DrivingCategories;
 import epusp.pcs.os.shared.model.licence.DrivingLicence;
 import epusp.pcs.os.shared.model.licence.Licence;
 import epusp.pcs.os.shared.model.licence.LicenceTypes;
 import epusp.pcs.os.shared.model.person.user.Agent;
 
-public class CreateAgentPresenter extends CreateUpdatePresenter {
+public class CreateAgentPresenter extends CreatePersonPresenter {
 
 	
 	public CreateAgentPresenter(IAdminWorkspaceServiceAsync rpcService,
@@ -30,29 +30,18 @@ public class CreateAgentPresenter extends CreateUpdatePresenter {
 		super(rpcService, view, constants);
 	}
 	
-	private TextBox registerCode, givenName, surname, email, googleId;
+	private TextBox registerCode;
 	private CheckBox isAcategory;
 	private DatePicker effectiveUntil;
 	private ListBox licence;
 	private ListBox category;
-	private CheckBox active;
 	
 	@Override
 	public void go(HasWidgets container){
 		final Display view = getView();
 		final CommonWorkspaceConstants constants = getConstants();
 		
-		givenName = new TextBox();
-		surname = new TextBox();
-		email = new TextBox();
-		googleId = new TextBox();
-		active = new CheckBox();
-
-		view.addPrimaryAttribute(constants.surname(), true, surname);
-		view.addPrimaryAttribute(constants.name(), true, givenName);
-		view.addPrimaryAttribute(constants.email(), true, email);
-		view.addPrimaryAttribute(constants.googleId(), false, googleId);
-		view.addPrimaryAttribute(constants.active(), true, active);
+		super.go(container);
 		
 		registerCode = new TextBox();
 		effectiveUntil = new DatePicker();
@@ -91,18 +80,15 @@ public class CreateAgentPresenter extends CreateUpdatePresenter {
 				}
 			}
 		});		
-		super.go(container);
 		bind();
 	}
 	
 	private void bind(){
-		Display view = getView();
-		view.setSaveEnabled(true);
-		view.addSaveClickHandler(new ClickHandler() {
+		getView().addSaveClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				String[] names = givenName.getText().split("\\s+");
+				String[] names = getGivenNameTextBox().getText().split("\\s+");
 				String firstName = names[0], secondName = "";
 				for(int i = 1; i < names.length; i++){
 					secondName = secondName.concat(names[i]);
@@ -112,12 +98,12 @@ public class CreateAgentPresenter extends CreateUpdatePresenter {
 				
 				Agent agent = null;
 				if(!secondName.equals(""))
-					agent = new Agent(firstName, surname.getText(), email.getText());
+					agent = new Agent(firstName, getSurnameTextBox().getText(), getEmailTextBox().getText());
 				else
-					agent = new Agent(firstName, secondName, surname.getText(), email.getText());
+					agent = new Agent(firstName, secondName, getSurnameTextBox().getText(), getEmailTextBox().getText());
 				
-				agent.setGoogleUserId(googleId.getText());
-				agent.setIsActive(active.getValue());
+				agent.setGoogleUserId(getGoogleIdTextBox().getText());
+				agent.setIsActive(getActiveCheckBox().getValue());
 				
 				agent.setPictureURL(getPictureUrl());
 				
@@ -158,22 +144,6 @@ public class CreateAgentPresenter extends CreateUpdatePresenter {
 		return registerCode;
 	}
 	
-	protected TextBox getGivenNameTextBox(){
-		return givenName;
-	}
-	
-	protected TextBox getSurnameTextBox(){
-		return surname;
-	}
-	
-	protected TextBox getEmailTextBox(){
-		return email;
-	}
-
-	protected TextBox getGoogleIdTextBox(){
-		return googleId;
-	}
-	
 	protected CheckBox getIsAcategoryCheckBox(){
 		return isAcategory;
 	}
@@ -188,10 +158,6 @@ public class CreateAgentPresenter extends CreateUpdatePresenter {
 	
 	protected ListBox getCategoryListBox(){
 		return category;
-	}
-	
-	protected CheckBox getActiveCheckBox(){
-		return active;
 	}
 	
 	@Override
