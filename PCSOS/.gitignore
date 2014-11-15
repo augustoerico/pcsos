@@ -4,6 +4,6 @@ endpoint-libs/
 *.class
 *.war
 *.ear
-*.jar
+
 *.api
 *.classpath
