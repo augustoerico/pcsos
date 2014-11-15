@@ -12,7 +12,6 @@ local.properties
 endpoint-libs/
 *.class
 *.war
-
 *.ear
 *.api
 # External tool builders
