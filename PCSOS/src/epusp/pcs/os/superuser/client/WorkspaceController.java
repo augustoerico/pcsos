@@ -11,12 +11,12 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import epusp.pcs.os.shared.client.presenter.PreferencesPresenter;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.client.view.Preferences;
+import epusp.pcs.os.shared.client.view.Workspace;
 import epusp.pcs.os.superuser.client.constants.SuperUserWorkspaceConstants;
 import epusp.pcs.os.superuser.client.presenter.WorkspacePresenter;
 import epusp.pcs.os.superuser.client.rpc.ISuperUserWorkspaceServiceAsync;
-import epusp.pcs.os.superuser.client.view.Workspace;
 
-public class WorkspaceController  implements Presenter{
+public class WorkspaceController implements Presenter{
 	
 	private final ISuperUserWorkspaceServiceAsync rpcService;
 	private final SuperUserWorkspaceConstants constants;

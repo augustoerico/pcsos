@@ -1,23 +1,23 @@
 package epusp.pcs.os.admin.client.presenter;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.admin.client.AdminResources;
 import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
+import epusp.pcs.os.shared.client.WorkspaceStyles;
 import epusp.pcs.os.shared.client.event.ClosePopupEvent;
 import epusp.pcs.os.shared.client.event.ClosePopupEvent.ClosePopupHandler;
 import epusp.pcs.os.shared.client.event.EventBus;
@@ -27,6 +27,7 @@ import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.client.view.CreateUpdate;
 import epusp.pcs.os.shared.client.view.HeaderButton;
 import epusp.pcs.os.shared.client.view.ImageTabPanel;
+import epusp.pcs.os.shared.general.Display;
 import epusp.pcs.os.shared.general.SelectedRowHandler;
 import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
@@ -37,18 +38,6 @@ import epusp.pcs.os.shared.model.vehicle.Vehicle;
 import epusp.pcs.os.shared.model.vehicle.VehicleTypes;
 
 public class WorkspacePresenter implements Presenter, ClosePopupHandler {
-
-	public interface Display {
-		void setUserImage(String url);
-		void setUserImage(ImageResource resource);
-		void setUsername(String username);
-		Widget asWidget();
-		Image getLogout();
-		Image getPreferences();
-		Boolean hasType(String type);
-		HasWidgets addType(String type, Widget header);
-		void addSelectionHandler(SelectionHandler<Integer> handler);
-	}
 
 	private final IAdminWorkspaceServiceAsync rpcService;
 	private final Display display;
@@ -61,6 +50,8 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 	private final HeaderButton victimHeaderButton;
 	private final HeaderButton agentHeaderButton;
 	private final HeaderButton vehicleHeaderButton;
+	
+	private WorkspaceStyles backgroundResources = WorkspaceStyles.INSTANCE;
 
 	private final PopupPanel popup = new PopupPanel(false, false);
 
@@ -82,6 +73,8 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 					popup.center();
 			}
 		});
+		
+		GWT.<WorkspaceStyles> create(WorkspaceStyles.class).backgroundStyles().ensureInjected();
 	}
 
 	@Override
@@ -106,6 +99,8 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 				System.out.println(caught.getMessage());
 			}
 		});
+		
+		display.setBackgroundStyleName(backgroundResources.backgroundStyles().adminBackground());
 		
 		final VictimTablePresenter victimTablePresenter = new VictimTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Victim>() {
 			

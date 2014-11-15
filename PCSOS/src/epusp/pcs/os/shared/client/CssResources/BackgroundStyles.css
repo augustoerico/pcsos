@@ -1,0 +1,13 @@
+@CHARSET "ISO-8859-1";
+
+@sprite .adminBackground {
+    gwt-image:'adminBackground';
+    background-repeat:no-repeat;
+    background-size: cover;
+}
+
+@sprite .superuserBackground {
+    gwt-image:'superuserBackgroung';
+    background-repeat:no-repeat;
+    background-size: cover;
+}

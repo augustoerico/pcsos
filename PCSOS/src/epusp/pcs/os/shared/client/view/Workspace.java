@@ -1,4 +1,4 @@
-package epusp.pcs.os.admin.client.view;
+package epusp.pcs.os.shared.client.view;
 
 import java.util.HashMap;
 
@@ -19,8 +19,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import epusp.pcs.os.admin.client.AdminResources;
-import epusp.pcs.os.admin.client.presenter.WorkspacePresenter.Display;
+import epusp.pcs.os.shared.client.SharedResources;
+import epusp.pcs.os.shared.general.Display;
 
 public class Workspace extends Composite implements Display{
 
@@ -28,7 +28,7 @@ public class Workspace extends Composite implements Display{
 			.create(WorkspaceUiBinder.class);
 	
 	@UiField
-	AbsolutePanel desk, background;
+	AbsolutePanel panel, desk, background;
 	
 	@UiField
 	Image logo, picture, preferences, logout;
@@ -46,13 +46,13 @@ public class Workspace extends Composite implements Display{
 	@UiField
 	Sytles style;
 	
-	private AdminResources resources = AdminResources.INSTANCE;
+	private SharedResources resources = SharedResources.INSTANCE;
 	
 	private HashMap<String, HasWidgets> containers = new HashMap<String, HasWidgets>(); 
 
 	interface WorkspaceUiBinder extends UiBinder<Widget, Workspace> {
 	}
-
+	
 	public Workspace() {
 		initWidget(uiBinder.createAndBindUi(this));
 		logo.setResource(resources.logo());
@@ -143,5 +143,10 @@ public class Workspace extends Composite implements Display{
 	@Override
 	public void addSelectionHandler(SelectionHandler<Integer> handler){
 		options.addSelectionHandler(handler);
+	}
+	
+	@Override
+	public void setBackgroundStyleName(String style){
+		panel.setStyleName(style);
 	}
 }
