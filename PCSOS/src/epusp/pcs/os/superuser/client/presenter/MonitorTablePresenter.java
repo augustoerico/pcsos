@@ -2,7 +2,12 @@ package epusp.pcs.os.superuser.client.presenter;
 
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionChangeEvent.Handler;
+import com.google.gwt.view.client.SingleSelectionModel;
 
+import epusp.pcs.os.shared.general.SelectedRowHandler;
 import epusp.pcs.os.shared.model.person.user.Monitor;
 import epusp.pcs.os.shared.provider.AsyncMonitorProvider;
 import epusp.pcs.os.superuser.client.constants.SuperUserWorkspaceConstants;
@@ -10,9 +15,19 @@ import epusp.pcs.os.superuser.client.rpc.ISuperUserWorkspaceServiceAsync;
 
 public class MonitorTablePresenter extends UserTablePresenter{
 
+	private final SingleSelectionModel<Monitor> selectionModel = new SingleSelectionModel<Monitor>(new ProvidesKey<Monitor>() {
+		@Override
+		public Object getKey(Monitor item) {
+			return item == null ? null : item.getId();
+		}
+	});
+	
+	private final SelectedRowHandler<Monitor> handler;
+	
 	public MonitorTablePresenter(ISuperUserWorkspaceServiceAsync rpcService,
-			SuperUserWorkspaceConstants constants, int pageSize) {
+			SuperUserWorkspaceConstants constants, int pageSize, SelectedRowHandler<Monitor> handler) {
 		super(rpcService, constants, pageSize);
+		this.handler = handler;
 	}
 	
 	@Override
@@ -22,11 +37,18 @@ public class MonitorTablePresenter extends UserTablePresenter{
 		AsyncMonitorProvider agentProvider = new AsyncMonitorProvider(getMonitorTable(), getPager(), getRpcService(), getPageSize());
 		agentProvider.addDataDisplay(getMonitorTable());
 		
+		getMonitorTable().setSelectionModel(selectionModel);
+		
 		bind();
 	}
 
 	private void bind(){
-		
+		selectionModel.addSelectionChangeHandler(new Handler() {
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				handler.onSelectedRow(selectionModel.getSelectedObject());
+			}
+		});
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -101,13 +101,6 @@ public class VictimTablePresenter implements Presenter{
 		};
 		
 		table.setSelectionModel(selectionModel);
-		selectionModel.addSelectionChangeHandler(new Handler() {
-			
-			@Override
-			public void onSelectionChange(SelectionChangeEvent event) {
-				handler.onSelectedRow(selectionModel.getSelectedObject());
-			}
-		});
 
 		victimPictureColumn.setCellStyleNames("picture");
 
@@ -129,7 +122,12 @@ public class VictimTablePresenter implements Presenter{
 	}
 	    
 	private void bind(){
-
+		selectionModel.addSelectionChangeHandler(new Handler() {
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				handler.onSelectedRow(selectionModel.getSelectedObject());
+			}
+		});
 	}
 	
 	public SingleSelectionModel<Victim> getSelectionModel(){

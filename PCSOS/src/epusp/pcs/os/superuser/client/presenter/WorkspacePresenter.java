@@ -22,6 +22,7 @@ import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.client.view.CreateUpdate;
 import epusp.pcs.os.shared.client.view.HeaderButton;
 import epusp.pcs.os.shared.general.Display;
+import epusp.pcs.os.shared.general.SelectedRowHandler;
 import epusp.pcs.os.shared.model.person.user.Admin;
 import epusp.pcs.os.shared.model.person.user.Monitor;
 import epusp.pcs.os.shared.model.person.user.SuperUser;
@@ -97,13 +98,40 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 		HasWidgets adminContainer = display.addType(Admin.class.getName(), adminHeaderButton);
 		HasWidgets superUserContainer = display.addType(SuperUser.class.getName(), superHeaderButton);
 
-		UserTablePresenter monitorTablePresenter = new MonitorTablePresenter(rpcService, constants, pageSize);
+		UserTablePresenter monitorTablePresenter = new MonitorTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Monitor>() {
+			@Override
+			public void onSelectedRow(Monitor objectSelected) {
+				popup.setSize("800px", "500px");
+				CreateUpdatePresenter createUpdatePresenter = new UpdateMonitorPresenter(rpcService, new CreateUpdate(), constants, objectSelected);
+				createUpdatePresenter.go(popup);
+				popup.center();
+			}
+		});
+		
 		monitorTablePresenter.go(monitorContainer);
 
-		UserTablePresenter adminTablePresenter = new AdminTablePresenter(rpcService, constants, pageSize);
+		UserTablePresenter adminTablePresenter = new AdminTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Admin>() {
+			@Override
+			public void onSelectedRow(Admin objectSelected) {
+				popup.setSize("800px", "500px");
+				CreateUpdatePresenter createUpdatePresenter = new UpdateAdminPresenter(rpcService, new CreateUpdate(), constants, objectSelected);
+				createUpdatePresenter.go(popup);
+				popup.center();
+			}
+		});
+		
 		adminTablePresenter.go(adminContainer);
 
-		UserTablePresenter superUserTablePresenter = new SuperUserTablePresenter(rpcService, constants, pageSize);
+		UserTablePresenter superUserTablePresenter = new SuperUserTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<SuperUser>() {
+			@Override
+			public void onSelectedRow(SuperUser objectSelected) {
+				popup.setSize("800px", "500px");
+				CreateUpdatePresenter createUpdatePresenter = new UpdateSuperUserPresenter(rpcService, new CreateUpdate(), constants, objectSelected);
+				createUpdatePresenter.go(popup);
+				popup.center();
+			}
+		});
+		
 		superUserTablePresenter.go(superUserContainer);
 
 		monitorHeaderButton.enable();

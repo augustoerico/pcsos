@@ -98,13 +98,6 @@ public class AgentTablePresenter implements Presenter{
 		agentPictureColumn.setCellStyleNames("picture");
 		
 		table.setSelectionModel(selectionModel);
-		selectionModel.addSelectionChangeHandler(new Handler() {
-			
-			@Override
-			public void onSelectionChange(SelectionChangeEvent event) {
-				handler.onSelectedRow(selectionModel.getSelectedObject());
-			}
-		});
 		
 		table.addColumn(agentSurnameColumn, constants.surname());
 		
@@ -124,6 +117,12 @@ public class AgentTablePresenter implements Presenter{
 	}
 	
 	private void bind(){
-		
+		selectionModel.addSelectionChangeHandler(new Handler() {
+			
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				handler.onSelectedRow(selectionModel.getSelectedObject());
+			}
+		});
 	}
 }

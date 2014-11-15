@@ -98,12 +98,6 @@ public class CarTablePresenter implements Presenter{
 		};
 		
 		table.setSelectionModel(selectionModel);
-		selectionModel.addSelectionChangeHandler(new Handler() {
-			@Override
-			public void onSelectionChange(SelectionChangeEvent event) {
-				handler.onSelectedRow(selectionModel.getSelectedObject());
-			}
-		});
 		
 		pictureColumn.setCellStyleNames("picture");
 		
@@ -125,7 +119,12 @@ public class CarTablePresenter implements Presenter{
 	}
 	
 	private void bind(){
-		
+		selectionModel.addSelectionChangeHandler(new Handler() {
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				handler.onSelectedRow(selectionModel.getSelectedObject());
+			}
+		});
 	}
 
 }
