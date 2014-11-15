@@ -9,12 +9,12 @@ public interface SuperUserResources extends SharedResources {
 	
 	public static final SuperUserResources INSTANCE = GWT.create(SuperUserResources.class);
 	
-	@Source("images/admin.png")
-	ImageResource admin();
+	@Source("images/new-admin.png")
+	ImageResource newAdmin();
 	
-	@Source("images/monitor.png")
-	ImageResource monitor();
+	@Source("images/new-monitor.png")
+	ImageResource newMonitor();
 	
-	@Source("images/superuser.png")
-	ImageResource superuser();
+	@Source("images/new-superuser.png")
+	ImageResource newSuperUser();
 }

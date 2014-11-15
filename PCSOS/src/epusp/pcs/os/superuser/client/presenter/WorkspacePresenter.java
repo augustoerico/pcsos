@@ -5,12 +5,12 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import epusp.pcs.os.shared.client.WorkspaceStyles;
@@ -18,7 +18,11 @@ import epusp.pcs.os.shared.client.event.ClosePopupEvent;
 import epusp.pcs.os.shared.client.event.ClosePopupEvent.ClosePopupHandler;
 import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.Presenter;
+import epusp.pcs.os.shared.client.view.HeaderButton;
 import epusp.pcs.os.shared.general.Display;
+import epusp.pcs.os.shared.model.person.user.Admin;
+import epusp.pcs.os.shared.model.person.user.Monitor;
+import epusp.pcs.os.shared.model.person.user.SuperUser;
 import epusp.pcs.os.shared.model.person.user.User;
 import epusp.pcs.os.superuser.client.SuperUserResources;
 import epusp.pcs.os.superuser.client.constants.SuperUserWorkspaceConstants;
@@ -37,11 +41,17 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 	private final int pageSize = 2;
 	private final PopupPanel popup = new PopupPanel(false, false);
 	
+	private final HeaderButton adminHeaderButton, superHeaderButton, monitorHeaderButton;
+	
 	public WorkspacePresenter(ISuperUserWorkspaceServiceAsync rpcService, Display view, SuperUserWorkspaceConstants constants){
 		this.rpcService = rpcService;
 		this.display = view;
 		this.constants = constants;
 
+		adminHeaderButton = new HeaderButton(constants.admin(), resources.newAdmin().getSafeUri());
+		superHeaderButton = new HeaderButton(constants.superUser(), resources.newSuperUser().getSafeUri());
+		monitorHeaderButton = new HeaderButton(constants.monitor(), resources.newMonitor().getSafeUri());
+		
 		EventBus.get().addHandler(ClosePopupEvent.TYPE, this);
 		
 		Window.addResizeHandler(new ResizeHandler() {
@@ -81,23 +91,22 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 		
 		display.setBackgroundStyleName(backgroundResources.backgroundStyles().superuserBackground());
 		
-//		ImageTabPresenter imageTabPresenter = new ImageTabPresenter(new ImageTabPanel());
-//		imageTabPresenter.go(display.getWorkArea());
+		HasWidgets monitorContainer = display.addType(Monitor.class.getName(), monitorHeaderButton);
+		HasWidgets adminContainer = display.addType(Admin.class.getName(), adminHeaderButton);
+		HasWidgets superUserContainer = display.addType(SuperUser.class.getName(), superHeaderButton);
 		
-		AbsolutePanel adminPanel = new AbsolutePanel();
-		adminPanel.setSize("100%", "100%");
+		UserTablePresenter monitorTablePresenter = new MonitorTablePresenter(rpcService, constants, pageSize);
+		monitorTablePresenter.go(monitorContainer);
+		
 		UserTablePresenter adminTablePresenter = new AdminTablePresenter(rpcService, constants, pageSize);
-		adminTablePresenter.go(adminPanel);
+		adminTablePresenter.go(adminContainer);
+	
+		UserTablePresenter superUserTablePresenter = new SuperUserTablePresenter(rpcService, constants, pageSize);
+		superUserTablePresenter.go(superUserContainer);
 		
-		display.addType("ADMIN", new Label("Admin"));
-		display.addType("MONITOR", new Label("Monitor"));
-		display.addType("SUPERUSER", new Label("SuperUser"));
-
-		
-//		imageTabPresenter.addInfo(constants.admin(), resources.admin().getSafeUri().asString(), adminPanel);
-//		imageTabPresenter.addInfo(constants.monitor(), resources.monitor().getSafeUri().asString(), new Label("Monitor"));
-//		imageTabPresenter.addInfo(constants.superUser(), resources.superuser().getSafeUri().asString(), new Label("SuperUser"));
-		
+		monitorHeaderButton.enable();
+		adminHeaderButton.disable();
+		superHeaderButton.disable();
 		bind();
 	}
 
@@ -119,6 +128,49 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 					public void onFailure(Throwable caught) {	
 					}
 				});
+			}
+		});
+		
+		adminHeaderButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				System.out.println("todo: create new admin");
+			}
+		});
+
+		superHeaderButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				System.out.println("todo: create new superuser");
+			}
+		});
+
+		monitorHeaderButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				System.out.println("todo: create new monitor");
+			}
+		});
+		
+		display.addSelectionHandler(new SelectionHandler<Integer>() {
+
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				Integer i = event.getSelectedItem();
+
+				adminHeaderButton.disable();
+				superHeaderButton.disable();
+				monitorHeaderButton.disable();
+
+				if(i == 0)
+					monitorHeaderButton.enable();
+				else if(i == 1)
+					adminHeaderButton.enable();
+				else if(i == 2)
+					superHeaderButton.enable();
 			}
 		});
 	}
