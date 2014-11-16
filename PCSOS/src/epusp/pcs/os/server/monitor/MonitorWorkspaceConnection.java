@@ -1,12 +1,16 @@
 package epusp.pcs.os.server.monitor;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpSession;
 
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceService;
 import epusp.pcs.os.monitor.shared.EmergencyCallSpecs;
 import epusp.pcs.os.server.Connection;
+import epusp.pcs.os.shared.exception.CannotLogoutExeception;
 import epusp.pcs.os.shared.model.oncall.EmergencyCall;
 import epusp.pcs.os.shared.model.oncall.Position;
 import epusp.pcs.os.shared.model.person.Victim;
@@ -162,6 +166,24 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 			return workflow.getVictim(email);
 		}
 		return null;
+	}
+	
+	@Override
+	public void logout() throws CannotLogoutExeception{
+		if(isLoggedIn()){
+			Monitor monitor = (Monitor) getSessionAttibute(userSessionAttribute);
+			if(!workflow.isMonitorOnCall(monitor.getId())){
+				HttpSession session = this.getThreadLocalRequest().getSession(false);
+				if (session == null)
+					return;
+				
+				workflow.monitorLeaving(monitor.getId());
+
+				System.out.println(getUserInfo().getEmail() + " has logout @ " + DateFormat.getDateInstance().format(new Date()));
+				session.invalidate();
+			}else
+				throw new CannotLogoutExeception();
+		}
 	}
 
 }

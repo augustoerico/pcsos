@@ -3,6 +3,7 @@ package epusp.pcs.os.shared.client.rpc;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import epusp.pcs.os.shared.exception.CannotLogoutExeception;
 import epusp.pcs.os.shared.exception.LoginException;
 import epusp.pcs.os.shared.model.attribute.AttributeInfo;
 import epusp.pcs.os.shared.model.person.Victim;
@@ -18,7 +19,7 @@ public interface IConnectionService extends RemoteService {
 	
 	void identifySession(String key) throws LoginException;
 
-	void logout();
+	void logout() throws CannotLogoutExeception;
 
 	void setPreferredLanguage(AvailableLanguages language);
 
