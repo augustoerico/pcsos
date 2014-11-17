@@ -14,6 +14,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import epusp.pcs.os.server.login.AuthenticationManager;
 import epusp.pcs.os.server.workflow.EmergencyCallWorkflow;
 import epusp.pcs.os.shared.client.rpc.IConnectionService;
+import epusp.pcs.os.shared.exception.CannotLogoutExeception;
 import epusp.pcs.os.shared.exception.LoginException;
 import epusp.pcs.os.shared.model.attribute.AttributeInfo;
 import epusp.pcs.os.shared.model.attribute.Category;
@@ -779,7 +780,7 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 	}
 	
 	@Override
-	public void logout(){
+	public void logout() throws CannotLogoutExeception{
 		if(isLoggedIn()){
 			HttpSession session = this.getThreadLocalRequest().getSession(false);
 			if (session == null)

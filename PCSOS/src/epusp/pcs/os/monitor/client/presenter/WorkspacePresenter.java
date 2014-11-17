@@ -156,7 +156,7 @@ public class WorkspacePresenter implements Presenter {
 					}
 					
 					@Override
-					public void onFailure(Throwable caught) {	
+					public void onFailure(Throwable caught) {
 					}
 				});
 			}
