@@ -8,9 +8,13 @@ import com.google.api.server.spi.config.ApiNamespace;
 
 import epusp.pcs.os.server.workflow.EmergencyCallWorkflow;
 import epusp.pcs.os.shared.model.AgentCollection;
+import epusp.pcs.os.shared.model.EmergencyCallLifecycleStatus;
 import epusp.pcs.os.shared.model.oncall.EmergencyCall;
+import epusp.pcs.os.shared.model.oncall.EmergencyCallLifecycle;
 import epusp.pcs.os.shared.model.oncall.Position;
+import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.person.user.Monitor;
 
 @Api(name = "emcallworkflowendpoint", namespace = @ApiNamespace(ownerDomain = "pcs.epusp", ownerName = "pcs.epusp", packagePath = "os.workflow"))
 public class EmergencyCallWorkflowEndpoint {
@@ -41,6 +45,22 @@ public class EmergencyCallWorkflowEndpoint {
 		else
 			return null;
 	}
+	
+	@ApiMethod(name="updateVictimPositionAndVerifyStatus")
+	public EmergencyCallLifecycleStatus updateVictimPositionAndVerifyStatus(@Named("victimEmail") String victimEmail, Position position) {
+		instance.addVictimPosition(victimEmail, position);
+		EmergencyCallLifecycleStatus emCallStatus = new EmergencyCallLifecycleStatus();
+		emCallStatus.setStatus(instance.getEmergencyCallLifecycle(victimEmail).name());
+		return emCallStatus;
+	}
+	
+	@ApiMethod(name="updatePositionAndVerifyCallStatus")
+	public EmergencyCallLifecycleStatus updatePositionAndVerifyCallStatus(@Named("vehicleId") String vehicleId, Position position, @Named("victimEmail") String victimEmail) {
+		instance.addVehiclePosition(vehicleId, position);
+		EmergencyCallLifecycleStatus emCallStatus = new EmergencyCallLifecycleStatus();
+		emCallStatus.setStatus(instance.getEmergencyCallLifecycle(victimEmail).name());
+		return emCallStatus;
+	}
 
 	@ApiMethod(name="ackVehicleOnCall")
 	public void ackVehicleOnCall(@Named("vehicleId") String vehicleId) {
@@ -50,6 +70,16 @@ public class EmergencyCallWorkflowEndpoint {
 	@ApiMethod(name="ackVehicleFinishedCall")
 	public void ackVehicleFinishedCall(@Named("vehicleId") String vehicleId) {
 		instance.vehicleFinishedCallAcknowledgment(vehicleId);
+	}
+	
+	@ApiMethod(name="getVictim")
+	public Victim getVictim(@Named("victimEmail") String victimEmail) {
+		return instance.getVictim(victimEmail);
+	}
+	
+	@ApiMethod(name="getMonitor")
+	public Monitor getMonitor(@Named("monitorId") String monitorId) {
+		return instance.getMonitor(monitorId);
 	}
 	
 	@ApiMethod(name="addAgentsToVehicle")
