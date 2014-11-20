@@ -9,7 +9,7 @@
 
 	<ui:image field='phoneOn' src='../images/accepting-calls.png' />
 	<ui:image field='phoneOff' src='../images/denying-calls.png' />
-	<ui:image field='endCall' src='../images/end-call.gif' />
+	<ui:image field='endCall' src='../images/end-call.png' />
 
 	<ui:style type="epusp.pcs.os.monitor.client.view.Workspace.TrafficSytle">
 	@sprite .backgroundPicture {
