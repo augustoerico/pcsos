@@ -64,7 +64,7 @@ public class Workspace extends Composite implements Display{
 
 	public Workspace() {
 		initWidget(uiBinder.createAndBindUi(this));
-		logo.setResource(resources.logo());
+		logo.setResource(resources.darkLogo());
 		info.setResource(resources.info());
 		map.setResource(resources.map());
 		preferences.setResource(resources.preferences());

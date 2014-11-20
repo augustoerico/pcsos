@@ -97,10 +97,14 @@ public class SuperUserWorkspaceConnection extends Connection implements ISuperUs
 				q.closeAll();
 			}
 
-			if((detachedAdmins != null && !detachedAdmins.isEmpty() && move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) 
-					|| (cursors.isEmpty() && cursorPosition == -1)){
+			if(detachedAdmins != null && !detachedAdmins.isEmpty()){
 				Cursor cursor = JDOCursorHelper.getCursor(admins);
-				cursors.add(cursor);
+				if((move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) ||
+						(cursors.isEmpty() && cursorPosition == -1)){
+					cursors.add(cursor);
+				}else{
+					cursors.set(cursorPosition+1, cursor);
+				}
 			}
 
 			setSessionAttribute(adminCursorPositionSessionAttribute, cursorPosition);
@@ -169,10 +173,14 @@ public class SuperUserWorkspaceConnection extends Connection implements ISuperUs
 				q.closeAll();
 			}
 
-			if((detachedMonitors != null && !detachedMonitors.isEmpty() && move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) 
-					|| (cursors.isEmpty() && cursorPosition == -1)){
+			if(detachedMonitors != null && !detachedMonitors.isEmpty()){
 				Cursor cursor = JDOCursorHelper.getCursor(monitors);
-				cursors.add(cursor);
+				if((move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) ||
+						(cursors.isEmpty() && cursorPosition == -1)){
+					cursors.add(cursor);
+				}else{
+					cursors.set(cursorPosition+1, cursor);
+				}
 			}
 
 			setSessionAttribute(monitorCursorPositionSessionAttribute, cursorPosition);
@@ -241,10 +249,14 @@ public class SuperUserWorkspaceConnection extends Connection implements ISuperUs
 				q.closeAll();
 			}
 
-			if((detachedSuperUsers != null && !detachedSuperUsers.isEmpty() && move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) 
-					|| (cursors.isEmpty() && cursorPosition == -1)){
+			if(detachedSuperUsers != null && !detachedSuperUsers.isEmpty()){
 				Cursor cursor = JDOCursorHelper.getCursor(superUsers);
-				cursors.add(cursor);
+				if((move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) ||
+						(cursors.isEmpty() && cursorPosition == -1)){
+					cursors.add(cursor);
+				}else{
+					cursors.set(cursorPosition+1, cursor);
+				}
 			}
 
 			setSessionAttribute(superUserCursorPositionSessionAttribute, cursorPosition);

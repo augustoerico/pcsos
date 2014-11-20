@@ -8,7 +8,10 @@ public interface SharedResources extends ClientBundle {
 	
 	public static final SharedResources INSTANCE = GWT.create(SharedResources.class);
 	
-	@Source("images/logo.jpg")
+	@Source("images/logo-white.png")
+	ImageResource darkLogo();
+	
+	@Source("images/logo.png")
 	ImageResource logo();
 	
 	@Source("images/user.png")

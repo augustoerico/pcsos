@@ -98,10 +98,14 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 				q.closeAll();
 			}
 
-			if((detachedVictims != null && !detachedVictims.isEmpty() && move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) 
-					|| (cursors.isEmpty() && cursorPosition == -1)){
+			if(detachedVictims != null && !detachedVictims.isEmpty()){
 				Cursor cursor = JDOCursorHelper.getCursor(victims);
-				cursors.add(cursor);
+				if((move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) ||
+						(cursors.isEmpty() && cursorPosition == -1)){
+					cursors.add(cursor);
+				}else{
+					cursors.set(cursorPosition+1, cursor);
+				}
 			}
 
 			setSessionAttribute(victimCursorPositionSessionAttribute, cursorPosition);
@@ -172,11 +176,15 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 			} finally {
 				q.closeAll();
 			}
-
-			if((detachedAgents != null && !detachedAgents.isEmpty() && move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) 
-					|| (cursors.isEmpty() && cursorPosition == -1)){
+			
+			if(detachedAgents != null && !detachedAgents.isEmpty()){
 				Cursor cursor = JDOCursorHelper.getCursor(agents);
-				cursors.add(cursor);
+				if((move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) ||
+						(cursors.isEmpty() && cursorPosition == -1)){
+					cursors.add(cursor);
+				}else{
+					cursors.set(cursorPosition+1, cursor);
+				}
 			}
 
 			setSessionAttribute(agentCursorPositionSessionAttribute, cursorPosition);
@@ -245,10 +253,14 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 				q.closeAll();
 			}
 
-			if((detachedCar != null && !detachedCar.isEmpty() && move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) 
-					|| (cursors.isEmpty() && cursorPosition == -1)){
+			if(detachedCar != null && !detachedCar.isEmpty()){
 				Cursor cursor = JDOCursorHelper.getCursor(car);
-				cursors.add(cursor);
+				if((move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) ||
+						(cursors.isEmpty() && cursorPosition == -1)){
+					cursors.add(cursor);
+				}else{
+					cursors.set(cursorPosition+1, cursor);
+				}
 			}
 
 			setSessionAttribute(carCursorPositionSessionAttribute, cursorPosition);
@@ -317,10 +329,14 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 				q.closeAll();
 			}
 
-			if((detachedHelicopter != null && !detachedHelicopter.isEmpty() && move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) 
-					|| (cursors.isEmpty() && cursorPosition == -1)){
+			if(detachedHelicopter != null && !detachedHelicopter.isEmpty()){
 				Cursor cursor = JDOCursorHelper.getCursor(helicopter);
-				cursors.add(cursor);
+				if((move.equals(MoveCursor.FORWARD) && cursorPosition == cursors.size()-1) ||
+						(cursors.isEmpty() && cursorPosition == -1)){
+					cursors.add(cursor);
+				}else{
+					cursors.set(cursorPosition+1, cursor);
+				}
 			}
 
 			setSessionAttribute(helicopterCursorPositionSessionAttribute, cursorPosition);
