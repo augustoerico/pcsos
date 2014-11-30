@@ -19,7 +19,7 @@ import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.general.SelectedRowHandler;
-import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.person.user.agent.Agent;
 import epusp.pcs.os.shared.provider.AsyncAgentProvider;
 
 public class AgentTablePresenter implements Presenter{

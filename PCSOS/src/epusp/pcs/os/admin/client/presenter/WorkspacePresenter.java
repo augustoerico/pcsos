@@ -1,5 +1,9 @@
 package epusp.pcs.os.admin.client.presenter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -27,11 +31,17 @@ import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.client.view.CreateUpdate;
 import epusp.pcs.os.shared.client.view.HeaderButton;
 import epusp.pcs.os.shared.client.view.ImageTabPanel;
+import epusp.pcs.os.shared.general.AttributeInfoLoader;
+import epusp.pcs.os.shared.general.AttributeInfoLoader.IAttributeInfoLoaded;
 import epusp.pcs.os.shared.general.Display;
 import epusp.pcs.os.shared.general.SelectedRowHandler;
-import epusp.pcs.os.shared.model.person.Victim;
-import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.ICustomAttributes;
+import epusp.pcs.os.shared.model.attribute.AttributeInfo;
 import epusp.pcs.os.shared.model.person.user.User;
+import epusp.pcs.os.shared.model.person.user.agent.Agent;
+import epusp.pcs.os.shared.model.person.user.agent.AgentCustomAttributes;
+import epusp.pcs.os.shared.model.person.victim.Victim;
+import epusp.pcs.os.shared.model.person.victim.VictimCustomAttributes;
 import epusp.pcs.os.shared.model.vehicle.Car;
 import epusp.pcs.os.shared.model.vehicle.Helicopter;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
@@ -54,6 +64,10 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 	private WorkspaceStyles backgroundResources = WorkspaceStyles.INSTANCE;
 
 	private final PopupPanel popup = new PopupPanel(false, false);
+	
+	private final HashMap<String, AttributeInfo> attributesInfo = new HashMap<String, AttributeInfo>();
+	
+	private final AttributeInfoLoader loader;
 
 	public WorkspacePresenter(IAdminWorkspaceServiceAsync rpcService, Display view, AdminWorkspaceConstants constants) {
 		this.rpcService = rpcService;
@@ -63,6 +77,8 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 		victimHeaderButton = new HeaderButton(constants.client(), resources.newClient().getSafeUri());
 		agentHeaderButton = new HeaderButton(constants.agent(), resources.newPolice().getSafeUri());
 		vehicleHeaderButton = new HeaderButton(constants.vehicle(), resources.newVehicle().getSafeUri());
+		
+		loader = new AttributeInfoLoader(attributesInfo, rpcService);
 
 		EventBus.get().addHandler(ClosePopupEvent.TYPE, this);
 		
@@ -102,14 +118,33 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 		
 		display.setBackgroundStyleName(backgroundResources.backgroundStyles().adminBackground());
 		
-		final VictimTablePresenter victimTablePresenter = new VictimTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Victim>() {
+		VictimTablePresenter victimTablePresenter = new VictimTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Victim>() {
 			
 			@Override
-			public void onSelectedRow(Victim objectSelected) {
+			public void onSelectedRow(final Victim objectSelected) {
 				popup.setSize("800px", "500px");
-				CreateUpdatePresenter createUpdatePresenter = new UpdateVictimPresenter(rpcService, new CreateUpdate(), constants, objectSelected);
-				createUpdatePresenter.go(popup);
-				popup.center();
+				loader.loadCustomAttributes(VictimCustomAttributes.values(), new IAttributeInfoLoaded() {
+					@Override
+					public void onCustomAttributesLoaded() {
+						rpcService.getFullVictim(objectSelected.getEmail(), new AsyncCallback<Victim>() {
+							
+							@Override
+							public void onSuccess(Victim result) {
+								List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
+								for(ICustomAttributes attribute : VictimCustomAttributes.values()){
+									attributes.add(attributesInfo.get(attribute.getAttributeName()));
+								}
+								CreateUpdatePresenter createUpdatePresenter = new UpdateVictimPresenter(rpcService, new CreateUpdate(), constants, attributes, result);
+								createUpdatePresenter.go(popup);
+								popup.center();
+							}
+							
+							@Override
+							public void onFailure(Throwable caught) {
+							}
+						});
+					}
+				});
 			}
 		});
 		
@@ -117,13 +152,31 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 		victimTablePresenter.go(victimContainer);
 
 		AgentTablePresenter agentTablePresenter = new AgentTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Agent>() {
-			
 			@Override
-			public void onSelectedRow(Agent objectSelected) {
+			public void onSelectedRow(final Agent objectSelected) {
 				popup.setSize("800px", "500px");
-				CreateUpdatePresenter createUpdatePresenter = new UpdateAgentPresenter(rpcService, new CreateUpdate(), constants, objectSelected);
-				createUpdatePresenter.go(popup);
-				popup.center();
+				loader.loadCustomAttributes(AgentCustomAttributes.values(), new IAttributeInfoLoaded() {
+					@Override
+					public void onCustomAttributesLoaded() {
+						rpcService.getFullAgent(objectSelected.getId(), new AsyncCallback<Agent>() {
+							
+							@Override
+							public void onSuccess(Agent result) {
+								List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
+								for(ICustomAttributes attribute : AgentCustomAttributes.values()){
+									attributes.add(attributesInfo.get(attribute.getAttributeName()));
+								}
+								CreateUpdatePresenter createUpdatePresenter = new UpdateAgentPresenter(rpcService, new CreateUpdate(), constants, attributes, result);
+								createUpdatePresenter.go(popup);
+								popup.center();
+							}
+							
+							@Override
+							public void onFailure(Throwable caught) {
+							}
+						});
+					}
+				});
 			}
 		});
 		HasWidgets agentContainer = display.addType(Agent.class.getName(), agentHeaderButton);
@@ -144,7 +197,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 					@Override
 					public void onSelectedRow(Car objectSelected) {
 						popup.setSize("800px", "500px");
-						CreateUpdatePresenter createUpdatePresenter = new UpdateCarPresenter(rpcService, new CreateUpdate(), constants, objectSelected);
+						CreateUpdatePresenter createUpdatePresenter = new UpdateCarPresenter(rpcService, new CreateUpdate(), constants, new ArrayList<AttributeInfo>(), objectSelected);
 						createUpdatePresenter.go(popup);
 						popup.center();
 					}
@@ -158,7 +211,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 					@Override
 					public void onSelectedRow(Helicopter objectSelected) {
 						popup.setSize("800px", "500px");
-						CreateUpdatePresenter createUpdatePresenter = new UpdateHelicopterPresenter(rpcService, new CreateUpdate(), constants, objectSelected);
+						CreateUpdatePresenter createUpdatePresenter = new UpdateHelicopterPresenter(rpcService, new CreateUpdate(), constants, new ArrayList<AttributeInfo>(), objectSelected);
 						createUpdatePresenter.go(popup);
 						popup.center();
 					}
@@ -205,9 +258,18 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 			public void onClick(ClickEvent event) {
 				if(victimHeaderButton.isEnabled()){
 					popup.setSize("800px", "500px");
-					CreateUpdatePresenter createUpdatePresenter = new CreateVictimPresenter(rpcService, new CreateUpdate(), constants);
-					createUpdatePresenter.go(popup);
-					popup.center();
+					loader.loadCustomAttributes(VictimCustomAttributes.values(), new IAttributeInfoLoaded() {
+						@Override
+						public void onCustomAttributesLoaded() {
+							List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
+							for(ICustomAttributes attribute : VictimCustomAttributes.values()){
+								attributes.add(attributesInfo.get(attribute.getAttributeName()));
+							}
+							CreateUpdatePresenter createUpdatePresenter = new CreateVictimPresenter(rpcService, new CreateUpdate(), constants, attributes);
+							createUpdatePresenter.go(popup);
+							popup.center();
+						}
+					});
 				}
 			}
 		});
@@ -218,9 +280,18 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 			public void onClick(ClickEvent event) {
 				if(agentHeaderButton.isEnabled()){
 					popup.setSize("800px", "500px");
-					CreateUpdatePresenter createUpdatePresenter = new CreateAgentPresenter(rpcService, new CreateUpdate(), constants);
-					createUpdatePresenter.go(popup);
-					popup.center();
+					loader.loadCustomAttributes(AgentCustomAttributes.values(), new IAttributeInfoLoaded() {
+						@Override
+						public void onCustomAttributesLoaded() {
+							List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
+							for(ICustomAttributes attribute : AgentCustomAttributes.values()){
+								attributes.add(attributesInfo.get(attribute.getAttributeName()));
+							}
+							CreateUpdatePresenter createUpdatePresenter = new CreateAgentPresenter(rpcService, new CreateUpdate(), constants, attributes);
+							createUpdatePresenter.go(popup);
+							popup.center();
+						}
+					});
 				}
 			}
 		});
@@ -231,7 +302,8 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 			public void onClick(ClickEvent event) {
 				if(vehicleHeaderButton.isEnabled()){
 					popup.setSize("800px", "500px");
-					CreateUpdatePresenter createUpdatePresenter = new CreateVehiclePresenter(rpcService, new CreateUpdate(), constants);
+					//TODO: Solve this shit.
+					CreateUpdatePresenter createUpdatePresenter = new CreateVehiclePresenter(rpcService, new CreateUpdate(), constants, new ArrayList<AttributeInfo>());
 					createUpdatePresenter.go(popup);
 					popup.center();
 				}

@@ -1,18 +1,21 @@
 package epusp.pcs.os.superuser.client.presenter;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.HasWidgets;
 
 import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
 import epusp.pcs.os.shared.client.rpc.IConnectionServiceAsync;
-import epusp.pcs.os.shared.model.person.user.Monitor;
+import epusp.pcs.os.shared.model.attribute.AttributeInfo;
+import epusp.pcs.os.shared.model.person.user.monitor.Monitor;
 
 public class UpdateMonitorPresenter extends CreateMonitorPresenter{
 
 	private final Monitor monitor;
 	
 	public UpdateMonitorPresenter(IConnectionServiceAsync rpcService,
-			Display view, CommonWorkspaceConstants constants, Monitor monitor) {
-		super(rpcService, view, constants);
+			Display view, CommonWorkspaceConstants constants, List<AttributeInfo> customAttributes, Monitor monitor) {
+		super(rpcService, view, constants, customAttributes);
 		this.monitor = monitor;
 	}
 
@@ -38,5 +41,7 @@ public class UpdateMonitorPresenter extends CreateMonitorPresenter{
 		setPictureUrl(monitor.getPictureURL());
 		getView().setPictureUrl(monitor.getPictureURL());
 		getView().showPicture();
+		
+		addValuesToCustomWidgets(monitor);
 	}
 }

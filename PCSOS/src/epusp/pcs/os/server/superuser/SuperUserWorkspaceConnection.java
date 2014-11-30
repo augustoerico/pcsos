@@ -9,10 +9,10 @@ import epusp.pcs.os.server.Connection;
 import epusp.pcs.os.server.PMF;
 import epusp.pcs.os.shared.general.MoveCursor;
 import epusp.pcs.os.shared.model.person.user.AccountTypes;
-import epusp.pcs.os.shared.model.person.user.Admin;
-import epusp.pcs.os.shared.model.person.user.Monitor;
-import epusp.pcs.os.shared.model.person.user.SuperUser;
 import epusp.pcs.os.shared.model.person.user.User;
+import epusp.pcs.os.shared.model.person.user.admin.Admin;
+import epusp.pcs.os.shared.model.person.user.monitor.Monitor;
+import epusp.pcs.os.shared.model.person.user.superuser.SuperUser;
 import epusp.pcs.os.superuser.client.rpc.ISuperUserWorkspaceService;
 
 public class SuperUserWorkspaceConnection extends Connection implements ISuperUserWorkspaceService{
@@ -128,5 +128,86 @@ public class SuperUserWorkspaceConnection extends Connection implements ISuperUs
 				pm.close();
 			}
 		}
+	}
+
+	@Override
+	public Monitor getFullMonitor(String id) {
+		if(isLoggedIn()){
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+
+			pm.getFetchPlan().addGroup("all_system_object_attributes");
+			pm.getFetchPlan().setMaxFetchDepth(-1);
+
+			Monitor monitor = null, detached = null;
+			try{
+				pm.currentTransaction().begin();
+				monitor = pm.getObjectById(Monitor.class, id);
+				detached = pm.detachCopy(monitor);
+				pm.currentTransaction().commit();
+			}catch(Exception e){
+				e.printStackTrace();
+				if (pm.currentTransaction().isActive())
+					pm.currentTransaction().rollback();
+			}finally{
+				pm.close();
+			}
+
+			return detached;
+		}
+		return null;
+	}
+
+	@Override
+	public Admin getFullAdmin(String id) {
+		if(isLoggedIn()){
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+
+			pm.getFetchPlan().addGroup("all_system_object_attributes");
+			pm.getFetchPlan().setMaxFetchDepth(-1);
+
+			Admin admin = null, detached = null;
+			try{
+				pm.currentTransaction().begin();
+				admin = pm.getObjectById(Admin.class, id);
+				detached = pm.detachCopy(admin);
+				pm.currentTransaction().commit();
+			}catch(Exception e){
+				e.printStackTrace();
+				if (pm.currentTransaction().isActive())
+					pm.currentTransaction().rollback();
+			}finally{
+				pm.close();
+			}
+
+			return detached;
+		}
+		return null;
+	}
+
+	@Override
+	public SuperUser getFullSuperUser(String id) {
+		if(isLoggedIn()){
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+
+			pm.getFetchPlan().addGroup("all_system_object_attributes");
+			pm.getFetchPlan().setMaxFetchDepth(-1);
+
+			SuperUser superUser = null, detached = null;
+			try{
+				pm.currentTransaction().begin();
+				superUser = pm.getObjectById(SuperUser.class, id);
+				detached = pm.detachCopy(superUser);
+				pm.currentTransaction().commit();
+			}catch(Exception e){
+				e.printStackTrace();
+				if (pm.currentTransaction().isActive())
+					pm.currentTransaction().rollback();
+			}finally{
+				pm.close();
+			}
+
+			return detached;
+		}
+		return null;
 	}
 }

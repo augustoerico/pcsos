@@ -38,8 +38,8 @@ import epusp.pcs.os.shared.general.RPCRequestTracker;
 import epusp.pcs.os.shared.model.oncall.EmergencyCall;
 import epusp.pcs.os.shared.model.oncall.Position;
 import epusp.pcs.os.shared.model.oncall.VehicleOnCall;
-import epusp.pcs.os.shared.model.person.Victim;
-import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.person.user.agent.Agent;
+import epusp.pcs.os.shared.model.person.victim.Victim;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 public class WorkspaceController implements Presenter, LoadedInfoHandler, FinishCallHandler, AcceptRejectCallHandler {

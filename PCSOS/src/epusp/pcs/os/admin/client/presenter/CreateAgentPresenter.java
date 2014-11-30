@@ -1,5 +1,7 @@
 package epusp.pcs.os.admin.client.presenter;
 
+import java.util.List;
+
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -16,18 +18,18 @@ import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
 import epusp.pcs.os.shared.client.event.ClosePopupEvent;
 import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.CreatePersonPresenter;
+import epusp.pcs.os.shared.model.attribute.AttributeInfo;
 import epusp.pcs.os.shared.model.licence.DrivingCategories;
 import epusp.pcs.os.shared.model.licence.DrivingLicence;
 import epusp.pcs.os.shared.model.licence.Licence;
 import epusp.pcs.os.shared.model.licence.LicenceTypes;
-import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.person.user.agent.Agent;
 
 public class CreateAgentPresenter extends CreatePersonPresenter {
 
-	
 	public CreateAgentPresenter(IAdminWorkspaceServiceAsync rpcService,
-			Display view, CommonWorkspaceConstants constants) {
-		super(rpcService, view, constants);
+			Display view, CommonWorkspaceConstants constants, List<AttributeInfo> customAttributes) {
+		super(rpcService, view, constants, customAttributes);
 	}
 	
 	private TextBox registerCode;
@@ -37,7 +39,7 @@ public class CreateAgentPresenter extends CreatePersonPresenter {
 	private ListBox category;
 	
 	@Override
-	public void go(HasWidgets container){
+	public void go(HasWidgets container){		
 		final Display view = getView();
 		final CommonWorkspaceConstants constants = getConstants();
 		
@@ -79,7 +81,10 @@ public class CreateAgentPresenter extends CreatePersonPresenter {
 					}
 				}
 			}
-		});		
+		});
+		
+		addCustomAttributesToView();
+		
 		bind();
 	}
 	
@@ -124,6 +129,8 @@ public class CreateAgentPresenter extends CreatePersonPresenter {
 					if(l != null)
 						agent.addLicence(l);
 				}
+				
+				readValuesAndSaveOnObject(agent);
 				
 				getRpcService().createAgent(agent, new AsyncCallback<Void>() {
 					

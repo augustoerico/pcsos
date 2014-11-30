@@ -12,9 +12,9 @@ import epusp.pcs.os.shared.model.EmergencyCallLifecycleStatus;
 import epusp.pcs.os.shared.model.oncall.EmergencyCall;
 import epusp.pcs.os.shared.model.oncall.EmergencyCallLifecycle;
 import epusp.pcs.os.shared.model.oncall.Position;
-import epusp.pcs.os.shared.model.person.Victim;
-import epusp.pcs.os.shared.model.person.user.Agent;
-import epusp.pcs.os.shared.model.person.user.Monitor;
+import epusp.pcs.os.shared.model.person.user.agent.Agent;
+import epusp.pcs.os.shared.model.person.user.monitor.Monitor;
+import epusp.pcs.os.shared.model.person.victim.Victim;
 
 @Api(name = "emcallworkflowendpoint", namespace = @ApiNamespace(ownerDomain = "pcs.epusp", ownerName = "pcs.epusp", packagePath = "os.workflow"))
 public class EmergencyCallWorkflowEndpoint {

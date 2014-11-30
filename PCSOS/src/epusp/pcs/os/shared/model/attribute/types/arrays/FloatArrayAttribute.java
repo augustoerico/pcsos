@@ -26,7 +26,7 @@ public class FloatArrayAttribute extends ArrayAttribute {
 	
 	public FloatArrayAttribute(List<Float> values, String attributeName){
 		super(attributeName);
-		this.values = (Float[]) values.toArray();
+		this.values = values.toArray(new Float[values.size()]);
 	}
 	
 	public void setValue(Float[] values) {
@@ -38,7 +38,6 @@ public class FloatArrayAttribute extends ArrayAttribute {
 		return DataType.FLOAT_ARRAY;
 	}
 	
-//	@Override
 	public List<Float> getValuesAsList() {
 		return Arrays.asList(values);
 	}

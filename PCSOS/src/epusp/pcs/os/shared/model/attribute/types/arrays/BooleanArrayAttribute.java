@@ -16,7 +16,7 @@ public class BooleanArrayAttribute extends ArrayAttribute {
 	@NotPersistent
 	private static final long serialVersionUID = 1L;
 	
-	@Persistent
+	@Persistent(defaultFetchGroup="true")
 	private Boolean[] values;
 
 	public BooleanArrayAttribute(Boolean[] values, String attributeName){
@@ -26,7 +26,7 @@ public class BooleanArrayAttribute extends ArrayAttribute {
 	
 	public BooleanArrayAttribute(List<Boolean> values, String attributeName){
 		super(attributeName);
-		this.values = (Boolean[]) values.toArray();
+		this.values = values.toArray(new Boolean[values.size()]);
 	}
 	
 	public void setValue(Boolean[] values) {
@@ -37,8 +37,7 @@ public class BooleanArrayAttribute extends ArrayAttribute {
 	public DataType getDataType() {
 		return DataType.BOOLEAN_ARRAY;
 	}
-	
-//	@Override
+
 	public List<Boolean> getValuesAsList() {
 		return Arrays.asList(values);
 	}

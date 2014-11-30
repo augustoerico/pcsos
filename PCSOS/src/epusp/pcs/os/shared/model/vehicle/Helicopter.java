@@ -6,7 +6,7 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 
-import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.person.user.agent.Agent;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
 public class Helicopter extends Vehicle implements Serializable{

@@ -8,7 +8,7 @@ import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 import epusp.pcs.os.shared.general.SelectedRowHandler;
-import epusp.pcs.os.shared.model.person.user.Admin;
+import epusp.pcs.os.shared.model.person.user.admin.Admin;
 import epusp.pcs.os.shared.provider.AsyncAdminProvider;
 import epusp.pcs.os.superuser.client.constants.SuperUserWorkspaceConstants;
 import epusp.pcs.os.superuser.client.rpc.ISuperUserWorkspaceServiceAsync;

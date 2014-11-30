@@ -19,8 +19,8 @@ import epusp.pcs.os.monitor.client.view.Details;
 import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.client.view.PictureTagItem;
-import epusp.pcs.os.shared.model.person.Victim;
-import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.person.user.agent.Agent;
+import epusp.pcs.os.shared.model.person.victim.Victim;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 public class CallInfoPresenter implements Presenter, FinishCallHandler{

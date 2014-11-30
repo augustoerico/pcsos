@@ -1,5 +1,7 @@
 package epusp.pcs.os.superuser.client.presenter;
 
+import java.util.List;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -10,19 +12,21 @@ import epusp.pcs.os.shared.client.event.ClosePopupEvent;
 import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.CreatePersonPresenter;
 import epusp.pcs.os.shared.client.rpc.IConnectionServiceAsync;
-import epusp.pcs.os.shared.model.person.user.Admin;
+import epusp.pcs.os.shared.model.attribute.AttributeInfo;
+import epusp.pcs.os.shared.model.person.user.admin.Admin;
 import epusp.pcs.os.superuser.client.rpc.ISuperUserWorkspaceServiceAsync;
 
 public class CreateAdminPresenter extends CreatePersonPresenter{
 
 	public CreateAdminPresenter(IConnectionServiceAsync rpcService,
-			Display view, CommonWorkspaceConstants constants) {
-		super(rpcService, view, constants);
+			Display view, CommonWorkspaceConstants constants, List<AttributeInfo> customAttributes) {
+		super(rpcService, view, constants, customAttributes);
 	}
 	
 	@Override
 	public void go(HasWidgets container){
 		super.go(container);
+		addCustomAttributesToView();
 		bind();
 	}
 	
@@ -49,6 +53,8 @@ public class CreateAdminPresenter extends CreatePersonPresenter{
 				admin.setIsActive(getActiveCheckBox().getValue());
 				
 				admin.setPictureURL(getPictureUrl());
+				
+				readValuesAndSaveOnObject(admin);
 				
 				getRpcService().createAdmin(admin, new AsyncCallback<Void>() {
 					

@@ -1,5 +1,7 @@
 package epusp.pcs.os.admin.client.presenter;
 
+import java.util.List;
+
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -15,6 +17,7 @@ import epusp.pcs.os.shared.client.event.ClosePopupEvent;
 import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.CreateUpdatePresenter;
 import epusp.pcs.os.shared.client.rpc.IConnectionServiceAsync;
+import epusp.pcs.os.shared.model.attribute.AttributeInfo;
 import epusp.pcs.os.shared.model.vehicle.Car;
 import epusp.pcs.os.shared.model.vehicle.Helicopter;
 import epusp.pcs.os.shared.model.vehicle.Priority;
@@ -24,8 +27,8 @@ import epusp.pcs.os.shared.model.vehicle.VehicleTypes;
 public class CreateVehiclePresenter extends CreateUpdatePresenter{
 
 	public CreateVehiclePresenter(IConnectionServiceAsync rpcService,
-			Display view, CommonWorkspaceConstants constants) {
-		super(rpcService, view, constants);
+			Display view, CommonWorkspaceConstants constants, List<AttributeInfo> customAttributes) {
+		super(rpcService, view, constants, customAttributes);
 	}
 	
 	private TextBox idTag, plate;

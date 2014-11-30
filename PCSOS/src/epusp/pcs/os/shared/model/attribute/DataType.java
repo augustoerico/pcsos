@@ -13,8 +13,7 @@ public enum DataType implements Serializable {
 	INTEGER,
 	INTERGER_ARRAY,
 	FLOAT,
-	FLOAT_ARRAY,
-	TIPO_SANGUINEO;
+	FLOAT_ARRAY;
 	
 	/*
 	 * Seen by Serializable

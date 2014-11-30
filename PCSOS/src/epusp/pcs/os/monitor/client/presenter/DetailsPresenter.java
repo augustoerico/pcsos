@@ -18,8 +18,8 @@ import epusp.pcs.os.shared.model.SystemObject;
 import epusp.pcs.os.shared.model.attribute.AttributeInfo;
 import epusp.pcs.os.shared.model.attribute.Category;
 import epusp.pcs.os.shared.model.attribute.IAttribute;
-import epusp.pcs.os.shared.model.person.Victim;
-import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.person.user.agent.Agent;
+import epusp.pcs.os.shared.model.person.victim.Victim;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{

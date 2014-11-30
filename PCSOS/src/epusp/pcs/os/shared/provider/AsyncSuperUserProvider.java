@@ -7,7 +7,7 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import epusp.pcs.os.shared.general.MoveCursor;
-import epusp.pcs.os.shared.model.person.user.SuperUser;
+import epusp.pcs.os.shared.model.person.user.superuser.SuperUser;
 import epusp.pcs.os.superuser.client.rpc.ISuperUserWorkspaceServiceAsync;
 
 public class AsyncSuperUserProvider extends AsyncProvider<SuperUser> {

@@ -11,7 +11,7 @@ import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 @RemoteServiceRelativePath("monitorWorkspaceService")
 public interface IMonitorWorkspaceService extends IConnectionService {
-
+	
 	EmergencyCall getEmergencyCallDetails(EmergencyCallSpecs specs);
 
 	void addFreeMonitor();

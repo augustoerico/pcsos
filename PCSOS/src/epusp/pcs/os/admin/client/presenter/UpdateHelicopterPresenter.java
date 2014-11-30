@@ -1,11 +1,14 @@
 package epusp.pcs.os.admin.client.presenter;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.user.client.ui.HasWidgets;
 
 import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
 import epusp.pcs.os.shared.client.rpc.IConnectionServiceAsync;
+import epusp.pcs.os.shared.model.attribute.AttributeInfo;
 import epusp.pcs.os.shared.model.vehicle.Helicopter;
 import epusp.pcs.os.shared.model.vehicle.VehicleTypes;
 
@@ -14,8 +17,8 @@ public class UpdateHelicopterPresenter extends CreateVehiclePresenter{
 	private Helicopter helicopter;
 	
 	public UpdateHelicopterPresenter(IConnectionServiceAsync rpcService,
-			Display view, CommonWorkspaceConstants constants, Helicopter helicopter) {
-		super(rpcService, view, constants);
+			Display view, CommonWorkspaceConstants constants, List<AttributeInfo> customAttributes, Helicopter helicopter) {
+		super(rpcService, view, constants, customAttributes);
 		this.helicopter = helicopter;
 	}
 	

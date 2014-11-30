@@ -8,7 +8,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.general.MoveCursor;
-import epusp.pcs.os.shared.model.person.Victim;
+import epusp.pcs.os.shared.model.person.victim.Victim;
 
 public class AsyncVictimProvider extends AsyncProvider<Victim> {
 

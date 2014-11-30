@@ -31,7 +31,6 @@ public class AsyncProvider<T> extends AsyncDataProvider<T> {
 		this.serviceProvider = serviceProvider;
 	}
 
-
 	@Override
 	protected void onRangeChanged(HasData<T> display) {
 		final Range range = display.getVisibleRange();

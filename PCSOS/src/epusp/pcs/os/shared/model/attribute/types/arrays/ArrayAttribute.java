@@ -18,8 +18,6 @@ public abstract class ArrayAttribute extends Attribute {
 	protected ArrayAttribute(String attributeName) {
 		super(attributeName);
 	}
-
-//	public abstract List<?> getValuesAsList();
 	
 	/*
 	 * Seen by IsSerializable

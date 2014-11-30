@@ -1,11 +1,14 @@
 package epusp.pcs.os.admin.client.presenter;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.user.client.ui.HasWidgets;
 
 import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
 import epusp.pcs.os.shared.client.rpc.IConnectionServiceAsync;
+import epusp.pcs.os.shared.model.attribute.AttributeInfo;
 import epusp.pcs.os.shared.model.vehicle.Car;
 import epusp.pcs.os.shared.model.vehicle.VehicleTypes;
 
@@ -14,8 +17,8 @@ public class UpdateCarPresenter extends CreateVehiclePresenter{
 	private Car car;
 
 	public UpdateCarPresenter(IConnectionServiceAsync rpcService, Display view,
-			CommonWorkspaceConstants constants, Car car) {
-		super(rpcService, view, constants);
+			CommonWorkspaceConstants constants, List<AttributeInfo> customAttributes, Car car) {
+		super(rpcService, view, constants, customAttributes);
 		this.car = car;
 	}
 	

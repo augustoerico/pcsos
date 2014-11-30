@@ -1,5 +1,9 @@
 package epusp.pcs.os.superuser.client.presenter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -21,12 +25,19 @@ import epusp.pcs.os.shared.client.presenter.CreateUpdatePresenter;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.client.view.CreateUpdate;
 import epusp.pcs.os.shared.client.view.HeaderButton;
+import epusp.pcs.os.shared.general.AttributeInfoLoader;
+import epusp.pcs.os.shared.general.AttributeInfoLoader.IAttributeInfoLoaded;
 import epusp.pcs.os.shared.general.Display;
 import epusp.pcs.os.shared.general.SelectedRowHandler;
-import epusp.pcs.os.shared.model.person.user.Admin;
-import epusp.pcs.os.shared.model.person.user.Monitor;
-import epusp.pcs.os.shared.model.person.user.SuperUser;
+import epusp.pcs.os.shared.model.ICustomAttributes;
+import epusp.pcs.os.shared.model.attribute.AttributeInfo;
 import epusp.pcs.os.shared.model.person.user.User;
+import epusp.pcs.os.shared.model.person.user.admin.Admin;
+import epusp.pcs.os.shared.model.person.user.admin.AdminCustomProperties;
+import epusp.pcs.os.shared.model.person.user.monitor.Monitor;
+import epusp.pcs.os.shared.model.person.user.monitor.MonitorCustomAttributes;
+import epusp.pcs.os.shared.model.person.user.superuser.SuperUser;
+import epusp.pcs.os.shared.model.person.user.superuser.SuperUserCustomAttributes;
 import epusp.pcs.os.superuser.client.SuperUserResources;
 import epusp.pcs.os.superuser.client.constants.SuperUserWorkspaceConstants;
 import epusp.pcs.os.superuser.client.rpc.ISuperUserWorkspaceServiceAsync;
@@ -45,6 +56,10 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 	private final PopupPanel popup = new PopupPanel(false, false);
 
 	private final HeaderButton adminHeaderButton, superHeaderButton, monitorHeaderButton;
+	
+	private final HashMap<String, AttributeInfo> attributesInfo = new HashMap<String, AttributeInfo>();
+	
+	private final AttributeInfoLoader loader;
 
 	public WorkspacePresenter(ISuperUserWorkspaceServiceAsync rpcService, Display view, SuperUserWorkspaceConstants constants){
 		this.rpcService = rpcService;
@@ -54,6 +69,8 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 		adminHeaderButton = new HeaderButton(constants.admin(), resources.newAdmin().getSafeUri());
 		superHeaderButton = new HeaderButton(constants.superUser(), resources.newSuperUser().getSafeUri());
 		monitorHeaderButton = new HeaderButton(constants.monitor(), resources.newMonitor().getSafeUri());
+		
+		loader = new AttributeInfoLoader(attributesInfo, rpcService);
 
 		EventBus.get().addHandler(ClosePopupEvent.TYPE, this);
 
@@ -100,11 +117,30 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 
 		UserTablePresenter monitorTablePresenter = new MonitorTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Monitor>() {
 			@Override
-			public void onSelectedRow(Monitor objectSelected) {
+			public void onSelectedRow(final Monitor objectSelected) {
 				popup.setSize("800px", "500px");
-				CreateUpdatePresenter createUpdatePresenter = new UpdateMonitorPresenter(rpcService, new CreateUpdate(), constants, objectSelected);
-				createUpdatePresenter.go(popup);
-				popup.center();
+				loader.loadCustomAttributes(MonitorCustomAttributes.values(), new IAttributeInfoLoaded() {
+					@Override
+					public void onCustomAttributesLoaded() {
+						rpcService.getFullMonitor(objectSelected.getId(), new AsyncCallback<Monitor>() {
+							
+							@Override
+							public void onSuccess(Monitor result) {
+								List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
+								for(ICustomAttributes attribute : MonitorCustomAttributes.values()){
+									attributes.add(attributesInfo.get(attribute.getAttributeName()));
+								}
+								CreateUpdatePresenter createUpdatePresenter = new UpdateMonitorPresenter(rpcService, new CreateUpdate(), constants, attributes, result);
+								createUpdatePresenter.go(popup);
+								popup.center();
+							}
+							
+							@Override
+							public void onFailure(Throwable caught) {
+							}
+						});
+					}
+				});
 			}
 		});
 		
@@ -112,11 +148,30 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 
 		UserTablePresenter adminTablePresenter = new AdminTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Admin>() {
 			@Override
-			public void onSelectedRow(Admin objectSelected) {
+			public void onSelectedRow(final Admin objectSelected) {
 				popup.setSize("800px", "500px");
-				CreateUpdatePresenter createUpdatePresenter = new UpdateAdminPresenter(rpcService, new CreateUpdate(), constants, objectSelected);
-				createUpdatePresenter.go(popup);
-				popup.center();
+				loader.loadCustomAttributes(AdminCustomProperties.values(), new IAttributeInfoLoaded() {
+					@Override
+					public void onCustomAttributesLoaded() {
+						rpcService.getFullAdmin(objectSelected.getId(), new AsyncCallback<Admin>() {
+							
+							@Override
+							public void onSuccess(Admin result) {
+								List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
+								for(ICustomAttributes attribute : AdminCustomProperties.values()){
+									attributes.add(attributesInfo.get(attribute.getAttributeName()));
+								}
+								CreateUpdatePresenter createUpdatePresenter = new UpdateAdminPresenter(rpcService, new CreateUpdate(), constants, attributes, result);
+								createUpdatePresenter.go(popup);
+								popup.center();
+							}
+							
+							@Override
+							public void onFailure(Throwable caught) {
+							}
+						});
+					}
+				});				
 			}
 		});
 		
@@ -124,11 +179,30 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 
 		UserTablePresenter superUserTablePresenter = new SuperUserTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<SuperUser>() {
 			@Override
-			public void onSelectedRow(SuperUser objectSelected) {
+			public void onSelectedRow(final SuperUser objectSelected) {
 				popup.setSize("800px", "500px");
-				CreateUpdatePresenter createUpdatePresenter = new UpdateSuperUserPresenter(rpcService, new CreateUpdate(), constants, objectSelected);
-				createUpdatePresenter.go(popup);
-				popup.center();
+				loader.loadCustomAttributes(SuperUserCustomAttributes.values(), new IAttributeInfoLoaded() {
+					@Override
+					public void onCustomAttributesLoaded() {
+						rpcService.getFullSuperUser(objectSelected.getId(), new AsyncCallback<SuperUser>() {
+							
+							@Override
+							public void onSuccess(SuperUser result) {
+								List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
+								for(ICustomAttributes attribute : SuperUserCustomAttributes.values()){
+									attributes.add(attributesInfo.get(attribute.getAttributeName()));
+								}
+								CreateUpdatePresenter createUpdatePresenter = new UpdateSuperUserPresenter(rpcService, new CreateUpdate(), constants, attributes, result);
+								createUpdatePresenter.go(popup);
+								popup.center();
+							}
+							
+							@Override
+							public void onFailure(Throwable caught) {
+							}
+						});
+					}
+				});	
 			}
 		});
 		
@@ -167,9 +241,18 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 			public void onClick(ClickEvent event) {
 				if(adminHeaderButton.isEnabled()){
 					popup.setSize("800px", "500px");
-					CreateUpdatePresenter createUpdatePresenter = new CreateAdminPresenter(rpcService, new CreateUpdate(), constants);
-					createUpdatePresenter.go(popup);
-					popup.center();
+					loader.loadCustomAttributes(AdminCustomProperties.values(), new IAttributeInfoLoaded() {
+						@Override
+						public void onCustomAttributesLoaded() {
+							List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
+							for(ICustomAttributes attribute : AdminCustomProperties.values()){
+								attributes.add(attributesInfo.get(attribute.getAttributeName()));
+							}
+							CreateUpdatePresenter createUpdatePresenter = new CreateAdminPresenter(rpcService, new CreateUpdate(), constants, attributes);
+							createUpdatePresenter.go(popup);
+							popup.center();
+						}
+					});
 				}
 			}
 		});
@@ -180,9 +263,18 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 			public void onClick(ClickEvent event) {
 				if(superHeaderButton.isEnabled()){
 					popup.setSize("800px", "500px");
-					CreateUpdatePresenter createUpdatePresenter = new CreateSuperUserPresenter(rpcService, new CreateUpdate(), constants);
-					createUpdatePresenter.go(popup);
-					popup.center();
+					loader.loadCustomAttributes(SuperUserCustomAttributes.values(), new IAttributeInfoLoaded() {
+						@Override
+						public void onCustomAttributesLoaded() {
+							List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
+							for(ICustomAttributes attribute : SuperUserCustomAttributes.values()){
+								attributes.add(attributesInfo.get(attribute.getAttributeName()));
+							}
+							CreateUpdatePresenter createUpdatePresenter = new CreateSuperUserPresenter(rpcService, new CreateUpdate(), constants, attributes);
+							createUpdatePresenter.go(popup);
+							popup.center();
+						}
+					});
 				}
 			}
 		});
@@ -193,9 +285,18 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 			public void onClick(ClickEvent event) {
 				if(monitorHeaderButton.isEnabled()){
 					popup.setSize("800px", "500px");
-					CreateUpdatePresenter createUpdatePresenter = new CreateMonitorPresenter(rpcService, new CreateUpdate(), constants);
-					createUpdatePresenter.go(popup);
-					popup.center();
+					loader.loadCustomAttributes(MonitorCustomAttributes.values(), new IAttributeInfoLoaded() {
+						@Override
+						public void onCustomAttributesLoaded() {
+							List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
+							for(ICustomAttributes attribute : MonitorCustomAttributes.values()){
+								attributes.add(attributesInfo.get(attribute.getAttributeName()));
+							}
+							CreateUpdatePresenter createUpdatePresenter = new CreateMonitorPresenter(rpcService, new CreateUpdate(), constants, attributes);
+							createUpdatePresenter.go(popup);
+							popup.center();
+						}
+					});
 				}
 			}
 		});

@@ -19,7 +19,7 @@ import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.general.SelectedRowHandler;
-import epusp.pcs.os.shared.model.person.Victim;
+import epusp.pcs.os.shared.model.person.victim.Victim;
 import epusp.pcs.os.shared.provider.AsyncVictimProvider;
 
 public class VictimTablePresenter implements Presenter{

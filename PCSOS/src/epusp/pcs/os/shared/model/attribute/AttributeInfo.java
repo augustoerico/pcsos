@@ -31,16 +31,23 @@ public class AttributeInfo implements Serializable {
 	
 	@Persistent
 	private Boolean isArray = false; 
+	
+	@Persistent
+	private Boolean isEditable = true;
 
 	@Persistent
 	private List<String> isVisableAt = new ArrayList<String>();
 
 	@Persistent
 	private Category category;
+	
+	@Persistent
+	private DataType dataType;
 
-	public AttributeInfo(String attributeName, Category category){
+	public AttributeInfo(String attributeName, Category category, DataType dataType){
 		this.attributeName = attributeName;
 		this.category = category;
+		this.dataType = dataType;
 	}
 
 	public String getAttributeName(){
@@ -51,8 +58,13 @@ public class AttributeInfo implements Serializable {
 		int i = locales.indexOf(locale);
 		if(i >= 0)
 			return labels.get(i);
-		else
-			return "";
+		else{
+			i = locales.indexOf("en");
+			if(i >= 0)
+				return labels.get(i);
+			else
+				return "";
+		}
 	}
 	
 	public void addLocale(String locale, String label){
@@ -113,6 +125,18 @@ public class AttributeInfo implements Serializable {
 	
 	public List<String> getAllVisibleClasses(){
 		return isVisableAt;
+	}
+	
+	public DataType getDataType(){
+		return dataType;
+	}
+	
+	public void setEditable(Boolean isEditable){
+		this.isEditable = isEditable;
+	}
+	
+	public Boolean isEditable(){
+		return isEditable;
 	}
 	
 	/*

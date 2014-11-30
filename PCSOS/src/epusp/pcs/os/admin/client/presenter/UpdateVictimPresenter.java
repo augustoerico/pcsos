@@ -1,18 +1,21 @@
 package epusp.pcs.os.admin.client.presenter;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.HasWidgets;
 
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
-import epusp.pcs.os.shared.model.person.Victim;
+import epusp.pcs.os.shared.model.attribute.AttributeInfo;
+import epusp.pcs.os.shared.model.person.victim.Victim;
 
 public class UpdateVictimPresenter extends CreateVictimPresenter {
 
 	private final Victim victim;
 	
 	public UpdateVictimPresenter(IAdminWorkspaceServiceAsync rpcService,
-			Display view, CommonWorkspaceConstants constants, Victim victim) {
-		super(rpcService, view, constants);
+			Display view, CommonWorkspaceConstants constants,  List<AttributeInfo> customAttributes, Victim victim) {
+		super(rpcService, view, constants, customAttributes);
 		this.victim = victim;
 	}
 
@@ -20,23 +23,25 @@ public class UpdateVictimPresenter extends CreateVictimPresenter {
 	public void go(HasWidgets container){
 		super.go(container);
 		
-		getGivenNameTextBox().setReadOnly(false);
+		getGivenNameTextBox().setReadOnly(true);
 		getGivenNameTextBox().setText(victim.getName() + " " + victim.getSecondName());
 		
 		getActiveCheckBox().setValue(victim.isActive());
 		
-		getEmailTextBox().setReadOnly(false);
+		getEmailTextBox().setReadOnly(true);
 		getEmailTextBox().setText(victim.getEmail());
 		
-		getSurnameTextBox().setReadOnly(false);
+		getSurnameTextBox().setReadOnly(true);
 		getSurnameTextBox().setText(victim.getSurname());
 		
-		getGoogleIdTextBox().setReadOnly(false);
+		getGoogleIdTextBox().setReadOnly(true);
 		getGoogleIdTextBox().setText(victim.getGoogleUserId());
 		
 		getView().setPictureUrl(victim.getPictureURL());
 		getView().showPicture();
 		setPictureUrl(victim.getPictureURL());
+		
+		addValuesToCustomWidgets(victim);
 	}
 	
 }

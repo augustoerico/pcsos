@@ -1,5 +1,7 @@
 package epusp.pcs.os.admin.client.presenter;
 
+import java.util.List;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -10,18 +12,20 @@ import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
 import epusp.pcs.os.shared.client.event.ClosePopupEvent;
 import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.CreatePersonPresenter;
-import epusp.pcs.os.shared.model.person.Victim;
+import epusp.pcs.os.shared.model.attribute.AttributeInfo;
+import epusp.pcs.os.shared.model.person.victim.Victim;
 
 public class CreateVictimPresenter extends CreatePersonPresenter{
 	
 	public CreateVictimPresenter(IAdminWorkspaceServiceAsync rpcService,
-			Display view, CommonWorkspaceConstants constants) {
-		super(rpcService, view, constants);
+			Display view, CommonWorkspaceConstants constants, List<AttributeInfo> customAttributes) {
+		super(rpcService, view, constants, customAttributes);
 	}
 	
 	@Override
 	public void go(HasWidgets container){
 		super.go(container);
+		addCustomAttributesToView();
 		bind();
 	}
 	
@@ -48,6 +52,8 @@ public class CreateVictimPresenter extends CreatePersonPresenter{
 				victim.setIsActive(getActiveCheckBox().getValue());
 				
 				victim.setPictureURL(getPictureUrl());
+				
+				readValuesAndSaveOnObject(victim);
 				
 				getRpcService().createVictim(victim, new AsyncCallback<Void>() {
 					

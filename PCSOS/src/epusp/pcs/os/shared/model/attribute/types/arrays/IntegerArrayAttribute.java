@@ -26,7 +26,7 @@ public class IntegerArrayAttribute extends ArrayAttribute {
 	
 	public IntegerArrayAttribute(List<Integer> values, String attributeName){
 		super(attributeName);
-		this.values = (Integer[]) values.toArray();
+		this.values = values.toArray(new Integer[values.size()]);
 	}
 	
 	public void setValue(Integer[] values) {
@@ -37,8 +37,7 @@ public class IntegerArrayAttribute extends ArrayAttribute {
 	public DataType getDataType() {
 		return DataType.INTERGER_ARRAY;
 	}
-	
-//	@Override
+
 	public List<Integer> getValuesAsList() {
 		return Arrays.asList(values);
 	}

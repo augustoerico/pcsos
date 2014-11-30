@@ -1,12 +1,15 @@
 package epusp.pcs.os.shared.client.rpc;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import epusp.pcs.os.shared.model.ICustomAttributes;
 import epusp.pcs.os.shared.model.attribute.AttributeInfo;
-import epusp.pcs.os.shared.model.person.Victim;
-import epusp.pcs.os.shared.model.person.user.Agent;
 import epusp.pcs.os.shared.model.person.user.AvailableLanguages;
 import epusp.pcs.os.shared.model.person.user.User;
+import epusp.pcs.os.shared.model.person.user.agent.Agent;
+import epusp.pcs.os.shared.model.person.victim.Victim;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 
@@ -35,4 +38,7 @@ public interface IConnectionServiceAsync {
 	void getAgent(String id, AsyncCallback<Agent> callback);
 
 	void getFullAgent(String id, AsyncCallback<Agent> callback);
+
+	void getCustomAttributesInfo(ICustomAttributes[] customAttributes,
+			AsyncCallback<List<AttributeInfo>> callback);
 }

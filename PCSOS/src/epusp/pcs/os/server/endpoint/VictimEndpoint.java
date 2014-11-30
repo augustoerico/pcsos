@@ -1,7 +1,7 @@
 package epusp.pcs.os.server.endpoint;
 
 import epusp.pcs.os.server.PMF;
-import epusp.pcs.os.shared.model.person.Victim;
+import epusp.pcs.os.shared.model.person.victim.Victim;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;

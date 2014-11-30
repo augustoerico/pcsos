@@ -3,7 +3,7 @@ package epusp.pcs.os.shared.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.person.user.agent.Agent;
 
 public class AgentCollection {
 	List<Agent> agents;

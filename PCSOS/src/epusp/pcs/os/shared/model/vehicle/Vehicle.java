@@ -14,7 +14,7 @@ import javax.jdo.annotations.Persistent;
 
 import epusp.pcs.os.shared.model.SystemObject;
 import epusp.pcs.os.shared.model.oncall.Position;
-import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.person.user.agent.Agent;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)

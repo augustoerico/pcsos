@@ -26,7 +26,7 @@ public class StringArrayAttribute extends ArrayAttribute {
 	
 	public StringArrayAttribute(List<String> values, String attributeName){
 		super(attributeName);
-		this.values = (String[]) values.toArray();
+		this.values = values.toArray(new String[values.size()]);
 	}
 	
 	public void setValue(String[] values) {
@@ -38,7 +38,6 @@ public class StringArrayAttribute extends ArrayAttribute {
 		return DataType.STRING_ARRAY;
 	}
 	
-//	@Override
 	public List<String> getValuesAsList() {
 		return Arrays.asList(values);
 	}

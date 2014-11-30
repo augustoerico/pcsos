@@ -1,18 +1,21 @@
 package epusp.pcs.os.admin.client.presenter;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.HasWidgets;
 
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
-import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.attribute.AttributeInfo;
+import epusp.pcs.os.shared.model.person.user.agent.Agent;
 
 public class UpdateAgentPresenter extends CreateAgentPresenter{
 
 	private Agent agent;
 
 	public UpdateAgentPresenter(IAdminWorkspaceServiceAsync rpcService,
-			Display view, CommonWorkspaceConstants constants, Agent agent) {
-		super(rpcService, view, constants);
+			Display view, CommonWorkspaceConstants constants, List<AttributeInfo> customAttributes, Agent agent) {
+		super(rpcService, view, constants, customAttributes);
 		this.agent = agent;
 	}
 
@@ -47,7 +50,8 @@ public class UpdateAgentPresenter extends CreateAgentPresenter{
 			
 			getLicenceListBox().setSelectedIndex(1);
 		}
-
+		
+		addValuesToCustomWidgets(agent);
 	}
 
 }

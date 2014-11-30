@@ -27,7 +27,7 @@ public class DateArrayAttribute extends ArrayAttribute {
 	
 	public DateArrayAttribute(List<Date> values, String attributeName){
 		super(attributeName);
-		this.values = (Date[]) values.toArray();
+		this.values = values.toArray(new Date[values.size()]);
 	}
 	
 	public void setValue(Date[] values) {
@@ -40,11 +40,10 @@ public class DateArrayAttribute extends ArrayAttribute {
 	}
 
 	@Override
-	public Object getValue() {
+	public Date[] getValue() {
 		return values;
 	}
 
-//	@Override
 	public List<Date> getValuesAsList() {
 		return Arrays.asList(values);
 	}

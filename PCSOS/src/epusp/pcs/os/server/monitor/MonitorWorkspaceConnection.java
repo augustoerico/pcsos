@@ -13,10 +13,10 @@ import epusp.pcs.os.server.Connection;
 import epusp.pcs.os.shared.exception.CannotLogoutExeception;
 import epusp.pcs.os.shared.model.oncall.EmergencyCall;
 import epusp.pcs.os.shared.model.oncall.Position;
-import epusp.pcs.os.shared.model.person.Victim;
 import epusp.pcs.os.shared.model.person.user.AccountTypes;
-import epusp.pcs.os.shared.model.person.user.Monitor;
 import epusp.pcs.os.shared.model.person.user.User;
+import epusp.pcs.os.shared.model.person.user.monitor.Monitor;
+import epusp.pcs.os.shared.model.person.victim.Victim;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 
 public class MonitorWorkspaceConnection extends Connection implements IMonitorWorkspaceService{

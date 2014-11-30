@@ -1,18 +1,21 @@
 package epusp.pcs.os.superuser.client.presenter;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.HasWidgets;
 
 import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
 import epusp.pcs.os.shared.client.rpc.IConnectionServiceAsync;
-import epusp.pcs.os.shared.model.person.user.Admin;
+import epusp.pcs.os.shared.model.attribute.AttributeInfo;
+import epusp.pcs.os.shared.model.person.user.admin.Admin;
 
 public class UpdateAdminPresenter extends CreateAdminPresenter {
 
 	private final Admin admin;
 	
 	public UpdateAdminPresenter(IConnectionServiceAsync rpcService,
-			Display view, CommonWorkspaceConstants constants, Admin admin) {
-		super(rpcService, view, constants);
+			Display view, CommonWorkspaceConstants constants, List<AttributeInfo> customAttributes, Admin admin) {
+		super(rpcService, view, constants, customAttributes);
 		this.admin = admin;
 	}
 	
@@ -38,6 +41,8 @@ public class UpdateAdminPresenter extends CreateAdminPresenter {
 		setPictureUrl(admin.getPictureURL());
 		getView().setPictureUrl(admin.getPictureURL());
 		getView().showPicture();
+		
+		addValuesToCustomWidgets(admin);
 	}
 
 }

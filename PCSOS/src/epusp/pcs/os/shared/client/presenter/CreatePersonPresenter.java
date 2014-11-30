@@ -1,17 +1,20 @@
 package epusp.pcs.os.shared.client.presenter;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.TextBox;
 
 import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
 import epusp.pcs.os.shared.client.rpc.IConnectionServiceAsync;
+import epusp.pcs.os.shared.model.attribute.AttributeInfo;
 
 public class CreatePersonPresenter extends CreateUpdatePresenter{
 
 	public CreatePersonPresenter(IConnectionServiceAsync rpcService,
-			Display view, CommonWorkspaceConstants constants) {
-		super(rpcService, view, constants);
+			Display view, CommonWorkspaceConstants constants, List<AttributeInfo> customAttributes) {
+		super(rpcService, view, constants, customAttributes);
 	}
 	
 	private TextBox givenName, surname, email, googleId;
@@ -60,5 +63,4 @@ public class CreatePersonPresenter extends CreateUpdatePresenter{
 	protected CheckBox getActiveCheckBox(){
 		return active;
 	}
-
 }

@@ -8,7 +8,7 @@ import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
-import epusp.pcs.os.shared.model.person.user.Agent;
+import epusp.pcs.os.shared.model.person.user.agent.Agent;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
 public class DrivingLicence extends Licence implements Serializable{
