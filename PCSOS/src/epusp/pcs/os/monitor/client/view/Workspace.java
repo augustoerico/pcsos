@@ -75,10 +75,15 @@ public class Workspace extends Composite implements Display{
 		int height = Window.getClientHeight();
 		int width = Window.getClientWidth();
 		
-		mapsArea.setWidth(width-40 + "px");
-		mapsArea.setHeight(0.9*height-20 + "px");
-		infoArea.setWidth(width-40 + "px");
-		infoArea.setHeight(0.9*height-20 + "px");
+		if(width-40 > 1200){
+			mapsArea.setWidth(width-40 + "px");
+			infoArea.setWidth(width-40 + "px");
+		}
+		
+		if(height-125 > 800){
+			mapsArea.setHeight(height-125 + "px");
+			infoArea.setHeight(height-125 + "px");
+		}
 		
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
@@ -86,10 +91,15 @@ public class Workspace extends Composite implements Display{
 				int height = Window.getClientHeight();
 				int width = Window.getClientWidth();
 				
-				mapsArea.setWidth(width-40 + "px");
-				mapsArea.setHeight(0.9*height-20 + "px");
-				infoArea.setWidth(width-40 + "px");
-				infoArea.setHeight(0.9*height-20 + "px");
+				if(width-40 > 1200){
+					mapsArea.setWidth(width-40 + "px");
+					infoArea.setWidth(width-40 + "px");
+				}
+				
+				if(height-125 > 800){
+					mapsArea.setHeight(height-125 + "px");
+					infoArea.setHeight(height-125 + "px");
+				}
 			}
 		});
 		

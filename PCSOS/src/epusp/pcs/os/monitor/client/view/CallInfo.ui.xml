@@ -20,7 +20,7 @@
 		<g:AbsolutePanel ui:field="background" width="100%"
 			height="100%" styleName="background" />
 
-		<g:AbsolutePanel width="100%" height="100%"
+		<g:AbsolutePanel ui:field="area" width="100%" height="100%"
 			styleName="{style.infoPanel}">
 			<g:VerticalPanel width="100%" height="100%">
 				<g:cell>

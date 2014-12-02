@@ -24,7 +24,7 @@ public class CallInfo extends Composite implements Display {
 	}
 	
 	@UiField
-	AbsolutePanel victimPanel, background;
+	AbsolutePanel victimPanel, background, area;
 	
 	@UiField
 	FlowPanel control;
@@ -37,9 +37,16 @@ public class CallInfo extends Composite implements Display {
 		
 		int height = Window.getClientHeight();
 		int width = Window.getClientWidth();
+				
+		if(width-40 > 1200){
+			background.setWidth(width-40 + "px");
+			area.setWidth(width-40 + "px");
+		}
 		
-		background.setWidth(width-40 + "px");
-		background.setHeight(0.9*height-20 + "px");
+		if(height-125 > 800){
+			background.setHeight(height-125 + "px");
+			area.setHeight(height-125 + "px");
+		}
 		
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
@@ -47,8 +54,15 @@ public class CallInfo extends Composite implements Display {
 				int height = Window.getClientHeight();
 				int width = Window.getClientWidth();
 				
-				background.setWidth(width-40 + "px");
-				background.setHeight(0.9*height-20 + "px");
+				if(width-40 > 1200){
+					background.setWidth(width-40 + "px");
+					area.setWidth(width-40 + "px");
+				}
+				
+				if(height-125 > 800){
+					background.setHeight(height-125 + "px");
+					area.setHeight(height-125 + "px");
+				}
 			}
 		});
 	}

@@ -16,10 +16,6 @@
 		background-size: cover;
 	}
 	
-	.tmp {
-		color: white;
-	}
-	
 	.panel {
 		padding-top: 10px;
 		padding-left: 20px;
@@ -39,6 +35,7 @@
 	}
 	
 	.taskbar {
+		min-width: 600px;
 		/* FF3.6+ */
 		background: -moz-linear-gradient(top, rgba(39, 39, 39, 1) 0%,
 			rgba(41, 41, 41, 1) 1%, rgba(45, 45, 45, 1) 3%, rgba(52, 52, 52, 0.99)
@@ -101,7 +98,7 @@
 	
 	.usernamePanel {
 		display: inline-table;
-		margin-right: 150px;
+		margin-right: 50px;
 	}
 	
 	.usernamePanel:HOVER {
@@ -134,21 +131,36 @@
 		display: inline-flex;
 		background: transparent !important;
 	}
+	
+	.logoImage{
+		padding-left: 50px;
+	}
+	
+	.logoText {
+		font-family: Georgia, Times, “Times New Roman”, serif;
+		color: #FFFFFF;
+		font-size: 17px;
+		padding: 0;
+		font-weight: bold;
+		font-style: italic;
+		text-shadow: -1px 1px 10px #A1A1A1;
+		padding-left: 10px;
+	}
 	</ui:style>
 
 	<g:AbsolutePanel width="100%" height="100%"
 		ui:field="panel">
-		<g:DockLayoutPanel unit="PX" width="100" height="100%">
+		<g:DockLayoutPanel unit="PX" width="100%" height="100%">
 
 			<g:north size="50">
 				<g:AbsolutePanel height="40px">
 					<g:HorizontalPanel width="100%" height="100%"
 						verticalAlignment="middle" horizontalAlignment="left" styleName="{style.taskbar}">
 						<g:cell width="40px">
-							<g:Image width="35px" height="auto" ui:field="logo" />
+							<g:Image width="35px" styleName="{style.logoImage}" height="auto" ui:field="logo" />
 						</g:cell>
 						<g:cell>
-							<g:Label styleName="{style.tmp}">PCS.O.S</g:Label>
+							<g:Label styleName="{style.logoText}">PCS.O.S</g:Label>
 						</g:cell>
 						<g:cell horizontalAlignment="right" verticalAlignment="middle">
 							<g:FlowPanel styleName="{style.usernamePanel}">
