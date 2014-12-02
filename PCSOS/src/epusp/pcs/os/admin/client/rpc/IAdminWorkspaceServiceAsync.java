@@ -8,9 +8,9 @@ import epusp.pcs.os.shared.client.rpc.IConnectionServiceAsync;
 import epusp.pcs.os.shared.general.MoveCursor;
 import epusp.pcs.os.shared.model.person.user.agent.Agent;
 import epusp.pcs.os.shared.model.person.victim.Victim;
-import epusp.pcs.os.shared.model.vehicle.Car;
-import epusp.pcs.os.shared.model.vehicle.Helicopter;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
+import epusp.pcs.os.shared.model.vehicle.car.Car;
+import epusp.pcs.os.shared.model.vehicle.helicopter.Helicopter;
 
 public interface IAdminWorkspaceServiceAsync extends IConnectionServiceAsync {
 
@@ -30,5 +30,9 @@ public interface IAdminWorkspaceServiceAsync extends IConnectionServiceAsync {
 	void createAgent(Agent agent, AsyncCallback<Void> callback);
 
 	void createVehicle(Vehicle vehicle, AsyncCallback<Void> callback);
+
+	void getFullCar(String id, AsyncCallback<Car> asyncCallback);
+
+	void getFullHelicopter(String id, AsyncCallback<Helicopter> asyncCallback);
 
 }

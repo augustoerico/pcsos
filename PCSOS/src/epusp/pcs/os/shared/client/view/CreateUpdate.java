@@ -139,6 +139,11 @@ public class CreateUpdate extends Composite implements Display {
 	}
 
 	@Override
+	public void clearSecondaryAttributes(){
+		secondaryAttributes.clear();
+	}
+	
+	@Override
 	public Widget asWidget(){
 		return this;
 	}

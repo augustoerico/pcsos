@@ -49,5 +49,9 @@ public class AttributeInfoLoader {
 		}else
 			attributesLoaded.onCustomAttributesLoaded();
 	}
+	
+	public AttributeInfo getAttributeInfo(String attributeName){
+		return cache.get(attributeName);
+	}
 
 }

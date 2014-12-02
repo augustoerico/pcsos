@@ -13,9 +13,9 @@ import epusp.pcs.os.shared.model.person.user.AccountTypes;
 import epusp.pcs.os.shared.model.person.user.User;
 import epusp.pcs.os.shared.model.person.user.agent.Agent;
 import epusp.pcs.os.shared.model.person.victim.Victim;
-import epusp.pcs.os.shared.model.vehicle.Car;
-import epusp.pcs.os.shared.model.vehicle.Helicopter;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
+import epusp.pcs.os.shared.model.vehicle.car.Car;
+import epusp.pcs.os.shared.model.vehicle.helicopter.Helicopter;
 
 public class AdminWorkspaceConnection extends Connection implements IAdminWorkspaceService{
 
@@ -151,5 +151,59 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 				pm.close();
 			}
 		}
+	}
+
+	@Override
+	public Car getFullCar(String id) {
+		if(isLoggedIn()){
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+
+			pm.getFetchPlan().addGroup("all_system_object_attributes");
+			pm.getFetchPlan().setMaxFetchDepth(-1);
+
+			Car car = null, detached = null;
+			try{
+				pm.currentTransaction().begin();
+				car = pm.getObjectById(Car.class, id);
+				detached = pm.detachCopy(car);
+				pm.currentTransaction().commit();
+			}catch(Exception e){
+				e.printStackTrace();
+				if (pm.currentTransaction().isActive())
+					pm.currentTransaction().rollback();
+			}finally{
+				pm.close();
+			}
+
+			return detached;
+		}
+		return null;
+	}
+
+	@Override
+	public Helicopter getFullHelicopter(String id) {
+		if(isLoggedIn()){
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+
+			pm.getFetchPlan().addGroup("all_system_object_attributes");
+			pm.getFetchPlan().setMaxFetchDepth(-1);
+
+			Helicopter car = null, detached = null;
+			try{
+				pm.currentTransaction().begin();
+				car = pm.getObjectById(Helicopter.class, id);
+				detached = pm.detachCopy(car);
+				pm.currentTransaction().commit();
+			}catch(Exception e){
+				e.printStackTrace();
+				if (pm.currentTransaction().isActive())
+					pm.currentTransaction().rollback();
+			}finally{
+				pm.close();
+			}
+
+			return detached;
+		}
+		return null;
 	}
 }

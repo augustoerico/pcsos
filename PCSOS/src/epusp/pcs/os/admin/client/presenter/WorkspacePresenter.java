@@ -42,10 +42,12 @@ import epusp.pcs.os.shared.model.person.user.agent.Agent;
 import epusp.pcs.os.shared.model.person.user.agent.AgentCustomAttributes;
 import epusp.pcs.os.shared.model.person.victim.Victim;
 import epusp.pcs.os.shared.model.person.victim.VictimCustomAttributes;
-import epusp.pcs.os.shared.model.vehicle.Car;
-import epusp.pcs.os.shared.model.vehicle.Helicopter;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 import epusp.pcs.os.shared.model.vehicle.VehicleTypes;
+import epusp.pcs.os.shared.model.vehicle.car.Car;
+import epusp.pcs.os.shared.model.vehicle.car.CarCustomProperties;
+import epusp.pcs.os.shared.model.vehicle.helicopter.Helicopter;
+import epusp.pcs.os.shared.model.vehicle.helicopter.HelicopterCustomProperties;
 
 public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 
@@ -195,11 +197,30 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 				CarTablePresenter carTablePresenter = new CarTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Car>() {
 					
 					@Override
-					public void onSelectedRow(Car objectSelected) {
+					public void onSelectedRow(final Car objectSelected) {
 						popup.setSize("800px", "500px");
-						CreateUpdatePresenter createUpdatePresenter = new UpdateCarPresenter(rpcService, new CreateUpdate(), constants, new ArrayList<AttributeInfo>(), objectSelected);
-						createUpdatePresenter.go(popup);
-						popup.center();
+						loader.loadCustomAttributes(CarCustomProperties.values(), new IAttributeInfoLoaded() {
+							@Override
+							public void onCustomAttributesLoaded() {
+								rpcService.getFullCar(objectSelected.getId(), new AsyncCallback<Car>() {
+									
+									@Override
+									public void onSuccess(Car result) {
+										List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
+										for(ICustomAttributes attribute : CarCustomProperties.values()){
+											attributes.add(attributesInfo.get(attribute.getAttributeName()));
+										}
+										CreateUpdatePresenter createUpdatePresenter = new UpdateCarPresenter(rpcService, new CreateUpdate(), constants, attributes, loader, result);
+										createUpdatePresenter.go(popup);
+										popup.center();
+									}
+									
+									@Override
+									public void onFailure(Throwable caught) {
+									}
+								});
+							}
+						});
 					}
 				});
 				carTablePresenter.go(panel);
@@ -209,11 +230,30 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 				HelicopterTablePresenter helicopterTablePresenter = new HelicopterTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Helicopter>() {
 					
 					@Override
-					public void onSelectedRow(Helicopter objectSelected) {
+					public void onSelectedRow(final Helicopter objectSelected) {
 						popup.setSize("800px", "500px");
-						CreateUpdatePresenter createUpdatePresenter = new UpdateHelicopterPresenter(rpcService, new CreateUpdate(), constants, new ArrayList<AttributeInfo>(), objectSelected);
-						createUpdatePresenter.go(popup);
-						popup.center();
+						loader.loadCustomAttributes(HelicopterCustomProperties.values(), new IAttributeInfoLoaded() {
+							@Override
+							public void onCustomAttributesLoaded() {
+								rpcService.getFullHelicopter(objectSelected.getId(), new AsyncCallback<Helicopter>() {
+									
+									@Override
+									public void onSuccess(Helicopter result) {
+										List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
+										for(ICustomAttributes attribute : HelicopterCustomProperties.values()){
+											attributes.add(attributesInfo.get(attribute.getAttributeName()));
+										}
+										CreateUpdatePresenter createUpdatePresenter = new UpdateHelicopterPresenter(rpcService, new CreateUpdate(), constants, attributes, loader, result);
+										createUpdatePresenter.go(popup);
+										popup.center();
+									}
+									
+									@Override
+									public void onFailure(Throwable caught) {
+									}
+								});
+							}
+						});
 					}
 				});
 				helicopterTablePresenter.go(panel);
@@ -303,7 +343,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 				if(vehicleHeaderButton.isEnabled()){
 					popup.setSize("800px", "500px");
 					//TODO: Solve this shit.
-					CreateUpdatePresenter createUpdatePresenter = new CreateVehiclePresenter(rpcService, new CreateUpdate(), constants, new ArrayList<AttributeInfo>());
+					CreateUpdatePresenter createUpdatePresenter = new CreateVehiclePresenter(rpcService, new CreateUpdate(), constants, loader);
 					createUpdatePresenter.go(popup);
 					popup.center();
 				}

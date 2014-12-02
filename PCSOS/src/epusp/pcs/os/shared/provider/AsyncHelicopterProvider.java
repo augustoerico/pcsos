@@ -8,7 +8,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.general.MoveCursor;
-import epusp.pcs.os.shared.model.vehicle.Helicopter;
+import epusp.pcs.os.shared.model.vehicle.helicopter.Helicopter;
 
 public class AsyncHelicopterProvider  extends AsyncProvider<Helicopter> {
 

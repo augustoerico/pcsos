@@ -64,6 +64,7 @@ public class CreateUpdatePresenter implements Presenter{
 		void addSecondaryAttribute(String label, Boolean required, Widget w);
 		void removeSecondaryAttribute(Widget w);
 		void setSaveEnabled(Boolean enabled);
+		void clearSecondaryAttributes();
 	}
 
 	private final IConnectionServiceAsync rpcService;
@@ -164,6 +165,14 @@ public class CreateUpdatePresenter implements Presenter{
 		return customAttributes;
 	}
 
+	protected void clearCustomAtttributes(){
+		customAttributes.clear();
+	}
+	
+	protected void addCustomAttribute(AttributeInfo attributeInfo){
+		customAttributes.add(attributeInfo);
+	}
+	
 	protected void addCustomAttributesToView(){
 		for(AttributeInfo attributeInfo : customAttributes){
 			if(attributeInfo.isVisable(CreateUpdatePresenter.class.getName())){

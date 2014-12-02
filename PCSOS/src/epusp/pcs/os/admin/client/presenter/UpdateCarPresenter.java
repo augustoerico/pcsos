@@ -8,17 +8,18 @@ import com.google.gwt.user.client.ui.HasWidgets;
 
 import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
 import epusp.pcs.os.shared.client.rpc.IConnectionServiceAsync;
+import epusp.pcs.os.shared.general.AttributeInfoLoader;
 import epusp.pcs.os.shared.model.attribute.AttributeInfo;
-import epusp.pcs.os.shared.model.vehicle.Car;
 import epusp.pcs.os.shared.model.vehicle.VehicleTypes;
+import epusp.pcs.os.shared.model.vehicle.car.Car;
 
 public class UpdateCarPresenter extends CreateVehiclePresenter{
 	
 	private Car car;
 
 	public UpdateCarPresenter(IConnectionServiceAsync rpcService, Display view,
-			CommonWorkspaceConstants constants, List<AttributeInfo> customAttributes, Car car) {
-		super(rpcService, view, constants, customAttributes);
+			CommonWorkspaceConstants constants, List<AttributeInfo> customAttributes, AttributeInfoLoader loader, Car car) {
+		super(rpcService, view, constants, customAttributes, loader);
 		this.car = car;
 	}
 	
@@ -42,6 +43,8 @@ public class UpdateCarPresenter extends CreateVehiclePresenter{
 		setPictureUrl(car.getImageURL());
 		getView().setPictureUrl(car.getImageURL());
 		getView().showPicture();
+		
+		addValuesToCustomWidgets(car);
 	}
 
 }

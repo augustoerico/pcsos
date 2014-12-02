@@ -19,7 +19,7 @@ import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.general.SelectedRowHandler;
-import epusp.pcs.os.shared.model.vehicle.Helicopter;
+import epusp.pcs.os.shared.model.vehicle.helicopter.Helicopter;
 import epusp.pcs.os.shared.provider.AsyncHelicopterProvider;
 
 public class HelicopterTablePresenter implements Presenter{

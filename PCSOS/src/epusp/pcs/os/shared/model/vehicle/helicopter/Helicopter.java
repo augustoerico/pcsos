@@ -1,60 +1,53 @@
-package epusp.pcs.os.shared.model.vehicle;
+package epusp.pcs.os.shared.model.vehicle.helicopter;
 
 import java.io.Serializable;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
 
 import epusp.pcs.os.shared.model.person.user.agent.Agent;
+import epusp.pcs.os.shared.model.vehicle.Vehicle;
+import epusp.pcs.os.shared.model.vehicle.VehicleTypes;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
-public class Car extends Vehicle implements Serializable{
+public class Helicopter extends Vehicle implements Serializable{
 	
 	@NotPersistent
 	private static final long serialVersionUID = 1L;
-
+	
 	@NotPersistent
 	public static int maxCarOccupants = 5;
 	
 	@NotPersistent
-	private Agent driver;
+	private Agent pilot;
 	
-	@Persistent
-	private String plate;
-	
-	public Car(String idTag, String plate){
+	public Helicopter(String idTag){
 		super(idTag);
-		this.plate = plate;
 	}
 	
-	public Agent getDriver() {
-		return driver;
+	public Agent getPilot() {
+		return pilot;
 	}
 
-	public void setDriver(Agent driver) {
-		this.driver = driver;
+	public void setPilot(Agent pilot) {
+		this.pilot = pilot;
 	}
-	
-	public String getPlate(){
-		return plate;
-	}
-	
+
 	@Override
 	public VehicleTypes getType() {
-		return VehicleTypes.Car;
+		return VehicleTypes.Helicopter;
 	}
 
 	@Override
 	public int getMaxNumberOfOccupants() {
-		return maxCarOccupants;
+		return 0;
 	}
-	
+
 	/*
 	 * Seen by Serializable
 	 */
-	public Car() {
+	public Helicopter(){
 		super();
 	}
 }

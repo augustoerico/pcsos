@@ -1,5 +1,6 @@
 package epusp.pcs.os.admin.client.presenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -17,18 +18,32 @@ import epusp.pcs.os.shared.client.event.ClosePopupEvent;
 import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.CreateUpdatePresenter;
 import epusp.pcs.os.shared.client.rpc.IConnectionServiceAsync;
+import epusp.pcs.os.shared.general.AttributeInfoLoader;
+import epusp.pcs.os.shared.general.AttributeInfoLoader.IAttributeInfoLoaded;
+import epusp.pcs.os.shared.model.ICustomAttributes;
 import epusp.pcs.os.shared.model.attribute.AttributeInfo;
-import epusp.pcs.os.shared.model.vehicle.Car;
-import epusp.pcs.os.shared.model.vehicle.Helicopter;
 import epusp.pcs.os.shared.model.vehicle.Priority;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 import epusp.pcs.os.shared.model.vehicle.VehicleTypes;
+import epusp.pcs.os.shared.model.vehicle.car.Car;
+import epusp.pcs.os.shared.model.vehicle.car.CarCustomProperties;
+import epusp.pcs.os.shared.model.vehicle.helicopter.Helicopter;
+import epusp.pcs.os.shared.model.vehicle.helicopter.HelicopterCustomProperties;
 
 public class CreateVehiclePresenter extends CreateUpdatePresenter{
 
-	public CreateVehiclePresenter(IConnectionServiceAsync rpcService,
-			Display view, CommonWorkspaceConstants constants, List<AttributeInfo> customAttributes) {
+	private final AttributeInfoLoader loader;
+	
+	protected CreateVehiclePresenter(IConnectionServiceAsync rpcService,
+			Display view, CommonWorkspaceConstants constants, List<AttributeInfo> customAttributes, AttributeInfoLoader loader) {
 		super(rpcService, view, constants, customAttributes);
+		this.loader = loader;
+	}
+	
+	public CreateVehiclePresenter(IConnectionServiceAsync rpcService,
+			Display view, CommonWorkspaceConstants constants, AttributeInfoLoader loader) {
+		super(rpcService, view, constants, new ArrayList<AttributeInfo>());
+		this.loader = loader;
 	}
 	
 	private TextBox idTag, plate;
@@ -53,25 +68,7 @@ public class CreateVehiclePresenter extends CreateUpdatePresenter{
 		view.addPrimaryAttribute(constants.tag(), true, idTag);
 		view.addPrimaryAttribute(constants.vehicleType(), true, vehicleTypes);
 		view.addPrimaryAttribute(constants.priority(), true, priority);
-		vehicleTypes.addChangeHandler(new ChangeHandler() {
 
-			@Override
-			public void onChange(ChangeEvent event) {
-				String l = vehicleTypes.getItemText(vehicleTypes.getSelectedIndex());
-				if(!l.equals(VehicleTypes.Car.name())){
-					view.removeSecondaryAttribute(plate);
-				}else{
-					switch (VehicleTypes.valueOf(l)) {
-					case Car:
-						plate = new TextBox();
-						view.addSecondaryAttribute(constants.plate(), true, plate);
-						break;
-					default:
-						break;
-					}
-				}
-			}
-		});
 		super.go(container);
 		bind();
 	}
@@ -79,6 +76,47 @@ public class CreateVehiclePresenter extends CreateUpdatePresenter{
 	private void bind(){
 		final Display view = getView();
 		view.setSaveEnabled(true);
+		
+		vehicleTypes.addChangeHandler(new ChangeHandler() {
+
+			@Override
+			public void onChange(ChangeEvent event) {
+				String l = vehicleTypes.getItemText(vehicleTypes.getSelectedIndex());
+				clearCustomAtttributes();
+				view.clearSecondaryAttributes();
+				if(!l.equals("")){
+					switch (VehicleTypes.valueOf(l)) {
+					case Car:
+						plate = new TextBox();
+						view.addPrimaryAttribute(getConstants().plate(), true, plate);
+						loader.loadCustomAttributes(CarCustomProperties.values(), new IAttributeInfoLoaded() {
+							@Override
+							public void onCustomAttributesLoaded() {
+								for(ICustomAttributes attribute : CarCustomProperties.values()){
+									addCustomAttribute(loader.getAttributeInfo(attribute.getAttributeName()));
+								}
+								addCustomAttributesToView();
+							}
+						});
+						break;
+					case Helicopter:
+						loader.loadCustomAttributes(HelicopterCustomProperties.values(), new IAttributeInfoLoaded() {
+							@Override
+							public void onCustomAttributesLoaded() {
+								for(ICustomAttributes attribute : HelicopterCustomProperties.values()){
+									addCustomAttribute(loader.getAttributeInfo(attribute.getAttributeName()));
+								}
+								addCustomAttributesToView();
+							}
+						});
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		});
+		
 		view.addSaveClickHandler(new ClickHandler() {
 			
 			@Override
@@ -100,6 +138,8 @@ public class CreateVehiclePresenter extends CreateUpdatePresenter{
 				vehicle.setImageURL(getPictureUrl());
 				
 				vehicle.setPrioraty(Priority.valueOf(priority.getItemText(priority.getSelectedIndex())));
+				
+				readValuesAndSaveOnObject(vehicle);
 				
 				getRpcService().createVehicle(vehicle, new AsyncCallback<Void>() {
 					

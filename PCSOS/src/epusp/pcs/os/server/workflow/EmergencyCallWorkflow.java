@@ -19,9 +19,9 @@ import epusp.pcs.os.shared.model.oncall.VehicleOnCall;
 import epusp.pcs.os.shared.model.person.user.agent.Agent;
 import epusp.pcs.os.shared.model.person.user.monitor.Monitor;
 import epusp.pcs.os.shared.model.person.victim.Victim;
-import epusp.pcs.os.shared.model.vehicle.Car;
-import epusp.pcs.os.shared.model.vehicle.Helicopter;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
+import epusp.pcs.os.shared.model.vehicle.car.Car;
+import epusp.pcs.os.shared.model.vehicle.helicopter.Helicopter;
 
 public enum EmergencyCallWorkflow {
 	INSTANCE;
