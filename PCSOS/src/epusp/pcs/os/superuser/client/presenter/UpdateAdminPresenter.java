@@ -26,7 +26,10 @@ public class UpdateAdminPresenter extends CreateAdminPresenter {
 		getSurnameTextBox().setText(admin.getSurname());
 		getSurnameTextBox().setReadOnly(true);
 
-		getGivenNameTextBox().setText(admin.getName() + " " + admin.getSecondName());
+		if(admin.getSecondName() != null)
+			getGivenNameTextBox().setText(admin.getName() + " " + admin.getSecondName());
+		else
+			getGivenNameTextBox().setText(admin.getName());
 		getGivenNameTextBox().setReadOnly(true);
 
 		getEmailTextBox().setText(admin.getEmail());

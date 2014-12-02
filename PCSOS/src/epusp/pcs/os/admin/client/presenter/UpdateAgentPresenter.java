@@ -26,7 +26,10 @@ public class UpdateAgentPresenter extends CreateAgentPresenter{
 		getSurnameTextBox().setText(agent.getSurname());
 		getSurnameTextBox().setReadOnly(true);
 
-		getGivenNameTextBox().setText(agent.getName() + " " + agent.getSecondName());
+		if(agent.getSecondName() != null)
+			getGivenNameTextBox().setText(agent.getName() + " " + agent.getSecondName());
+		else
+			getGivenNameTextBox().setText(agent.getName());
 		getGivenNameTextBox().setReadOnly(true);
 
 		getEmailTextBox().setText(agent.getEmail());

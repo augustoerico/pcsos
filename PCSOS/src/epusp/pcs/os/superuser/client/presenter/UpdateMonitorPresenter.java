@@ -26,7 +26,10 @@ public class UpdateMonitorPresenter extends CreateMonitorPresenter{
 		getSurnameTextBox().setText(monitor.getSurname());
 		getSurnameTextBox().setReadOnly(true);
 
-		getGivenNameTextBox().setText(monitor.getName() + " " + monitor.getSecondName());
+		if(monitor.getSecondName() != null)
+			getGivenNameTextBox().setText(monitor.getName() + " " + monitor.getSecondName());
+		else
+			getGivenNameTextBox().setText(monitor.getName());
 		getGivenNameTextBox().setReadOnly(true);
 
 		getEmailTextBox().setText(monitor.getEmail());

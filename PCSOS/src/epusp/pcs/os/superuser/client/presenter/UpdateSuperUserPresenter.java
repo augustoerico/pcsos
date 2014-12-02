@@ -26,7 +26,10 @@ public class UpdateSuperUserPresenter extends CreateSuperUserPresenter {
 		getSurnameTextBox().setText(superUser.getSurname());
 		getSurnameTextBox().setReadOnly(true);
 
-		getGivenNameTextBox().setText(superUser.getName() + " " + superUser.getSecondName());
+		if(superUser.getSecondName() != null)
+			getGivenNameTextBox().setText(superUser.getName() + " " + superUser.getSecondName());
+		else
+			getGivenNameTextBox().setText(superUser.getName());
 		getGivenNameTextBox().setReadOnly(true);
 
 		getEmailTextBox().setText(superUser.getEmail());

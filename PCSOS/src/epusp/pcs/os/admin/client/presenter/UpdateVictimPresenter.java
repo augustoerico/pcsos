@@ -24,7 +24,11 @@ public class UpdateVictimPresenter extends CreateVictimPresenter {
 		super.go(container);
 		
 		getGivenNameTextBox().setReadOnly(true);
-		getGivenNameTextBox().setText(victim.getName() + " " + victim.getSecondName());
+		
+		if(victim.getSecondName() != null)
+			getGivenNameTextBox().setText(victim.getName() + " " + victim.getSecondName());
+		else
+			getGivenNameTextBox().setText(victim.getName());
 		
 		getActiveCheckBox().setValue(victim.isActive());
 		
