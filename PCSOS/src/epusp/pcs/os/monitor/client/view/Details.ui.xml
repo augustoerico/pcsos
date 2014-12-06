@@ -1,17 +1,20 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:f="urn:import:epusp.pcs.os.shared.client.panel">
 	<ui:style type="epusp.pcs.os.monitor.client.view.Details.Style">
 	.picture {
 		border-radius: 5px;
 	}
 	
-	.abPanel{
+	.abPanel {
 		float: left;
 	}
 	
-	.panel{
+	.panel {
 		padding-bottom: 10px;
+		-webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
+        break-inside: avoid;
 	}
 	
 	.label {
@@ -34,28 +37,25 @@
 		padding-left: 15px;
 		font-variant: small-caps;
 	}
+	
+	.captionPanel {
+		border-style: none;
+		background-color: red;
+	}
+	
+	.categoriesPanel{
+		color: white;
+		max-width: 1705px;
+		overflow-x: auto;
+		overflow-y: hidden;
+	}
 	</ui:style>
 
-	<g:AbsolutePanel styleName="{style.abPanel}">
-		<g:VerticalPanel ui:field="panel">
-			<g:cell>
-				<g:Label ui:field="infoHeader" />
-			</g:cell>
-			<g:cell>
-				<g:HorizontalPanel>
-					<g:cell>
-						<g:Image height="100px" width="auto" styleName="{style.picture}"
-							ui:field="picture" />
-					</g:cell>
-					<g:cell>
-						<g:VerticalPanel ui:field="staticAttributes" />
-					</g:cell>
-				</g:HorizontalPanel>
-			</g:cell>
-			<g:cell>
-				<g:VerticalPanel ui:field="dynamicAttributes"/>
-			</g:cell>
-		</g:VerticalPanel>
-
-	</g:AbsolutePanel>
+	<f:HorizontalDivPanel ui:field="infoPanel">
+		<f:VerticalDivPanel ui:field="header">
+			<g:Image height="100px" width="auto" styleName="{style.picture}"
+				ui:field="picture" />
+		</f:VerticalDivPanel>
+		<f:HorizontalDivPanel ui:field="categoriesPanel" />
+	</f:HorizontalDivPanel>
 </ui:UiBinder> 

@@ -17,15 +17,14 @@
 	opacity: 1.0 !important;
 }
 
-.infoItem {
-	padding-left: 10px;
-	float: left;
-}
-
 .detailsPanel {
 	padding-top: 10px;
 }
 
 .gwt-StackLayoutPanel .gwt-StackLayoutPanelContent{
 	background-color: transparent !important;
+}
+
+.captionPanelStyle{
+	color: white;
 }

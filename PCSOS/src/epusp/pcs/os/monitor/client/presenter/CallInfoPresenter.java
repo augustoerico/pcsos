@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.CaptionPanel;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -33,6 +34,7 @@ public class CallInfoPresenter implements Presenter, FinishCallHandler{
 		void addControl(Widget w);
 		Widget asWidget();
 		void clear();
+		void setCaptionText(String text);
 	}
 	
 	private IMonitorWorkspaceServiceAsync rpcService; 
@@ -73,15 +75,26 @@ public class CallInfoPresenter implements Presenter, FinishCallHandler{
 		AbsolutePanel container = new AbsolutePanel();
 		
 		FlowPanel infoPanel = new FlowPanel();
+		infoPanel.addStyleName("inlineFp");
 		
+		CaptionPanel vehiclePanel = new CaptionPanel(constants.vehicle());
+		infoPanel.add(vehiclePanel);
+		vehiclePanel.addStyleName("captionPanelStyle");
 		DetailsPresenter details = new DetailsPresenter(vehicle, new Details(), rpcService, constants);
-		details.go(infoPanel);
+		details.go(vehiclePanel);
+		
+		CaptionPanel agentsPanel = new CaptionPanel(constants.agents());
+		infoPanel.add(agentsPanel);
+		agentsPanel.addStyleName("captionPanelStyle");
+		
+		FlowPanel agentsList = new FlowPanel();
+		agentsList.addStyleName("inlineFp");
+		agentsPanel.add(agentsList);
 		
 		for(Agent agent : agents){
 			DetailsPresenter agentDetails = new DetailsPresenter(agent, new Details(), rpcService, constants);
 			AbsolutePanel ap = new AbsolutePanel();
-			ap.setStyleName("infoItem");
-			infoPanel.add(ap);
+			agentsList.add(ap);
 			agentDetails.go(ap);
 		}
 		
@@ -114,6 +127,8 @@ public class CallInfoPresenter implements Presenter, FinishCallHandler{
 				pti.addStyleDependentName("view");
 			}
 		});
+		
+		view.setCaptionText(constants.victim());
 	}
 	
 	public void showVictim(Victim victim){

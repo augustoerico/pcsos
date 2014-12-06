@@ -9,10 +9,27 @@
 	.victimDetailsPanel {
 		padding-left: 5px;
 		padding-top: 10px;
+		padding-bottom: 10px;
+		padding-right: 5px;
 	}
 	
 	.infoPanel {
 		
+	}
+	
+	.captionHolder {
+		margin: 10px;
+	}
+	
+	.caption {
+		color: white;
+		border-color: white;
+		border-bottom-style: solid;
+		border-bottom-width: medium;
+	}
+	
+	.agentsPanel {
+		padding-left: 10px;
 	}
 	</ui:style>
 
@@ -22,30 +39,28 @@
 
 		<g:AbsolutePanel ui:field="area" width="100%" height="100%"
 			styleName="{style.infoPanel}">
-			<g:VerticalPanel width="100%" height="100%">
-				<g:cell>
-					<g:HorizontalPanel>
-						<g:cell height="100%" width="230px">
-							<g:AbsolutePanel styleName="{style.victimDetailsPanel}"
-								ui:field="victimPanel" />
+
+			<g:DockLayoutPanel width="100%" height="100%" unit="PX">
+				<g:north size="300">
+					<g:AbsolutePanel styleName="{style.captionHolder}">
+						<g:CaptionPanel ui:field="caption" styleName="{style.caption}">
+							<g:AbsolutePanel ui:field="victimPanel"
+								styleName="{style.victimDetailsPanel}" width="100%" height="100%" />
+						</g:CaptionPanel>
+					</g:AbsolutePanel>
+				</g:north>
+				<g:center>
+					<g:VerticalPanel width="100%" height="100%"
+						styleName="{style.agentsPanel}">
+						<g:cell width="100%" height="50px">
+							<g:FlowPanel ui:field="control" styleName="{style.controlPanel}" />
 						</g:cell>
-
-						<g:cell>
-							<g:VerticalPanel width="100%" height="100%">
-								<g:cell width="100%" height="50px">
-									<g:FlowPanel ui:field="control" styleName="{style.controlPanel}" />
-								</g:cell>
-								<g:cell width="100%">
-									<g:DeckLayoutPanel width="400px" height="400px"
-										ui:field="infoPanel" />
-								</g:cell>
-							</g:VerticalPanel>
+						<g:cell height="100%" width="100%">
+							<g:DeckLayoutPanel height="470px" ui:field="infoPanel" />
 						</g:cell>
-
-					</g:HorizontalPanel>
-				</g:cell>
-
-			</g:VerticalPanel>
+					</g:VerticalPanel>
+				</g:center>
+			</g:DockLayoutPanel>
 		</g:AbsolutePanel>
 	</g:AbsolutePanel>
 </ui:UiBinder> 

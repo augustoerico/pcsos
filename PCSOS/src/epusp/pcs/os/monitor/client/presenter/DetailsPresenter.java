@@ -25,11 +25,10 @@ import epusp.pcs.os.shared.model.vehicle.Vehicle;
 public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 	
 	public interface Display{
-		void setHeader(String text);
 		void setPicture(String url);
-		void addStaticAttribute(String label, String text);
 		void addDynamicAttribute(Category category, String label, String value);
 		Widget asWidget();
+		void addHeaderAttribute(String label, String text);
 	}
 	
 	private Display view;
@@ -82,17 +81,17 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 		
 		if(item instanceof Victim){
 			Victim victim = (Victim) item;
-			view.addStaticAttribute(constants.givenName(), victim.getName());
-			view.addStaticAttribute(constants.surname(), victim.getSurname());
+			view.addHeaderAttribute(constants.givenName(), victim.getName());
+			view.addHeaderAttribute(constants.surname(), victim.getSurname());
 			view.setPicture(victim.getPictureURL());
 		}else if(item instanceof Vehicle){
 			Vehicle vehicle = (Vehicle) item;
-			view.addStaticAttribute("Priority",vehicle.getPriority().toString());
+			view.addHeaderAttribute(constants.priority(), vehicle.getPriority().toString());
 			view.setPicture(vehicle.getImageURL());
 		}else if(item instanceof Agent){
 			Agent agent = (Agent) item;
-			view.addStaticAttribute(constants.givenName(), agent.getName());
-			view.addStaticAttribute(constants.surname(), agent.getSurname());
+			view.addHeaderAttribute(constants.givenName(), agent.getName());
+			view.addHeaderAttribute(constants.surname(), agent.getSurname());
 			view.setPicture(agent.getPictureURL());
 		}
 		

@@ -30,4 +30,10 @@ public interface MonitorWorkspaceConstants extends CommonWorkspaceConstants{
 	
 	@DefaultStringValue("Last Name")
 	String surname();
+	
+	@DefaultStringValue("Vehicle")
+	String vehicle();
+	
+	@DefaultStringValue("Agents")
+	String agents();
 }

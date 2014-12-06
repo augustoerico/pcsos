@@ -6,14 +6,17 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.CaptionPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import epusp.pcs.os.monitor.client.presenter.DetailsPresenter.Display;
+import epusp.pcs.os.shared.client.panel.HorizontalDivPanel;
+import epusp.pcs.os.shared.client.panel.VerticalDivPanel;
+import epusp.pcs.os.shared.client.widget.DisplayGroupPanel;
 import epusp.pcs.os.shared.model.attribute.Category;
 
 public class Details extends Composite implements Display{
@@ -21,20 +24,22 @@ public class Details extends Composite implements Display{
 	private static DetailsUiBinder uiBinder = GWT.create(DetailsUiBinder.class);
 	
 	@UiField
-	Label infoHeader;
-	
-	@UiField
 	Image picture;
 	
 	@UiField
-	VerticalPanel panel, staticAttributes, dynamicAttributes;
+	VerticalDivPanel header;
 	
-	HashMap<Category, FlowPanel> categories = new HashMap<Category, FlowPanel>();
+	@UiField
+	HorizontalDivPanel categoriesPanel;
+	
+	HashMap<Category, DisplayGroupPanel> categories = new HashMap<Category, DisplayGroupPanel>();
 	
 	public interface Style extends CssResource{
 		String label();
 		String text();
 		String panel();
+		String captionPanel();
+		String categoriesPanel();
 	}
 	
 	@UiField
@@ -45,6 +50,7 @@ public class Details extends Composite implements Display{
 
 	public Details() {
 		initWidget(uiBinder.createAndBindUi(this));
+		categoriesPanel.addStyleName(style.categoriesPanel());
 	}
 	
 	private FlowPanel addAttribute(String label, String text){
@@ -64,17 +70,20 @@ public class Details extends Composite implements Display{
 	@Override
 	public void addDynamicAttribute(Category category, String label,
 			String value) {
-		dynamicAttributes.add(addAttribute(label, value));
+		if(!categories.containsKey(category)){
+			DisplayGroupPanel categoryPanel = new DisplayGroupPanel(200);
+			CaptionPanel captionPanel = new CaptionPanel(category.toString());
+			captionPanel.add(categoryPanel);
+			categoriesPanel.add(captionPanel);
+			categories.put(category, categoryPanel);
+		}
+		DisplayGroupPanel categoryPanel = categories.get(category);
+		categoryPanel.add(addAttribute(label, value));
 	}
 	
 	@Override
-	public void addStaticAttribute(String label, String text){
-		staticAttributes.add(addAttribute(label, text));
-	}
-
-	@Override
-	public void setHeader(String text) {
-		infoHeader.setText(text);
+	public void addHeaderAttribute(String label, String text){
+		header.add(addAttribute(label, text));
 	}
 
 	@Override

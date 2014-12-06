@@ -7,6 +7,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.CaptionPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -31,6 +32,9 @@ public class CallInfo extends Composite implements Display {
 	
 	@UiField
 	DeckLayoutPanel infoPanel;
+	
+	@UiField
+	CaptionPanel caption;
 	
 	public CallInfo(){
 		initWidget(uiBinder.createAndBindUi(this));
@@ -81,6 +85,11 @@ public class CallInfo extends Composite implements Display {
 	public HasWidgets getVictimPanel(){
 		return victimPanel;
 	}
+	
+	@Override
+	public void setCaptionText(String text){
+		caption.setCaptionText(text);
+	}
 
 	@Override
 	public void addControl(Widget w) {
@@ -93,7 +102,7 @@ public class CallInfo extends Composite implements Display {
 	@Override
 	public void addInfo(Widget w) {
 		AbsolutePanel p = new AbsolutePanel();
-		p.setSize("100%", "500px");
+		p.setSize("100%", "470px");
 		p.addStyleName("detailsPanel");
 		p.add(w);
 		infoPanel.add(p);
