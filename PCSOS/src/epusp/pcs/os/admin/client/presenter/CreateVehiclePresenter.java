@@ -56,12 +56,12 @@ public class CreateVehiclePresenter extends CreateUpdatePresenter{
 		vehicleTypes = new ListBox();
 		vehicleTypes.addItem("");
 		for(VehicleTypes type : VehicleTypes.values()){
-			vehicleTypes.addItem(type.name());
+			vehicleTypes.addItem(type.getText(), type.name());
 		}
 		
 		priority = new ListBox();
 		for(Priority p : Priority.values()){
-			priority.addItem(p.name());
+			priority.addItem(p.getText(), p.name());
 		}
 		
 		idTag = new TextBox();
@@ -81,7 +81,7 @@ public class CreateVehiclePresenter extends CreateUpdatePresenter{
 
 			@Override
 			public void onChange(ChangeEvent event) {
-				String l = vehicleTypes.getItemText(vehicleTypes.getSelectedIndex());
+				String l = vehicleTypes.getValue(vehicleTypes.getSelectedIndex());
 				clearCustomAtttributes();
 				view.clearSecondaryAttributes();
 				if(!l.equals("")){
@@ -124,7 +124,7 @@ public class CreateVehiclePresenter extends CreateUpdatePresenter{
 				
 				Vehicle vehicle = null;
 				
-				switch(VehicleTypes.valueOf(vehicleTypes.getItemText(vehicleTypes.getSelectedIndex()))){
+				switch(VehicleTypes.valueOf(vehicleTypes.getValue(vehicleTypes.getSelectedIndex()))){
 				case Car:
 					vehicle = new Car(idTag.getText(), plate.getText());
 					break;
@@ -137,7 +137,7 @@ public class CreateVehiclePresenter extends CreateUpdatePresenter{
 				
 				vehicle.setImageURL(getPictureUrl());
 				
-				vehicle.setPrioraty(Priority.valueOf(priority.getItemText(priority.getSelectedIndex())));
+				vehicle.setPrioraty(Priority.valueOf(priority.getValue(priority.getSelectedIndex())));
 				
 				readValuesAndSaveOnObject(vehicle);
 				

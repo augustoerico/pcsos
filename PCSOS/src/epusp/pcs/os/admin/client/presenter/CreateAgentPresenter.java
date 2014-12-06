@@ -53,14 +53,14 @@ public class CreateAgentPresenter extends CreatePersonPresenter {
 		view.addSecondaryAttribute(constants.effectiveUntil(), false, effectiveUntil);
 		licence.addItem("");
 		for(LicenceTypes type : LicenceTypes.values()){
-			licence.addItem(type.name());
+			licence.addItem(type.getText(), type.name());
 		}
 		view.addSecondaryAttribute(constants.licence(), false, licence);
 		licence.addChangeHandler(new ChangeHandler() {
 			
 			@Override
 			public void onChange(ChangeEvent event) {
-				String l = licence.getItemText(licence.getSelectedIndex());
+				String l = licence.getValue(licence.getSelectedIndex());
 				if(l.equals("")){
 					view.removeSecondaryAttribute(category);
 					view.removeSecondaryAttribute(isAcategory);
@@ -114,7 +114,7 @@ public class CreateAgentPresenter extends CreatePersonPresenter {
 				
 				if(licence.getSelectedIndex() != 0){
 					 
-					String licenceType = licence.getItemText(licence.getSelectedIndex());
+					String licenceType = licence.getValue(licence.getSelectedIndex());
 					Licence l = null;
 					
 					switch (LicenceTypes.valueOf(licenceType)) {

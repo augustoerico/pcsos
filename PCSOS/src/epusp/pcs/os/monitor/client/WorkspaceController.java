@@ -119,7 +119,7 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 		callInfoPresenter.go(workspacePresenter.getInfoArea());
 		preferencesPresenter = new PreferencesPresenter(monitorService, new Preferences(), constants);
 		preferencesPresenter.go(preferencesPopup);
-		reinforcementsPresenter = new ReinforcementsPresenter(monitorService, new Reinforcements(), constants);
+		reinforcementsPresenter = new ReinforcementsPresenter(monitorService, new Reinforcements());
 		reinforcementsPresenter.go(workspacePresenter.getReinforcementsArea());
 		timer.scheduleRepeating(2_000);
 		bind();

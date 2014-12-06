@@ -63,4 +63,22 @@ public interface CommonWorkspaceConstants extends Constants{
 	
 	@DefaultStringValue("Preferred language")
 	String preferredLanguage();
+	
+	@DefaultStringValue("Primary")
+	String primary();
+	
+	@DefaultStringValue("Support")
+	String support();
+	
+	@DefaultStringValue("Physical Profile")
+	String physicalProfile();
+	
+	@DefaultStringValue("Medical Data")
+	String medicalData();
+	
+	@DefaultStringValue("Personal Vehicle")
+	String personalVehicle();
+	
+	@DefaultStringValue("Driving Licence")
+	String drivingLicence();
 }

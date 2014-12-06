@@ -67,7 +67,7 @@ public class HelicopterTablePresenter implements Presenter{
 		TextColumn<Helicopter> priorityColumn = new TextColumn<Helicopter>() {
 			@Override
 			public String getValue(Helicopter object) {
-				return object.getPriority().name();
+				return object.getPriority().getText();
 			}
 		};
 

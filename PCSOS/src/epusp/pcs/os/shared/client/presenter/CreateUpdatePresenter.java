@@ -565,7 +565,7 @@ public class CreateUpdatePresenter implements Presenter{
 	protected int getItemIndex(ListBox listBox, String item){;
 		int indexToFind = -1;
 		for (int i=0; i<listBox.getItemCount(); i++) {
-			if (listBox.getItemText(i).equals(item)) {
+			if (listBox.getValue(i).equals(item)) {
 				indexToFind = i;
 				break;
 			}

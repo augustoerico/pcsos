@@ -76,7 +76,7 @@ public class CarTablePresenter implements Presenter{
 		TextColumn<Car> priorityColumn = new TextColumn<Car>() {
 			@Override
 			public String getValue(Car object) {
-				return object.getPriority().name();
+				return object.getPriority().getText();
 			}
 		};
 

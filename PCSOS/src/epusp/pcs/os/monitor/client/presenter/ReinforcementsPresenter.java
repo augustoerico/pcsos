@@ -12,7 +12,6 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
 import epusp.pcs.os.monitor.client.event.FinishCallEvent;
 import epusp.pcs.os.monitor.client.event.FinishCallEvent.FinishCallHandler;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
@@ -42,17 +41,14 @@ public class ReinforcementsPresenter implements Presenter, FinishCallHandler {
 
 	private Display view;
 
-	private MonitorWorkspaceConstants constants;
-
 	private HashMap<String, Widget> items = new HashMap<String, Widget>();
 	private HashMap<String, Boolean> selectedItems = new HashMap<String, Boolean>();
 	private HashMap<String, Vehicle> vehicles = new HashMap<String, Vehicle>();
 	private List<Vehicle> choosenVehicles = new ArrayList<Vehicle>();
 
-	public ReinforcementsPresenter(IMonitorWorkspaceServiceAsync monitorService, Display view, MonitorWorkspaceConstants constants){
+	public ReinforcementsPresenter(IMonitorWorkspaceServiceAsync monitorService, Display view){
 		this.monitorService = monitorService;
 		this.view = view;
-		this.constants = constants;
 		
 		EventBus.get().addHandler(FinishCallEvent.TYPE, this);
 	}
@@ -156,19 +152,9 @@ public class ReinforcementsPresenter implements Presenter, FinishCallHandler {
 					choosenVehicles.remove(vehicle.getIdTag());
 				}
 
-				for(final Vehicle vehicle : vehiclesToAdd){
-					switch(vehicle.getType()){
-					case Car:
-						if(!view.hasType(vehicle.getType().name()))
-							view.addType(vehicle.getType().name(), new Label(constants.car()));
-						break;
-					case Helicopter:
-						if(!view.hasType(vehicle.getType().name()))
-							view.addType(vehicle.getType().name(), new Label(constants.helicopter()));						
-						break;
-					default:
-						break;
-					}
+				for(final Vehicle vehicle : vehiclesToAdd){					
+					if(!view.hasType(vehicle.getType().name()))
+						view.addType(vehicle.getType().name(), new Label(vehicle.getType().getText()));
 
 					vehicles.put(vehicle.getIdTag(), vehicle);
 

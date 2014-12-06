@@ -17,7 +17,6 @@ import epusp.pcs.os.monitor.client.presenter.DetailsPresenter.Display;
 import epusp.pcs.os.shared.client.panel.HorizontalDivPanel;
 import epusp.pcs.os.shared.client.panel.VerticalDivPanel;
 import epusp.pcs.os.shared.client.widget.DisplayGroupPanel;
-import epusp.pcs.os.shared.model.attribute.Category;
 
 public class Details extends Composite implements Display{
 
@@ -32,7 +31,7 @@ public class Details extends Composite implements Display{
 	@UiField
 	HorizontalDivPanel categoriesPanel;
 	
-	HashMap<Category, DisplayGroupPanel> categories = new HashMap<Category, DisplayGroupPanel>();
+	HashMap<String, DisplayGroupPanel> categories = new HashMap<String, DisplayGroupPanel>();
 	
 	public interface Style extends CssResource{
 		String label();
@@ -68,11 +67,11 @@ public class Details extends Composite implements Display{
 	}
 	
 	@Override
-	public void addDynamicAttribute(Category category, String label,
+	public void addDynamicAttribute(String category, String label,
 			String value) {
 		if(!categories.containsKey(category)){
 			DisplayGroupPanel categoryPanel = new DisplayGroupPanel(200);
-			CaptionPanel captionPanel = new CaptionPanel(category.toString());
+			CaptionPanel captionPanel = new CaptionPanel(category);
 			captionPanel.add(categoryPanel);
 			categoriesPanel.add(captionPanel);
 			categories.put(category, categoryPanel);

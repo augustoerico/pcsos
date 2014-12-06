@@ -16,7 +16,6 @@ import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.general.RPCRequestTracker;
 import epusp.pcs.os.shared.model.SystemObject;
 import epusp.pcs.os.shared.model.attribute.AttributeInfo;
-import epusp.pcs.os.shared.model.attribute.Category;
 import epusp.pcs.os.shared.model.attribute.IAttribute;
 import epusp.pcs.os.shared.model.person.user.agent.Agent;
 import epusp.pcs.os.shared.model.person.victim.Victim;
@@ -26,7 +25,7 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 	
 	public interface Display{
 		void setPicture(String url);
-		void addDynamicAttribute(Category category, String label, String value);
+		void addDynamicAttribute(String category, String label, String value);
 		Widget asWidget();
 		void addHeaderAttribute(String label, String text);
 	}
@@ -86,7 +85,7 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 			view.setPicture(victim.getPictureURL());
 		}else if(item instanceof Vehicle){
 			Vehicle vehicle = (Vehicle) item;
-			view.addHeaderAttribute(constants.priority(), vehicle.getPriority().toString());
+			view.addHeaderAttribute(constants.priority(), vehicle.getPriority().getText());
 			view.setPicture(vehicle.getImageURL());
 		}else if(item instanceof Agent){
 			Agent agent = (Agent) item;
@@ -109,7 +108,7 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 	public void onAttributeInfoLoaded(LoadedAttributeInfoEvent loadedAttributeInfoEvent) {
 		for(IAttribute attribute : item.getAllAttributes()){
 			AttributeInfo info = attributeInfo.get(attribute.getAttributeName());
-			view.addDynamicAttribute(info.getCategory(), info.getLabel(locale), attribute.getValue().toString());
+			view.addDynamicAttribute(info.getCategory().getText(), info.getLabel(locale), attribute.getValue().toString());
 		}
 	}	
 }

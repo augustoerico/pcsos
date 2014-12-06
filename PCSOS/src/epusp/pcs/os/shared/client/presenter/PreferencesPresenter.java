@@ -45,7 +45,16 @@ public class PreferencesPresenter implements Presenter{
 		container.clear();
 
 		for(AvailableLanguages language : AvailableLanguages.values()){
-			view.getLanguages().addItem(language.name());
+			switch (language) {
+			case ENGLISH:
+				view.getLanguages().addItem("English", language.name());
+				break;
+			case PORTUGUES:
+				view.getLanguages().addItem("Português", language.name());
+				break;
+			default:
+				break;
+			}
 		}
 
 		rpcService.getUserLanguage(new AsyncCallback<AvailableLanguages>() {
@@ -130,7 +139,7 @@ public class PreferencesPresenter implements Presenter{
 
 	private int getItemIndex(String text){
 		for(int i = 0; i < view.getLanguages().getItemCount(); i++){
-			if(view.getLanguages().getItemText(i).equals(text))
+			if(view.getLanguages().getValue(i).equals(text))
 				return i;
 		}
 
