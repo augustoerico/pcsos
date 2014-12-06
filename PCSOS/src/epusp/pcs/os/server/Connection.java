@@ -856,15 +856,18 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 
 			PersistenceManager pm = PMF.get().getPersistenceManager();
 
+			System.out.println("Changing preferred language for " + user.getEmail() + " to " + language.name());
+			
+			pm = PMF.get().getPersistenceManager();
 			try{
 				pm.currentTransaction().begin();
 				pm.makePersistent(user);
 				pm.currentTransaction().commit();
-			}catch (Exception e){
+			}catch(Exception e){
 				e.printStackTrace();
 				if(pm.currentTransaction().isActive())
 					pm.currentTransaction().rollback();
-			}finally{
+			}finally{				
 				pm.close();
 			}
 		}
@@ -891,9 +894,9 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 			}finally{				
 				pm.close();
 			}
-
-			pm = PMF.get().getPersistenceManager();
+			
 			if(vehicle == null){
+				pm = PMF.get().getPersistenceManager();
 				try{
 					vehicle = pm.getObjectById(Helicopter.class, vehicleId);
 				}catch(Exception e){

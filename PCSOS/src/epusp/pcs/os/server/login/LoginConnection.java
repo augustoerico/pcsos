@@ -83,68 +83,72 @@ public class LoginConnection extends Connection implements ILoginService{
 				PersistenceManager pm = PMF.get().getPersistenceManager();
 
 				pm = PMF.get().getPersistenceManager();
-				User user = null;
+				User user = null, detached = null;
 				try{
 					user = pm.getObjectById(Monitor.class, userEmail);
+					detached = pm.detachCopy(user);
 				}catch(Exception e){
 				}finally{				
 					pm.close();
 				}
 
-				pm = PMF.get().getPersistenceManager();
-				if(user == null){
+				if(detached == null){
+					pm = PMF.get().getPersistenceManager();
 					try{
 						user = pm.getObjectById(Admin.class, userEmail);
+						detached = pm.detachCopy(user);
 					}catch(Exception e){
 					}finally{
 						pm.close();
 					}
 				}
 
-				pm = PMF.get().getPersistenceManager();
-				if(user == null){
+				if(detached == null){
+					pm = PMF.get().getPersistenceManager();
 					try{
 						user = pm.getObjectById(Auditor.class, userEmail);
+						detached = pm.detachCopy(user);
 					}catch(Exception e){
 					}finally{
 						pm.close();
 					}
 				}
 
-				pm = PMF.get().getPersistenceManager();
-				if(user == null){
+				if(detached == null){
+					pm = PMF.get().getPersistenceManager();
 					try{
 						user = pm.getObjectById(SuperUser.class, userEmail);
+						detached = pm.detachCopy(user);
 					}catch(Exception e){
 					}finally{
 						pm.close();
 					}
 				}
 
-				if(user != null && user.isActive()){
+				if(detached != null && detached.isActive()){
 					
 					if(!userPicture.equals(user.getPictureURL())){
-						user.setPictureURL(userPicture);
+						detached.setPictureURL(userPicture);
 						
 						Admin admin = null;
 						Monitor monitor = null;
 						Auditor auditor = null;
 						SuperUser superUser = null;
-						switch (user.getType()) {
+						switch (detached.getType()) {
 						case Admin:
-							admin = (Admin) user;
+							admin = (Admin) detached;
 							break;
 						case Auditor:
-							auditor = (Auditor) user;
+							auditor = (Auditor) detached;
 							break;
 						case Monitor:
-							monitor = (Monitor) user;
+							monitor = (Monitor) detached;
 							break;
 						case SuperUser:
-							superUser = (SuperUser) user;
+							superUser = (SuperUser) detached;
 							break;
 						default:
-							System.out.println("Denied access to " + user.getEmail());
+							System.out.println("Denied access to " + detached.getEmail());
 							return null;
 						}
 						
@@ -172,7 +176,7 @@ public class LoginConnection extends Connection implements ILoginService{
 
 					LoginConfig config = new LoginConfig();
 
-					switch (user.getPreferedLanguage()) {
+					switch (detached.getPreferedLanguage()) {
 					case ENGLISH:
 						config.setLocale("en");
 						break;
@@ -184,20 +188,20 @@ public class LoginConnection extends Connection implements ILoginService{
 						break;
 					}
 					
-					String key = super.authenticationManager.login(user);
+					String key = super.authenticationManager.login(detached);
 					config.setKey(key);
 
-					switch(user.getType()){
+					switch(detached.getType()){
 					case Admin:
-						System.out.println("Admin " + user.getEmail() + " has logged in.");
+						System.out.println("Admin " + detached.getEmail() + " has logged in.");
 						config.setUrlPath("AdminWorkspace.html");
 						return config;
 					case Auditor:
-						System.out.println("Aditor " + user.getEmail() + " has logged in.");
+						System.out.println("Aditor " + detached.getEmail() + " has logged in.");
 						config.setUrlPath("todo");
 						return config;
 					case Monitor:
-						System.out.println("Monitor " + user.getEmail() + " has logged in.");
+						System.out.println("Monitor " + detached.getEmail() + " has logged in.");
 						config.setUrlPath("MonitorWorkspace.html");
 						return config;
 					case SuperUser:
@@ -205,7 +209,7 @@ public class LoginConnection extends Connection implements ILoginService{
 						config.setUrlPath("SuperUserWorkspace.html");
 						return config;
 					default:
-						System.out.println("Denied access to " + user.getEmail());
+						System.out.println("Denied access to " + detached.getEmail());
 						throw new DeniedAccess();
 					}
 				}else

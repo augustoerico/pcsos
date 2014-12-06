@@ -84,7 +84,7 @@ public class PreferencesPresenter implements Presenter{
 			
 			@Override
 			public void onChange(ChangeEvent event) {
-				AvailableLanguages language = AvailableLanguages.valueOf(view.getLanguages().getItemText(view.getLanguages().getSelectedIndex()));
+				AvailableLanguages language = AvailableLanguages.valueOf(view.getLanguages().getValue(view.getLanguages().getSelectedIndex()));
 				if(!language.equals(userLanguage))
 					view.getOkButton().setEnabled(true);
 				else
@@ -96,7 +96,7 @@ public class PreferencesPresenter implements Presenter{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				AvailableLanguages language = AvailableLanguages.valueOf(view.getLanguages().getItemText(view.getLanguages().getSelectedIndex()));
+				AvailableLanguages language = AvailableLanguages.valueOf(view.getLanguages().getValue(view.getLanguages().getSelectedIndex()));
 				if(!language.equals(userLanguage)){
 					userLanguage = language;
 					rpcService.setPreferredLanguage(language, new AsyncCallback<Void>() {
