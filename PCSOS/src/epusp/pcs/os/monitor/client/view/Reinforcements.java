@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import epusp.pcs.os.monitor.client.MonitorResources;
 import epusp.pcs.os.monitor.client.presenter.ReinforcementsPresenter.Display;
 
 public class Reinforcements extends Composite implements Display {
@@ -40,6 +41,8 @@ public class Reinforcements extends Composite implements Display {
 	@UiField
 	StackLayoutPanel options;
 	
+	private MonitorResources resources = MonitorResources.INSTANCE;
+	
 	private HashMap<String, HasWidgets> containers = new HashMap<String, HasWidgets>();
 	
 	public interface Sytles extends CssResource{
@@ -51,6 +54,10 @@ public class Reinforcements extends Composite implements Display {
 
 	public Reinforcements() {
 		initWidget(uiBinder.createAndBindUi(this));
+		
+		add.setResource(resources.add());
+		remove.setResource(resources.remove());
+		send.setResource(resources.send());
 		
 		int height = Window.getClientHeight();
 		int width = Window.getClientWidth();
