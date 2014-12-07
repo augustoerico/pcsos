@@ -30,8 +30,10 @@ public class Panel implements EntryPoint {
 			@Override
 			public void onFailure(Throwable caught) {
 				if(caught instanceof LoginException){
+					String query = Window.Location.getQueryString();
+					query = query.replaceAll("&locale=[^&]+", "");
 					String path = Window.Location.getProtocol().concat("//").concat(Window.Location.getHost()).concat("/")
-							.concat("PCSOS.html").concat(Window.Location.getQueryString());
+							.concat("PCSOS.html").concat(query);
 					Window.Location.replace(path);
 				}
 			}

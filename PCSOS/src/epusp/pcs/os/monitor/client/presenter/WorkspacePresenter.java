@@ -150,8 +150,10 @@ public class WorkspacePresenter implements Presenter {
 					
 					@Override
 					public void onSuccess(Void result) {
+						String query = Window.Location.getQueryString();
+						query = query.replaceAll("&locale=[^&]+", "");
 						String path = Window.Location.getProtocol().concat("//").concat(Window.Location.getHost()).concat("/")
-								.concat("PCSOS.html").concat(Window.Location.getQueryString());
+								.concat("PCSOS.html").concat(query);
 						Window.Location.replace(path);
 					}
 					

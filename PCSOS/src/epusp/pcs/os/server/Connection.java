@@ -855,12 +855,13 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 			user.setPreferedLanguage(language);
 
 			PersistenceManager pm = PMF.get().getPersistenceManager();
-
-			System.out.println("Changing preferred language for " + user.getEmail() + " to " + language.name());
+			System.out.println("Changing preferred language for " + user.getEmail() + " to " + user.getPreferedLanguage().name());
 			
 			pm = PMF.get().getPersistenceManager();
 			try{
 				pm.currentTransaction().begin();
+				user = pm.getObjectById(user.getClass(), user.getEmail());
+				user.setPreferedLanguage(language);
 				pm.makePersistent(user);
 				pm.currentTransaction().commit();
 			}catch(Exception e){

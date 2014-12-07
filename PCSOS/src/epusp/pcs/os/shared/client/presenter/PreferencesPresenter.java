@@ -4,7 +4,6 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -21,8 +20,6 @@ public class PreferencesPresenter implements Presenter{
 	private final IConnectionServiceAsync rpcService;
 	private final Display view;
 	private final CommonWorkspaceConstants constants;
-	
-	private RegExp regex = RegExp.compile("(locale=[a-z]+)");
 
 	public interface Display{
 		void setLanguageLabel(String text);
@@ -96,17 +93,19 @@ public class PreferencesPresenter implements Presenter{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				AvailableLanguages language = AvailableLanguages.valueOf(view.getLanguages().getValue(view.getLanguages().getSelectedIndex()));
+				final AvailableLanguages language = AvailableLanguages.valueOf(view.getLanguages().getValue(view.getLanguages().getSelectedIndex()));
 				if(!language.equals(userLanguage)){
 					userLanguage = language;
 					rpcService.setPreferredLanguage(language, new AsyncCallback<Void>() {
 
 						@Override
 						public void onSuccess(Void result) {
-							String path = Window.Location.getProtocol().concat("//").concat(Window.Location.getHost()).concat("/")
-									.concat("PCSOS.html").concat(Window.Location.getQueryString());
-							String locale = "locale=";
-							switch (userLanguage) {
+							String query = Window.Location.getQueryString();
+							query = query.replaceAll("&locale=[^&]+", "");
+							String path = Window.Location.getProtocol().concat("//").concat(Window.Location.getHost())
+									.concat(Window.Location.getPath()).concat(query);
+							String locale = "&locale=";
+							switch (language) {
 							case ENGLISH:
 								locale = locale.concat("en");
 								break;
@@ -114,9 +113,11 @@ public class PreferencesPresenter implements Presenter{
 								locale = locale.concat("pt");
 								break;
 							default:
+								locale = locale.concat("en");
 								break;
 							}
-							path = regex.replace(path, locale);
+							path = path.concat(locale);
+
 							Window.Location.replace(path);
 						}						
 

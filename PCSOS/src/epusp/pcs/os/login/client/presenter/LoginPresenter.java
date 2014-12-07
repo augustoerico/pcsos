@@ -90,7 +90,9 @@ public class LoginPresenter implements Presenter{
 		if(url == null)
 			view.showUnauthorizedAcess();
 		else{
-			String path = Window.Location.getProtocol().concat("//").concat(Window.Location.getHost()).concat("/").concat(url.getUrlPath()).concat(Window.Location.getQueryString());
+			String query = Window.Location.getQueryString();
+			query = query.replaceAll("&locale=[^&]+", "");
+			String path = Window.Location.getProtocol().concat("//").concat(Window.Location.getHost()).concat("/").concat(url.getUrlPath()).concat(query);
 			if(!path.contains("?"))
 				path = path.concat("?").concat("locale=").concat(url.getLocale());
 			else
