@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.jdo.PersistenceManager;
 
@@ -32,8 +31,8 @@ public enum EmergencyCallWorkflow {
 	private final ConcurrentLinkedDeque<Monitor> freeMonitors =
 			new ConcurrentLinkedDeque<Monitor>();
 	
-	private final CopyOnWriteArrayList<Vehicle> freePrimaryVehicles =
-			new CopyOnWriteArrayList<Vehicle>();
+	private final ConcurrentHashMap<String, Vehicle> freePrimaryVehicles =
+			new ConcurrentHashMap<String, Vehicle>();
 	
 	private final ConcurrentHashMap<String, Vehicle> freeSupportVehicles =
 			new ConcurrentHashMap<String, Vehicle>();
@@ -68,7 +67,7 @@ public enum EmergencyCallWorkflow {
 	/*
 	 * Available resources update methods
 	 */
-	public void addWaitingCall(String victimEmail){
+	public void addWaitingCall(String victimEmail, Position position){
 		if(!activeCalls.containsKey(victimEmail)){
 			PersistenceManager mgr = getPersistenceManager();
 			Victim victim, detached = null;
@@ -81,10 +80,12 @@ public enum EmergencyCallWorkflow {
 			
 			if(detached != null){
 				EmergencyCall emergencyCall = new EmergencyCall(new Date(), victimEmail);
-				System.out.println("Emergency call: " + emergencyCall.getVictimEmail() + " begin: " + emergencyCall.getBegin());
+				
+				System.out.println("Emergency call for " + emergencyCall.getVictimEmail() + ", begin " + emergencyCall.getBegin() + " at " + position.toString());
 				waitingCalls.addLast(emergencyCall);
 				activeCalls.putIfAbsent(detached.getEmail(), emergencyCall);
 				activeVictims.putIfAbsent(detached.getEmail(), victim);
+				addVictimPosition(victimEmail, position);
 				if(!freeMonitors.isEmpty() && !freePrimaryVehicles.isEmpty())
 					associate();
 			}
@@ -113,7 +114,7 @@ public enum EmergencyCallWorkflow {
 		}
 	}
 	
-	public void addFreeVehicle(String vehicleIdTag, List<Agent> agents){
+	public void addFreeVehicle(String vehicleIdTag, List<Agent> agents, Position position){
 		if(!activeVehicles.containsKey(vehicleIdTag)){
 			PersistenceManager mgr = getPersistenceManager();
 			mgr.getFetchPlan().addGroup("all_system_object_attributes");
@@ -143,7 +144,7 @@ public enum EmergencyCallWorkflow {
 			if(detached != null){
 				switch(detached.getPriority()){
 				case PRIMARY:
-					freePrimaryVehicles.add(detached);
+					freePrimaryVehicles.put(detached.getIdTag(), detached);
 					break;
 				case SUPPORT:
 					freeSupportVehicles.put(detached.getIdTag(), detached);
@@ -153,7 +154,7 @@ public enum EmergencyCallWorkflow {
 				}
 				detached.addAgents(agents);
 				activeVehicles.put(vehicleIdTag, detached);
-				
+				addVehiclePosition(vehicleIdTag, position);
 				if(!waitingCalls.isEmpty() && !freeMonitors.isEmpty())
 					associate();
 			}
@@ -161,16 +162,45 @@ public enum EmergencyCallWorkflow {
 	}
 	
 	private void associate(){
-		EmergencyCall emergencyCall = waitingCalls.pollFirst();
-		Monitor monitor = freeMonitors.pollFirst();
+		final EmergencyCall emergencyCall = waitingCalls.pollFirst();
+		final Monitor monitor = freeMonitors.pollFirst();
 		
 		emergencyCall.setMonitor(monitor.getId());
-		Position victimPosition = null;
+		
+		final Position victimPosition;
+		
 		if(emergencyCall.getVictimPositionSize() > 0)
 			victimPosition = emergencyCall.getLastVictimPosition();
-		//Choose best car...
-		Vehicle vehicle = freePrimaryVehicles.remove(0);
+		else
+			victimPosition = null;
+		
+		final List<Position> positions = new ArrayList<Position>();
+		final List<Vehicle> vehicles = new ArrayList<Vehicle>();
+		
+		for(Vehicle vehicle : freePrimaryVehicles.values()){
+			if(!vehicle.getPosition().isEmpty()){
+				positions.add(vehicle.getPosition());
+				vehicles.add(vehicle);
+			}
+		}
+		
+		DistanceCalculator calculator = new DistanceCalculator();
+		
+		int min = calculator.minTimeDistance(victimPosition, positions);
+		
+		String closest = null;
+		if(min >= 0){
+			closest = vehicles.get(min).getIdTag();
+			System.out.println("Closest vehicle from call: " + closest);
+		}else{
+			//Something went wrong: victim or any free primary vehicle have a position... So we can't decide which one is the closest. On this case, just pick one.
+			closest =freePrimaryVehicles.keySet().iterator().next();
+			System.out.println("Missing positions, selected: " + closest);
+		}
+		
+		Vehicle vehicle = freePrimaryVehicles.remove(closest);
 		List<String> agents = new ArrayList<String>();
+
 		for(Agent agent : vehicle.getAgents())
 			agents.add(agent.getId());
 		
@@ -179,6 +209,8 @@ public enum EmergencyCallWorkflow {
 		emergencyCall.setEmergencyCallLifecycle(EmergencyCallLifecycle.WaitingAcknowledgment);
 		vehiclesOnCall.put(vehicle.getIdTag(), emergencyCall);
 		monitorsOnCall.put(monitor.getId(), emergencyCall);
+		
+		System.out.println(vehicle.getPosition().toString());
 	}
 	
 	/*
@@ -258,12 +290,12 @@ public enum EmergencyCallWorkflow {
 				finish(emergencyCall);
 			switch(vehicle.getPriority()){
 			case PRIMARY:
-				freePrimaryVehicles.add(vehicle);
+				freePrimaryVehicles.put(vehicle.getIdTag(), vehicle);
 				if(!waitingCalls.isEmpty() && !freeMonitors.isEmpty())
 					associate();
 				break;
 			case SUPPORT:
-				freeSupportVehicles.put(vehicle.getId(), vehicle);
+				freeSupportVehicles.put(vehicle.getIdTag(), vehicle);
 				break;
 			default:
 				break;
@@ -338,7 +370,16 @@ public enum EmergencyCallWorkflow {
 				if(!p.isEmpty()){
 					call.addVehiclePosition(vehicleIdTag, p);
 				}
-				freeSupportVehicles.remove(vehicleIdTag);
+				switch (vehicle.getPriority()) {
+				case PRIMARY:
+					freePrimaryVehicles.remove(vehicleIdTag);
+					break;
+				case SUPPORT:
+					freeSupportVehicles.remove(vehicleIdTag);
+					break;
+				default:
+					break;				
+				}
 				vehiclesOnCall.put(vehicle.getIdTag(), call);
 			}
 		}
@@ -358,7 +399,9 @@ public enum EmergencyCallWorkflow {
 		 }
 		 
 		 if(available.isEmpty()){
-			 for(Vehicle vehicle : freePrimaryVehicles){
+			 vehicles = freePrimaryVehicles.elements();
+			 while(vehicles.hasMoreElements()){
+				 Vehicle vehicle = vehicles.nextElement();
 				 available.add(vehicle);
 			 }
 		 }

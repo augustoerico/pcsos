@@ -581,30 +581,29 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		Position CYCLORAMA = new Position(33.741185330333956, -84.35834884643555);
 		Position GEORGIA_AQUARIUM = new Position(33.761443931868925, -84.39432263374329);
 		Position UNDERGROUND_ATLANTA = new Position(33.75134645137294, -84.39026713371277);
+		Position PIEDMONT_HOSPITAL = new Position(33.8086907, -84.4690846);
 
 		List<Agent> l = new ArrayList<Agent>();
 		l.clear();
 		l.add(detachedAgent1);
-		workflow.addFreeVehicle(detachedCar.getIdTag(), l);
-		workflow.addWaitingCall(detachedVictim.getEmail());
-		workflow.addVictimPosition(victim.getEmail(), GEORGIA_AQUARIUM);
-		workflow.addVehiclePosition(detachedCar.getIdTag(), CYCLORAMA);
+		workflow.addFreeVehicle(detachedCar.getIdTag(), l,CYCLORAMA);
+		workflow.addWaitingCall(detachedVictim.getEmail(), GEORGIA_AQUARIUM);
+		
 		l.clear();
 		l.add(detachedAgent);
-		workflow.addFreeVehicle(detachedH.getIdTag(), l);
-		workflow.addVehiclePosition(detachedH.getIdTag(), ATLANTA);
+		workflow.addFreeVehicle(detachedH.getIdTag(), l, ATLANTA);
 
 		l.clear();
 		l.add(detachedChuck);
-		workflow.addFreeVehicle(detachedCX.getIdTag(), l);
+		workflow.addFreeVehicle(detachedCX.getIdTag(), l,UNDERGROUND_ATLANTA);
 
 		l.clear();
 		l.add(detachedArrow);
-		workflow.addFreeVehicle(detachedC2.getIdTag(), l);
+		workflow.addFreeVehicle(detachedC2.getIdTag(), l, STONE_MOUNTAIN_PARK);
 
 		l.clear();
 		l.add(detachedRobocop);
-		workflow.addFreeVehicle(detachedC1.getIdTag(), l);
+		workflow.addFreeVehicle(detachedC1.getIdTag(), l, PIEDMONT_HOSPITAL);
 		/*************************************************************************************************************************/
 
 

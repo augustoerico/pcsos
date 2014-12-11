@@ -10,7 +10,6 @@ import epusp.pcs.os.server.workflow.EmergencyCallWorkflow;
 import epusp.pcs.os.shared.model.AgentCollection;
 import epusp.pcs.os.shared.model.EmergencyCallLifecycleStatus;
 import epusp.pcs.os.shared.model.oncall.EmergencyCall;
-import epusp.pcs.os.shared.model.oncall.EmergencyCallLifecycle;
 import epusp.pcs.os.shared.model.oncall.Position;
 import epusp.pcs.os.shared.model.person.user.agent.Agent;
 import epusp.pcs.os.shared.model.person.user.monitor.Monitor;
@@ -23,8 +22,7 @@ public class EmergencyCallWorkflowEndpoint {
 
 	@ApiMethod(name="addWaitingCall")
 	public void addWaitingCall(@Named("victimEmail") String victimEmail, Position position) throws Exception {
-		instance.addWaitingCall(victimEmail);
-		instance.addVictimPosition(victimEmail, position);
+		instance.addWaitingCall(victimEmail, position);
 	}
 
 	@ApiMethod(name="addVictimPosition")
@@ -33,8 +31,8 @@ public class EmergencyCallWorkflowEndpoint {
 	}
 
 	@ApiMethod(name="addFreeVehicle")
-	public void addFreeVehicle(@Named("vehicleId") String vehicleId, AgentCollection agents) throws Exception {
-		instance.addFreeVehicle(vehicleId, agents.getAgentCollection());
+	public void addFreeVehicle(@Named("vehicleId") String vehicleId, AgentCollection agents, Position position) throws Exception {
+		instance.addFreeVehicle(vehicleId, agents.getAgentCollection(), position);
 	}
 
 	@ApiMethod(name="updatePositionAndVerifyStatus")

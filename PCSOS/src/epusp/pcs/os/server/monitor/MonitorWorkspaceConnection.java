@@ -99,7 +99,8 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 			for(String vehicleIdTag : vehiclesIdTag){
 				Monitor monitor = (Monitor) getSessionAttibute(userSessionAttribute);
 				EmergencyCall emergencyCall = workflow.getMonitorEmergencyCall(monitor.getId());
-				workflow.addVehicleToCall(emergencyCall.getVictimEmail(), vehicleIdTag);
+				if(emergencyCall != null)
+					workflow.addVehicleToCall(emergencyCall.getVictimEmail(), vehicleIdTag);
 			}
 		}
 	}

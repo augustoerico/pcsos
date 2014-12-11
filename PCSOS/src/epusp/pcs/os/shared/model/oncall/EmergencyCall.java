@@ -102,7 +102,7 @@ public class EmergencyCall implements Serializable {
 	
 	public List<Position> getVictimPositions(int i){
 		List<Position> positions = new ArrayList<Position>();
-		for(; i < latitudes.size(); i++){
+		for(; i < latitudes.size() && i >= 0; i++){
 			positions.add(new Position(latitudes.get(i), longitudes.get(i)));
 		}
 		return positions;
