@@ -33,6 +33,7 @@ public class EmergencyCallWorkflowEndpoint {
 	@ApiMethod(name="addFreeVehicle")
 	public void addFreeVehicle(@Named("vehicleId") String vehicleId, AgentCollection agents, Position position) throws Exception {
 		instance.addFreeVehicle(vehicleId, agents.getAgentCollection(), position);
+		
 	}
 
 	@ApiMethod(name="updatePositionAndVerifyStatus")
