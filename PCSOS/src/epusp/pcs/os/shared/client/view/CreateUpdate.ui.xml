@@ -35,41 +35,53 @@
 	.button {
 		display: inline-block;
 	}
+	
+	.panel{
+		width: 784px;
+		height: 484px;
+		margin-top: 8px;
+		margin-left: 8px;
+	}
 	</ui:style>
 
-	<g:AbsolutePanel width="100%" height="100%">
-		<g:ScrollPanel width="800px" height="500px">
-		<g:FlowPanel>
-			<g:VerticalPanel width="100%">
-				<g:cell>
-					<g:FlowPanel styleName="{style.topPanel}">
-						<g:DecoratorPanel>
-							<g:AbsolutePanel width="320px" height="320px">
-								<g:FlowPanel width="100%" height="100%"
-									styleName="{style.pictureContainer}">
-									<g:Image width="100%" height="100%" visible="false"
-										styleName="{style.picture}" ui:field="picture" />
-									<g:Image width="40px" height="40px"
-										styleName="{style.picture} {style.addPicture}" resource="{sharedResources.add}"
-										ui:field="addPicture" />
+	<g:AbsolutePanel width="1800px" height="900px" styleName="{style.panel}">
+		<g:DecoratorPanel>
+			<g:AbsolutePanel width="1784px" height="884px">
+				<g:ScrollPanel width="884px" height="884px">
+					<g:FlowPanel>
+						<g:VerticalPanel width="100%">
+							<g:cell>
+								<g:FlowPanel styleName="{style.topPanel}">
+									<g:DecoratorPanel>
+										<g:AbsolutePanel width="320px" height="320px">
+											<g:FlowPanel width="100%" height="100%"
+												styleName="{style.pictureContainer}">
+												<g:Image width="100%" height="100%" visible="false"
+													styleName="{style.picture}" ui:field="picture" />
+												<g:Image width="40px" height="40px"
+													styleName="{style.picture} {style.addPicture}" resource="{sharedResources.add}"
+													ui:field="addPicture" />
+											</g:FlowPanel>
+										</g:AbsolutePanel>
+									</g:DecoratorPanel>
+									<g:VerticalPanel ui:field="primaryAttributes" />
 								</g:FlowPanel>
-							</g:AbsolutePanel>
-						</g:DecoratorPanel>
-						<g:VerticalPanel ui:field="primaryAttributes" />
-					</g:FlowPanel>
-				</g:cell>
+							</g:cell>
 
-				<g:cell>
-					<g:VerticalPanel ui:field="secondaryAttributes" width="100%" />
-				</g:cell>
-			</g:VerticalPanel>
-			<g:FlowPanel>
-				<g:Button enabled="false" styleName="{style.button}"
-					ui:field="save" />
-				<g:Button styleName="{style.button}" ui:field="cancel" />
-			</g:FlowPanel>
-		</g:FlowPanel>
-		</g:ScrollPanel>
+							<g:cell>
+								<g:VerticalPanel ui:field="secondaryAttributes"
+									width="100%" />
+							</g:cell>
+						</g:VerticalPanel>
+						<g:FlowPanel>
+							<g:Button enabled="false" styleName="{style.button}"
+								ui:field="save" />
+							<g:Button styleName="{style.button}" ui:field="cancel" />
+						</g:FlowPanel>
+					</g:FlowPanel>
+				</g:ScrollPanel>
+			</g:AbsolutePanel>
+		</g:DecoratorPanel>
 	</g:AbsolutePanel>
 
 </ui:UiBinder> 

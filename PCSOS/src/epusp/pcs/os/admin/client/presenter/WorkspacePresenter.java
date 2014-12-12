@@ -75,6 +75,12 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 		this.rpcService = rpcService;
 		this.display = view;
 		this.constants = constants;
+		
+		popup.setGlassEnabled(true);
+		popup.setStyleName("preferencesPopupPanel");
+		popup.setGlassStyleName("preferencesPopupGlassPanel");
+		
+		popup.setSize("1800px", "900px");
 
 		victimHeaderButton = new HeaderButton(constants.client(), resources.newClient().getSafeUri());
 		agentHeaderButton = new HeaderButton(constants.agent(), resources.newPolice().getSafeUri());
@@ -124,7 +130,6 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 			
 			@Override
 			public void onSelectedRow(final Victim objectSelected) {
-				popup.setSize("800px", "500px");
 				loader.loadCustomAttributes(VictimCustomAttributes.values(), new IAttributeInfoLoaded() {
 					@Override
 					public void onCustomAttributesLoaded() {
@@ -156,7 +161,6 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 		AgentTablePresenter agentTablePresenter = new AgentTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Agent>() {
 			@Override
 			public void onSelectedRow(final Agent objectSelected) {
-				popup.setSize("800px", "500px");
 				loader.loadCustomAttributes(AgentCustomAttributes.values(), new IAttributeInfoLoaded() {
 					@Override
 					public void onCustomAttributesLoaded() {
@@ -198,7 +202,6 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 					
 					@Override
 					public void onSelectedRow(final Car objectSelected) {
-						popup.setSize("800px", "500px");
 						loader.loadCustomAttributes(CarCustomProperties.values(), new IAttributeInfoLoaded() {
 							@Override
 							public void onCustomAttributesLoaded() {
@@ -231,7 +234,6 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 					
 					@Override
 					public void onSelectedRow(final Helicopter objectSelected) {
-						popup.setSize("800px", "500px");
 						loader.loadCustomAttributes(HelicopterCustomProperties.values(), new IAttributeInfoLoaded() {
 							@Override
 							public void onCustomAttributesLoaded() {
@@ -299,7 +301,6 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 			@Override
 			public void onClick(ClickEvent event) {
 				if(victimHeaderButton.isEnabled()){
-					popup.setSize("800px", "500px");
 					loader.loadCustomAttributes(VictimCustomAttributes.values(), new IAttributeInfoLoaded() {
 						@Override
 						public void onCustomAttributesLoaded() {
@@ -321,7 +322,6 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 			@Override
 			public void onClick(ClickEvent event) {
 				if(agentHeaderButton.isEnabled()){
-					popup.setSize("800px", "500px");
 					loader.loadCustomAttributes(AgentCustomAttributes.values(), new IAttributeInfoLoaded() {
 						@Override
 						public void onCustomAttributesLoaded() {
@@ -343,8 +343,6 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 			@Override
 			public void onClick(ClickEvent event) {
 				if(vehicleHeaderButton.isEnabled()){
-					popup.setSize("800px", "500px");
-					//TODO: Solve this shit.
 					CreateUpdatePresenter createUpdatePresenter = new CreateVehiclePresenter(rpcService, new CreateUpdate(), constants, loader);
 					createUpdatePresenter.go(popup);
 					popup.center();

@@ -65,6 +65,12 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 		this.rpcService = rpcService;
 		this.display = view;
 		this.constants = constants;
+		
+		popup.setGlassEnabled(true);
+		popup.setStyleName("preferencesPopupPanel");
+		popup.setGlassStyleName("preferencesPopupGlassPanel");
+		
+		popup.setSize("1800px", "900px");
 
 		adminHeaderButton = new HeaderButton(constants.admin(), resources.newAdmin().getSafeUri());
 		superHeaderButton = new HeaderButton(constants.superUser(), resources.newSuperUser().getSafeUri());
@@ -118,7 +124,6 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 		UserTablePresenter monitorTablePresenter = new MonitorTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Monitor>() {
 			@Override
 			public void onSelectedRow(final Monitor objectSelected) {
-				popup.setSize("800px", "500px");
 				loader.loadCustomAttributes(MonitorCustomAttributes.values(), new IAttributeInfoLoaded() {
 					@Override
 					public void onCustomAttributesLoaded() {
@@ -149,7 +154,6 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 		UserTablePresenter adminTablePresenter = new AdminTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Admin>() {
 			@Override
 			public void onSelectedRow(final Admin objectSelected) {
-				popup.setSize("800px", "500px");
 				loader.loadCustomAttributes(AdminCustomProperties.values(), new IAttributeInfoLoaded() {
 					@Override
 					public void onCustomAttributesLoaded() {
@@ -180,7 +184,6 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 		UserTablePresenter superUserTablePresenter = new SuperUserTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<SuperUser>() {
 			@Override
 			public void onSelectedRow(final SuperUser objectSelected) {
-				popup.setSize("800px", "500px");
 				loader.loadCustomAttributes(SuperUserCustomAttributes.values(), new IAttributeInfoLoaded() {
 					@Override
 					public void onCustomAttributesLoaded() {
@@ -242,7 +245,6 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 			@Override
 			public void onClick(ClickEvent event) {
 				if(adminHeaderButton.isEnabled()){
-					popup.setSize("800px", "500px");
 					loader.loadCustomAttributes(AdminCustomProperties.values(), new IAttributeInfoLoaded() {
 						@Override
 						public void onCustomAttributesLoaded() {
@@ -264,7 +266,6 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 			@Override
 			public void onClick(ClickEvent event) {
 				if(superHeaderButton.isEnabled()){
-					popup.setSize("800px", "500px");
 					loader.loadCustomAttributes(SuperUserCustomAttributes.values(), new IAttributeInfoLoaded() {
 						@Override
 						public void onCustomAttributesLoaded() {
@@ -286,7 +287,6 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 			@Override
 			public void onClick(ClickEvent event) {
 				if(monitorHeaderButton.isEnabled()){
-					popup.setSize("800px", "500px");
 					loader.loadCustomAttributes(MonitorCustomAttributes.values(), new IAttributeInfoLoaded() {
 						@Override
 						public void onCustomAttributesLoaded() {
