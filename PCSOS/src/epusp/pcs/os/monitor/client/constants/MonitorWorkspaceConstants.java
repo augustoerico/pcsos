@@ -36,4 +36,10 @@ public interface MonitorWorkspaceConstants extends CommonWorkspaceConstants{
 	
 	@DefaultStringValue("Agents")
 	String agents();
+	
+	@DefaultStringValue("New Emergency Call!")
+	String warningMessage();
+	
+	@DefaultStringValue("Answer it")
+	String answerIt();
 }

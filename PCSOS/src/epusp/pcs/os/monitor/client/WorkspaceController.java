@@ -23,10 +23,12 @@ import epusp.pcs.os.monitor.client.event.FinishCallEvent.FinishCallHandler;
 import epusp.pcs.os.monitor.client.event.LoadedInfoEvent.LoadedInfoHandler;
 import epusp.pcs.os.monitor.client.presenter.CallInfoPresenter;
 import epusp.pcs.os.monitor.client.presenter.GoogleMapsPresenter;
+import epusp.pcs.os.monitor.client.presenter.NewCallPresenter;
 import epusp.pcs.os.monitor.client.presenter.ReinforcementsPresenter;
 import epusp.pcs.os.monitor.client.presenter.WorkspacePresenter;
 import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
 import epusp.pcs.os.monitor.client.view.CallInfo;
+import epusp.pcs.os.monitor.client.view.NewCall;
 import epusp.pcs.os.monitor.client.view.Reinforcements;
 import epusp.pcs.os.monitor.client.view.Workspace;
 import epusp.pcs.os.monitor.shared.EmergencyCallSpecs;
@@ -52,9 +54,12 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 	private PreferencesPresenter preferencesPresenter;
 	private CallInfoPresenter callInfoPresenter;
 	private ReinforcementsPresenter reinforcementsPresenter;
+	private NewCallPresenter newCallPresenter;
 
 	PopupPanel preferencesPopup = new PopupPanel(true);
 
+	PopupPanel newCallPopup = new PopupPanel(true);
+	
 	private MonitorStatusLifecycle monitorStatus = MonitorStatusLifecycle.Unavailable;
 
 	private EmergencyCallSpecs emergencyCallSpecs = new EmergencyCallSpecs();
@@ -78,6 +83,10 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 		preferencesPopup.setGlassEnabled(true);
 		preferencesPopup.setStyleName("preferencesPopupPanel");
 		preferencesPopup.setGlassStyleName("preferencesPopupGlassPanel");
+		
+		newCallPopup.setGlassEnabled(true);
+		newCallPopup.setStyleName("preferencesPopupPanel");
+		newCallPopup.setGlassStyleName("preferencesPopupGlassPanel");
 
 		EventBus.get().addHandler(LoadedInfoEvent.TYPE, this);
 		EventBus.get().addHandler(FinishCallEvent.TYPE, this);
@@ -86,8 +95,10 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
 			public void onResize(ResizeEvent event) {
-				if(preferencesPopup.isShowing())
+				if(preferencesPopup.isShowing()){
 					preferencesPopup.center();
+					newCallPopup.center();
+				}
 			}
 		});
 	}
@@ -107,6 +118,14 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 				preferencesPopup.hide();
 			}
 		});
+		
+		newCallPresenter.addCloseHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				newCallPopup.hide();
+			}
+		});
 	}
 
 	@Override
@@ -121,6 +140,8 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 		preferencesPresenter.go(preferencesPopup);
 		reinforcementsPresenter = new ReinforcementsPresenter(monitorService, new Reinforcements());
 		reinforcementsPresenter.go(workspacePresenter.getReinforcementsArea());
+		newCallPresenter = new NewCallPresenter(new NewCall(), constants);
+		newCallPresenter.go(newCallPopup);
 		timer.scheduleRepeating(2_000);
 		bind();
 	}
@@ -152,6 +173,7 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 					if(result){
 						monitorStatus = MonitorStatusLifecycle.OnCall;
 						workspacePresenter.setOnCall(true);
+						newCallPopup.center();
 					}
 				}
 

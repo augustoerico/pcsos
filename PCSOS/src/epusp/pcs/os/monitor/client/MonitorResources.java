@@ -36,4 +36,7 @@ public interface MonitorResources extends SharedResources {
 	@Source("images/remove.png")
 	ImageResource remove();
 	
+	@Source("images/warning.png")
+	ImageResource warning();
+	
 }
