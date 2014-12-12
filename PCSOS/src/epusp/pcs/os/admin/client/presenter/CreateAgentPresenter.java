@@ -21,8 +21,10 @@ import epusp.pcs.os.shared.client.presenter.CreatePersonPresenter;
 import epusp.pcs.os.shared.model.attribute.AttributeInfo;
 import epusp.pcs.os.shared.model.licence.DrivingCategories;
 import epusp.pcs.os.shared.model.licence.DrivingLicence;
-import epusp.pcs.os.shared.model.licence.Licence;
-import epusp.pcs.os.shared.model.licence.LicenceTypes;
+import epusp.pcs.os.shared.model.licence.HelicopterLicense;
+import epusp.pcs.os.shared.model.licence.HelicopterLicenseTypes;
+import epusp.pcs.os.shared.model.licence.License;
+import epusp.pcs.os.shared.model.licence.LicenseTypes;
 import epusp.pcs.os.shared.model.person.user.agent.Agent;
 
 public class CreateAgentPresenter extends CreatePersonPresenter {
@@ -52,7 +54,7 @@ public class CreateAgentPresenter extends CreatePersonPresenter {
 		view.addSecondaryAttribute(constants.registerCode(), false, registerCode);
 		view.addSecondaryAttribute(constants.effectiveUntil(), false, effectiveUntil);
 		licence.addItem("");
-		for(LicenceTypes type : LicenceTypes.values()){
+		for(LicenseTypes type : LicenseTypes.values()){
 			licence.addItem(type.getText(), type.name());
 		}
 		view.addSecondaryAttribute(constants.licence(), false, licence);
@@ -65,7 +67,7 @@ public class CreateAgentPresenter extends CreatePersonPresenter {
 					view.removeSecondaryAttribute(category);
 					view.removeSecondaryAttribute(isAcategory);
 				}else{
-					switch (LicenceTypes.valueOf(l)) {
+					switch (LicenseTypes.valueOf(l)) {
 					case DrivingLicence:
 						category = new ListBox();
 						isAcategory = new CheckBox();
@@ -75,6 +77,14 @@ public class CreateAgentPresenter extends CreatePersonPresenter {
 						}
 						view.addSecondaryAttribute(constants.drivingCategory(), false, category);
 						view.addSecondaryAttribute(constants.isA(), false, isAcategory);
+						break;
+					case HelicopterLicence:
+						category = new ListBox();
+						category.addItem("");
+						for(HelicopterLicenseTypes helicopterCategory : HelicopterLicenseTypes.values()){
+							category.addItem(helicopterCategory.getText());
+						}
+						view.addSecondaryAttribute(constants.drivingCategory(), false, category);
 						break;
 					default:
 						break;
@@ -115,12 +125,14 @@ public class CreateAgentPresenter extends CreatePersonPresenter {
 				if(licence.getSelectedIndex() != 0){
 					 
 					String licenceType = licence.getValue(licence.getSelectedIndex());
-					Licence l = null;
+					License l = null;
 					
-					switch (LicenceTypes.valueOf(licenceType)) {
+					switch (LicenseTypes.valueOf(licenceType)) {
 					case DrivingLicence:
-						l = new DrivingLicence(registerCode.getText(), effectiveUntil.getValue());
-						((DrivingLicence)l).setAgent(agent);
+						l = new DrivingLicence(agent, registerCode.getText(), effectiveUntil.getValue());
+						break;
+					case HelicopterLicence:
+						l = new HelicopterLicense(agent, registerCode.getText(), effectiveUntil.getValue());
 						break;
 					default:
 						break;

@@ -120,10 +120,9 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		agent1.setGoogleUserId("0000002");
 		agent1.setPictureURL("https://lh5.googleusercontent.com/Z59ZqJ392vBnwHtcgrm-h_c8ZPZGl-CXrmzgRmoW-_E=s207-p-no");
 
-		DrivingLicence drivingLicence =  new DrivingLicence("123123321", new Date());
+		DrivingLicence drivingLicence =  new DrivingLicence(agent1, "123123321", new Date());
 		drivingLicence.setCategory(DrivingCategories.B);
 		drivingLicence.setHasAcategory(true);
-		drivingLicence.setAgent(agent1);
 		agent1.addLicence(drivingLicence);
 
 		//		

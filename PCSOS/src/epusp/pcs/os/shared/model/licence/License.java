@@ -15,7 +15,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
-public abstract class Licence implements Serializable {
+public abstract class License implements Serializable {
 	
 	@NotPersistent
 	private static final long serialVersionUID = 1L;
@@ -32,11 +32,11 @@ public abstract class Licence implements Serializable {
 	@Persistent
 	private Date effectiveUntil;
 	
-	public Licence(String registerCode){
+	public License(String registerCode){
 		this.registerCode = registerCode;
 	}
 	
-	public Licence(String registerCode, Date effectiveUntil){
+	public License(String registerCode, Date effectiveUntil){
 		this.registerCode = registerCode;
 		this.effectiveUntil = effectiveUntil;
 	}
@@ -53,12 +53,12 @@ public abstract class Licence implements Serializable {
 		return effectiveUntil;
 	}
 
-	public abstract LicenceTypes getLicenceType();
+	public abstract LicenseTypes getLicenceType();
 	
 	/*
 	 * Seen by IsSerializable
 	 */
-	public Licence(){
+	public License(){
 		super();
 	}
 }

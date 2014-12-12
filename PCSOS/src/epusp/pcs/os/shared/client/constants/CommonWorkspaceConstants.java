@@ -55,6 +55,9 @@ public interface CommonWorkspaceConstants extends Constants{
 	@DefaultStringValue("Driving Category")
 	String drivingCategory();
 	
+	@DefaultStringValue("Pilot Class")
+	String helicopterCategory();
+	
 	@DefaultStringValue("A")
 	String isA();
 	
@@ -81,4 +84,19 @@ public interface CommonWorkspaceConstants extends Constants{
 	
 	@DefaultStringValue("Driving Licence")
 	String drivingLicence();
+	
+	@DefaultStringValue("Helicopter Licence")
+	String helicopterLicence();
+	
+	@DefaultStringValue("Certified Flight Instructor")
+	String certifiedFlightInstructor();
+	
+	@DefaultStringValue("Private Pilot")
+	String privatePilot();
+	
+	@DefaultStringValue("Certified Flight Instructor Instrument")
+	String certifiedFlightInstructorInstrument();
+	
+	@DefaultStringValue("Commercial Pilot")
+	String commercialPilot();
 }

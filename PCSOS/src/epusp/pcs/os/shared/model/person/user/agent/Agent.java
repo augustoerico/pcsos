@@ -11,7 +11,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
 import epusp.pcs.os.shared.model.licence.DrivingLicence;
-import epusp.pcs.os.shared.model.licence.Licence;
+import epusp.pcs.os.shared.model.licence.License;
 import epusp.pcs.os.shared.model.person.user.AccountTypes;
 import epusp.pcs.os.shared.model.person.user.User;
 
@@ -33,7 +33,7 @@ public class Agent extends User implements Serializable {
 		super(name, secondName, surname, email);
 	}
 	
-	public void addLicence(Licence licence){
+	public void addLicence(License licence){
 		switch(licence.getLicenceType()){
 		case DrivingLicence:
 			drivingLicence = (DrivingLicence) licence;
@@ -47,8 +47,8 @@ public class Agent extends User implements Serializable {
 		return drivingLicence;
 	}
 	
-	public List<Licence> getLicences(){
-		List<Licence> licences = new ArrayList<Licence>();
+	public List<License> getLicences(){
+		List<License> licences = new ArrayList<License>();
 		if(drivingLicence !=  null)
 			licences.add(drivingLicence);
 		return licences;
