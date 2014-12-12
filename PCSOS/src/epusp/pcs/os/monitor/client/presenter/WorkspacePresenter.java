@@ -54,6 +54,14 @@ public class WorkspacePresenter implements Presenter {
 		void addPhoneClickHandler(ClickHandler handler);
 		Boolean phoneIsDown();
 		void showEndCall();
+		void applyInfoGrayscale();
+		void applyReinforcementsGrayscale();
+		void applyMapGrayscale();
+		void removeMapGrayscale();
+		void removeReinforcementsGrayscale();
+		void removeInfoGrayscale();
+		void setPreferencesVisible(Boolean visible);
+		void setLogoutVisible(Boolean visible);
 	}
 
 	private final IMonitorWorkspaceServiceAsync rpcService;
@@ -98,27 +106,33 @@ public class WorkspacePresenter implements Presenter {
 		display.addMapClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				display.setMapBullet();
-				display.showMap();
-				display.getTrafficButton().setVisible(true);
+				if(onCall){
+					display.setMapBullet();
+					display.showMap();
+					display.getTrafficButton().setVisible(true);
+				}
 			}
 		});
 		
 		display.addInfoClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				display.setInfoBullet();
-				display.showCallInfo();
-				display.getTrafficButton().setVisible(false);
+				if(onCall){
+					display.setInfoBullet();
+					display.showCallInfo();
+					display.getTrafficButton().setVisible(false);
+				}
 			}
 		});
 		
 		display.addReinforcementsClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				display.setReinforcementsBullet();
-				display.showAvailableReinforcements();
-				display.getTrafficButton().setVisible(false);
+				if(onCall){
+					display.setReinforcementsBullet();
+					display.showAvailableReinforcements();
+					display.getTrafficButton().setVisible(false);
+				}
 			}
 		});
 		
@@ -150,11 +164,13 @@ public class WorkspacePresenter implements Presenter {
 					
 					@Override
 					public void onSuccess(Void result) {
-						String query = Window.Location.getQueryString();
-						query = query.replaceAll("&locale=[^&]+", "");
-						String path = Window.Location.getProtocol().concat("//").concat(Window.Location.getHost()).concat("/")
-								.concat("PCSOS.html").concat(query);
-						Window.Location.replace(path);
+						if(!onCall){
+							String query = Window.Location.getQueryString();
+							query = query.replaceAll("&locale=[^&]+", "");
+							String path = Window.Location.getProtocol().concat("//").concat(Window.Location.getHost()).concat("/")
+									.concat("PCSOS.html").concat(query);
+							Window.Location.replace(path);
+						}
 					}
 					
 					@Override
@@ -187,8 +203,25 @@ public class WorkspacePresenter implements Presenter {
 	}
 	
 	public void setOnCall(Boolean onCall){
-		if(onCall)
+		if(onCall){
 			display.showEndCall();
+			display.removeMapGrayscale();
+			display.removeInfoGrayscale();
+			display.removeReinforcementsGrayscale();
+		}else{
+			display.applyMapGrayscale();
+			display.applyInfoGrayscale();
+			display.applyReinforcementsGrayscale();
+			display.setMapBullet();
+			display.showMap();
+			display.getTrafficButton().setVisible(true);
+		}
+		
+		display.getMapButton().setEnabled(onCall);
+		display.getInfoButton().setEnabled(onCall);
+		display.getReinforcementsButton().setEnabled(onCall);
+		display.setPreferencesVisible(!onCall);
+		display.setLogoutVisible(!onCall);
 		this.onCall = onCall;
 	}
 

@@ -52,6 +52,7 @@ public class Workspace extends Composite implements Display{
 		String phoneOn();
 		String phoneOff();
 		String endCall();
+		String applyGrayscale();
 	}
 
 	@UiField 
@@ -273,6 +274,46 @@ public class Workspace extends Composite implements Display{
 		phoneButton.removeStyleName(style.phoneOn());
 		phoneButton.removeStyleName(style.phoneOff());
 		phoneButton.addStyleName(style.endCall());
+	}
+	
+	@Override
+	public void applyMapGrayscale(){
+		map.addStyleName(style.applyGrayscale());
+	}
+	
+	@Override
+	public void applyReinforcementsGrayscale(){
+		reinforcements.addStyleName(style.applyGrayscale());
+	}
+	
+	@Override
+	public void applyInfoGrayscale(){
+		info.addStyleName(style.applyGrayscale());
+	}
+	
+	@Override
+	public void removeMapGrayscale(){
+		map.removeStyleName(style.applyGrayscale());
+	}
+	
+	@Override
+	public void setPreferencesVisible(Boolean visible){
+		preferences.setVisible(visible);
+	}
+	
+	@Override
+	public void setLogoutVisible(Boolean visible){
+		logout.setVisible(visible);
+	}
+	
+	@Override
+	public void removeReinforcementsGrayscale(){
+		reinforcements.removeStyleName(style.applyGrayscale());
+	}
+	
+	@Override
+	public void removeInfoGrayscale(){
+		info.removeStyleName(style.applyGrayscale());
 	}
 	
 	@Override

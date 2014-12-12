@@ -178,6 +178,10 @@
 		cursor: pointer;
 	}
 	
+	input[type=radio]:disabled {
+		cursor: default;
+	}
+	
 	.logoImage {
 		padding-left: 50px;
 	}
@@ -195,6 +199,13 @@
 	
 	.middlePanel {
 		min-width: 600px;
+	}
+	
+	.applyGrayscale{
+		-webkit-filter: grayscale(100%);
+		-moz-filter: grayscale(100%);
+		filter: grayscale(100%);
+		cursor: default;
 	}
 	</ui:style>
 
