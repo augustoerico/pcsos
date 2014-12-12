@@ -47,7 +47,7 @@
 	<g:AbsolutePanel width="1800px" height="900px" styleName="{style.panel}">
 		<g:DecoratorPanel>
 			<g:AbsolutePanel width="1784px" height="884px">
-				<g:ScrollPanel width="884px" height="884px">
+				<g:ScrollPanel width="1784px" height="884px">
 					<g:FlowPanel>
 						<g:VerticalPanel width="100%">
 							<g:cell>
