@@ -6,17 +6,28 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
 
 public enum LicenseTypes implements IsSerializable{
-	DrivingLicence, HelicopterLicence;
+	DrivingLicence, HelicopterLicense;
 	
 	public String getText(){
 		CommonWorkspaceConstants constants = GWT.create(CommonWorkspaceConstants.class);
 		switch (this) {
 		case DrivingLicence:
 			return constants.drivingLicence();
-		case HelicopterLicence:
+		case HelicopterLicense:
 			return constants.helicopterLicence();
 		default:
 			return "";
+		}
+	}
+	
+	public LicenseCategory[] getLicenseCategories(){
+		switch (this) {
+		case DrivingLicence:
+			return DrivingCategories.values();
+		case HelicopterLicense:
+			return HelicopterLicenseTypes.values();
+		default:
+			return null;
 		}
 	}
 	

@@ -5,9 +5,10 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
 
-public enum HelicopterLicenseTypes implements IsSerializable{
+public enum HelicopterLicenseTypes implements IsSerializable, LicenseCategory{
 	PrivatePilot, CommercialPilot, CertifiedFlightInstructor, CertifiedFlightInstructorInstrument;
 	
+	@Override
 	public String getText(){
 		CommonWorkspaceConstants constants = GWT.create(CommonWorkspaceConstants.class);
 		switch(this){

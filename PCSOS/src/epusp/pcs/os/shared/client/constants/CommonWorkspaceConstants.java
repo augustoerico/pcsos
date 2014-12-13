@@ -49,8 +49,8 @@ public interface CommonWorkspaceConstants extends Constants{
 	@DefaultStringValue("Effective Until")
 	String effectiveUntil();
 	
-	@DefaultStringValue("Licence Type")
-	String licence();
+	@DefaultStringValue("License Type")
+	String license();
 	
 	@DefaultStringValue("Driving Category")
 	String drivingCategory();

@@ -16,12 +16,12 @@ public class HelicopterLicense extends License{
 	private static final long serialVersionUID = 1L;
 	
 	@NotPersistent
-	public static final LicenseTypes licenceType = LicenseTypes.DrivingLicence;
+	public static final LicenseTypes licenceType = LicenseTypes.HelicopterLicense;
 	
 	@Persistent
 	private HelicopterLicenseTypes category;
 	
-    @Persistent
+    @Persistent(mappedBy="helicopterLicense")
     private Agent agent;
 
 	public HelicopterLicense(Agent agent, String registerCode){
@@ -39,4 +39,19 @@ public class HelicopterLicense extends License{
 		return licenceType;
 	}
 
+	public void setCategory(HelicopterLicenseTypes helicopterLicenseTypes) {
+		this.category = helicopterLicenseTypes;
+	}
+
+	@Override
+	public LicenseCategory getLicenseCategory() {
+		return category;
+	}
+	
+	/*
+	 * Seen by IsSerializable
+	 */
+	public HelicopterLicense(){
+		super();
+	}
 }

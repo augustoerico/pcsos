@@ -55,6 +55,8 @@ public abstract class License implements Serializable {
 
 	public abstract LicenseTypes getLicenceType();
 	
+	public abstract LicenseCategory getLicenseCategory();
+	
 	/*
 	 * Seen by IsSerializable
 	 */

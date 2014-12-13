@@ -11,7 +11,7 @@ import javax.jdo.annotations.Persistent;
 import epusp.pcs.os.shared.model.person.user.agent.Agent;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION, detachable="true")
-public class DrivingLicence extends License implements Serializable{
+public class DrivingLicense extends License implements Serializable{
 
 	@NotPersistent
 	private static final long serialVersionUID = 1L;
@@ -28,12 +28,12 @@ public class DrivingLicence extends License implements Serializable{
     @Persistent(mappedBy="drivingLicence")
     private Agent agent;
 	
-	public DrivingLicence(Agent agent, String registerCode){
+	public DrivingLicense(Agent agent, String registerCode){
 		super(registerCode);
 		this.agent = agent;
 	}
 	
-	public DrivingLicence(Agent agent,String registerCode, Date effectiveUntil){
+	public DrivingLicense(Agent agent,String registerCode, Date effectiveUntil){
 		super(registerCode, effectiveUntil);
 		this.agent = agent;
 	}
@@ -58,11 +58,16 @@ public class DrivingLicence extends License implements Serializable{
 	public LicenseTypes getLicenceType() {
 		return licenceType;
 	}
+
+	@Override
+	public LicenseCategory getLicenseCategory() {
+		return category;
+	}
 	
 	/*
 	 * Seen by IsSerializable
 	 */
-	public DrivingLicence(){
+	public DrivingLicense(){
 		super();
 	}
 }
