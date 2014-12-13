@@ -17,7 +17,7 @@ public class Helicopter extends Vehicle implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@NotPersistent
-	public static int maxCarOccupants = 5;
+	public static int maxHelicopterOccupants = 5;
 	
 	@NotPersistent
 	private Agent pilot;
@@ -41,7 +41,7 @@ public class Helicopter extends Vehicle implements Serializable{
 
 	@Override
 	public int getMaxNumberOfOccupants() {
-		return 0;
+		return maxHelicopterOccupants;
 	}
 
 	/*
