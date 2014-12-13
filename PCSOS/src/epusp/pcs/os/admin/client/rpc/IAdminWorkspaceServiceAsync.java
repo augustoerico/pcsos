@@ -11,6 +11,7 @@ import epusp.pcs.os.shared.model.person.victim.Victim;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 import epusp.pcs.os.shared.model.vehicle.car.Car;
 import epusp.pcs.os.shared.model.vehicle.helicopter.Helicopter;
+import epusp.pcs.os.shared.model.vehicle.motorcycle.Motorcycle;
 
 public interface IAdminWorkspaceServiceAsync extends IConnectionServiceAsync {
 
@@ -24,6 +25,9 @@ public interface IAdminWorkspaceServiceAsync extends IConnectionServiceAsync {
 
 	void getHelicopters(MoveCursor move, int range,
 			AsyncCallback<Collection<Helicopter>> callback);
+	
+	void getMotorcycles(MoveCursor move, int range,
+			AsyncCallback<Collection<Motorcycle>> callback);
 
 	void createVictim(Victim victim, AsyncCallback<Void> callback);
 
@@ -35,4 +39,5 @@ public interface IAdminWorkspaceServiceAsync extends IConnectionServiceAsync {
 
 	void getFullHelicopter(String id, AsyncCallback<Helicopter> asyncCallback);
 
+	void getFullMotorcycle(String id, AsyncCallback<Motorcycle> asyncCallback);
 }

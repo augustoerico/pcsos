@@ -137,6 +137,13 @@ public class CreateUpdate extends Composite implements Display {
 		if(widget != null)
 			secondaryAttributes.remove(widget);
 	}
+	
+	@Override
+	public void removePrimaryAttribute(Widget w) {
+		Widget widget = map.remove(w);
+		if(widget != null)
+			primaryAttributes.remove(widget);		
+	}
 
 	@Override
 	public void clearSecondaryAttributes(){

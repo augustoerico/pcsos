@@ -15,6 +15,9 @@ public interface AdminResources extends SharedResources {
 	@Source("images/police-vehicle.png")
 	ImageResource car();
 	
+	@Source("images/motorcycle.png")
+	ImageResource motorcycle();
+	
 	@Source("images/new-client.png")
 	ImageResource newClient();
 	

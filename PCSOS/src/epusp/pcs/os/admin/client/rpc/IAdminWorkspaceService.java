@@ -11,6 +11,7 @@ import epusp.pcs.os.shared.model.person.victim.Victim;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 import epusp.pcs.os.shared.model.vehicle.car.Car;
 import epusp.pcs.os.shared.model.vehicle.helicopter.Helicopter;
+import epusp.pcs.os.shared.model.vehicle.motorcycle.Motorcycle;
 
 @RemoteServiceRelativePath("adminWorkspaceService")
 public interface IAdminWorkspaceService extends IConnectionService {
@@ -22,6 +23,8 @@ public interface IAdminWorkspaceService extends IConnectionService {
 	Collection<Car> getCars(MoveCursor move, int range);
 
 	Collection<Helicopter> getHelicopters(MoveCursor move, int range);
+	
+	Collection<Motorcycle> getMotorcycles(MoveCursor move, int range);
 
 	void createVictim(Victim victim);
 
@@ -32,4 +35,6 @@ public interface IAdminWorkspaceService extends IConnectionService {
 	Car getFullCar(String id);
 
 	Helicopter getFullHelicopter(String id);
+
+	Motorcycle getFullMotorcycle(String id);
 }

@@ -45,9 +45,11 @@ import epusp.pcs.os.shared.model.person.victim.VictimCustomAttributes;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 import epusp.pcs.os.shared.model.vehicle.VehicleTypes;
 import epusp.pcs.os.shared.model.vehicle.car.Car;
-import epusp.pcs.os.shared.model.vehicle.car.CarCustomProperties;
+import epusp.pcs.os.shared.model.vehicle.car.CarCustomAttributes;
 import epusp.pcs.os.shared.model.vehicle.helicopter.Helicopter;
-import epusp.pcs.os.shared.model.vehicle.helicopter.HelicopterCustomProperties;
+import epusp.pcs.os.shared.model.vehicle.helicopter.HelicopterCustomAttributes;
+import epusp.pcs.os.shared.model.vehicle.motorcycle.Motorcycle;
+import epusp.pcs.os.shared.model.vehicle.motorcycle.MotorcycleCustomAttributes;
 
 public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 
@@ -202,7 +204,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 					
 					@Override
 					public void onSelectedRow(final Car objectSelected) {
-						loader.loadCustomAttributes(CarCustomProperties.values(), new IAttributeInfoLoaded() {
+						loader.loadCustomAttributes(CarCustomAttributes.values(), new IAttributeInfoLoaded() {
 							@Override
 							public void onCustomAttributesLoaded() {
 								rpcService.getFullCar(objectSelected.getId(), new AsyncCallback<Car>() {
@@ -210,7 +212,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 									@Override
 									public void onSuccess(Car result) {
 										List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
-										for(ICustomAttributes attribute : CarCustomProperties.values()){
+										for(ICustomAttributes attribute : CarCustomAttributes.values()){
 											attributes.add(attributesInfo.get(attribute.getAttributeName()));
 										}
 										CreateUpdatePresenter createUpdatePresenter = new UpdateCarPresenter(rpcService, new CreateUpdate(), constants, attributes, loader, result);
@@ -234,7 +236,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 					
 					@Override
 					public void onSelectedRow(final Helicopter objectSelected) {
-						loader.loadCustomAttributes(HelicopterCustomProperties.values(), new IAttributeInfoLoaded() {
+						loader.loadCustomAttributes(HelicopterCustomAttributes.values(), new IAttributeInfoLoaded() {
 							@Override
 							public void onCustomAttributesLoaded() {
 								rpcService.getFullHelicopter(objectSelected.getId(), new AsyncCallback<Helicopter>() {
@@ -242,7 +244,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 									@Override
 									public void onSuccess(Helicopter result) {
 										List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
-										for(ICustomAttributes attribute : HelicopterCustomProperties.values()){
+										for(ICustomAttributes attribute : HelicopterCustomAttributes.values()){
 											attributes.add(attributesInfo.get(attribute.getAttributeName()));
 										}
 										CreateUpdatePresenter createUpdatePresenter = new UpdateHelicopterPresenter(rpcService, new CreateUpdate(), constants, attributes, loader, result);
@@ -260,6 +262,38 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 				});
 				helicopterTablePresenter.go(panel);
 				imageTabPresenter.addInfo(constants.helicopter(), resources.helicopter().getSafeUri().asString(), panel);
+				break;
+			case Motorcycle:
+				MotorcycleTablePresenter motorcycleTablePresenter = new MotorcycleTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Motorcycle>() {
+
+					@Override
+					public void onSelectedRow(final Motorcycle objectSelected) {
+						loader.loadCustomAttributes(MotorcycleCustomAttributes.values(), new IAttributeInfoLoaded() {
+							@Override
+							public void onCustomAttributesLoaded() {
+								rpcService.getFullMotorcycle(objectSelected.getId(), new AsyncCallback<Motorcycle>() {
+
+									@Override
+									public void onSuccess(Motorcycle result) {
+										List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
+										for(ICustomAttributes attribute : MotorcycleCustomAttributes.values()){
+											attributes.add(attributesInfo.get(attribute.getAttributeName()));
+										}
+										CreateUpdatePresenter createUpdatePresenter = new UpdateMotorcyclePresenter(rpcService, new CreateUpdate(), constants, attributes, loader, result);
+										createUpdatePresenter.go(popup);
+										popup.center();
+									}
+
+									@Override
+									public void onFailure(Throwable caught) {
+									}
+								});
+							}
+						});
+					}
+				});
+				motorcycleTablePresenter.go(panel);
+				imageTabPresenter.addInfo(constants.motorcycle(), resources.motorcycle().getSafeUri().asString(), panel);
 				break;
 			default:
 				break;

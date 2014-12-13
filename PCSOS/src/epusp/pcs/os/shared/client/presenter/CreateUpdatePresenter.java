@@ -61,6 +61,7 @@ public class CreateUpdatePresenter implements Presenter{
 		void addCancelClickHandler(ClickHandler handler);
 		Boolean isPictureVisible();
 		void addPrimaryAttribute(String label, Boolean required, Widget w);
+		void removePrimaryAttribute(Widget w);
 		void addSecondaryAttribute(String label, Boolean required, Widget w);
 		void removeSecondaryAttribute(Widget w);
 		void setSaveEnabled(Boolean enabled);

@@ -16,6 +16,7 @@ import epusp.pcs.os.shared.model.person.victim.Victim;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 import epusp.pcs.os.shared.model.vehicle.car.Car;
 import epusp.pcs.os.shared.model.vehicle.helicopter.Helicopter;
+import epusp.pcs.os.shared.model.vehicle.motorcycle.Motorcycle;
 
 public class AdminWorkspaceConnection extends Connection implements IAdminWorkspaceService{
 
@@ -78,6 +79,14 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 		}
 		return null;
 	}
+	
+	private static final String motorcycleCursorPositionSessionAttribute = "motorcycleCursorPositionSessionAttribute";
+	private static final String motorcycleCursorsListSessionAttribute = "motorcycleCursorsListSessionAttribute";
+	
+	@Override
+	public Collection<Motorcycle> getMotorcycles(MoveCursor move, int range) {
+		return getData(Motorcycle.class, move, range, motorcycleCursorPositionSessionAttribute, motorcycleCursorsListSessionAttribute);
+	}
 
 	@Override
 	public void createVictim(Victim victim){
@@ -138,6 +147,9 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 				case Helicopter:
 					pm.makePersistent((Helicopter) vehicle);
 					break;
+				case Motorcycle:
+					pm.makePersistent((Motorcycle) vehicle);
+					break;
 				default:
 					break;
 				};
@@ -193,6 +205,33 @@ public class AdminWorkspaceConnection extends Connection implements IAdminWorksp
 				pm.currentTransaction().begin();
 				car = pm.getObjectById(Helicopter.class, id);
 				detached = pm.detachCopy(car);
+				pm.currentTransaction().commit();
+			}catch(Exception e){
+				e.printStackTrace();
+				if (pm.currentTransaction().isActive())
+					pm.currentTransaction().rollback();
+			}finally{
+				pm.close();
+			}
+
+			return detached;
+		}
+		return null;
+	}
+
+	@Override
+	public Motorcycle getFullMotorcycle(String id) {
+		if(isLoggedIn()){
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+
+			pm.getFetchPlan().addGroup("all_system_object_attributes");
+			pm.getFetchPlan().setMaxFetchDepth(-1);
+
+			Motorcycle motorcycle = null, detached = null;
+			try{
+				pm.currentTransaction().begin();
+				motorcycle = pm.getObjectById(Motorcycle.class, id);
+				detached = pm.detachCopy(motorcycle);
 				pm.currentTransaction().commit();
 			}catch(Exception e){
 				e.printStackTrace();

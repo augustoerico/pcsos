@@ -26,9 +26,11 @@ import epusp.pcs.os.shared.model.vehicle.Priority;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 import epusp.pcs.os.shared.model.vehicle.VehicleTypes;
 import epusp.pcs.os.shared.model.vehicle.car.Car;
-import epusp.pcs.os.shared.model.vehicle.car.CarCustomProperties;
+import epusp.pcs.os.shared.model.vehicle.car.CarCustomAttributes;
 import epusp.pcs.os.shared.model.vehicle.helicopter.Helicopter;
-import epusp.pcs.os.shared.model.vehicle.helicopter.HelicopterCustomProperties;
+import epusp.pcs.os.shared.model.vehicle.helicopter.HelicopterCustomAttributes;
+import epusp.pcs.os.shared.model.vehicle.motorcycle.Motorcycle;
+import epusp.pcs.os.shared.model.vehicle.motorcycle.MotorcycleCustomAttributes;
 
 public class CreateVehiclePresenter extends CreateUpdatePresenter{
 
@@ -84,15 +86,17 @@ public class CreateVehiclePresenter extends CreateUpdatePresenter{
 				String l = vehicleTypes.getValue(vehicleTypes.getSelectedIndex());
 				clearCustomAtttributes();
 				view.clearSecondaryAttributes();
+				view.removePrimaryAttribute(plate);
+				plate = null;
 				if(!l.equals("")){
 					switch (VehicleTypes.valueOf(l)) {
 					case Car:
 						plate = new TextBox();
 						view.addPrimaryAttribute(getConstants().plate(), true, plate);
-						loader.loadCustomAttributes(CarCustomProperties.values(), new IAttributeInfoLoaded() {
+						loader.loadCustomAttributes(CarCustomAttributes.values(), new IAttributeInfoLoaded() {
 							@Override
 							public void onCustomAttributesLoaded() {
-								for(ICustomAttributes attribute : CarCustomProperties.values()){
+								for(ICustomAttributes attribute : CarCustomAttributes.values()){
 									addCustomAttribute(loader.getAttributeInfo(attribute.getAttributeName()));
 								}
 								addCustomAttributesToView();
@@ -100,10 +104,23 @@ public class CreateVehiclePresenter extends CreateUpdatePresenter{
 						});
 						break;
 					case Helicopter:
-						loader.loadCustomAttributes(HelicopterCustomProperties.values(), new IAttributeInfoLoaded() {
+						loader.loadCustomAttributes(HelicopterCustomAttributes.values(), new IAttributeInfoLoaded() {
 							@Override
 							public void onCustomAttributesLoaded() {
-								for(ICustomAttributes attribute : HelicopterCustomProperties.values()){
+								for(ICustomAttributes attribute : HelicopterCustomAttributes.values()){
+									addCustomAttribute(loader.getAttributeInfo(attribute.getAttributeName()));
+								}
+								addCustomAttributesToView();
+							}
+						});
+						break;
+					case Motorcycle:
+						plate = new TextBox();
+						view.addPrimaryAttribute(getConstants().plate(), true, plate);
+						loader.loadCustomAttributes(MotorcycleCustomAttributes.values(), new IAttributeInfoLoaded() {
+							@Override
+							public void onCustomAttributesLoaded() {
+								for(ICustomAttributes attribute : MotorcycleCustomAttributes.values()){
 									addCustomAttribute(loader.getAttributeInfo(attribute.getAttributeName()));
 								}
 								addCustomAttributesToView();
@@ -130,6 +147,9 @@ public class CreateVehiclePresenter extends CreateUpdatePresenter{
 					break;
 				case Helicopter:
 					vehicle = new Helicopter(idTag.getText());
+					break;
+				case Motorcycle:
+					vehicle = new Motorcycle(idTag.getText(), plate.getText());
 					break;
 				default:
 					break;
