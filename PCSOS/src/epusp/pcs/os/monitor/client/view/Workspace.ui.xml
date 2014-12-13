@@ -264,36 +264,36 @@
 								<g:VerticalPanel styleName="{style.controlItem}"
 									verticalAlignment="middle" horizontalAlignment="right">
 									<g:cell verticalAlignment="top" horizontalAlignment="center">
-										<g:Image styleName="{style.controlImage}" height="30px"
+										<g:Image styleName="{style.controlImage} {style.applyGrayscale}" height="30px"
 											width="auto" ui:field="map" />
 									</g:cell>
 									<g:cell verticalAlignment="bottom" horizontalAlignment="center">
 										<g:RadioButton ui:field="mapRadio" name="control"
-											enabled="true" checked="true" />
+											enabled="false" checked="true" />
 									</g:cell>
 								</g:VerticalPanel>
 
 								<g:VerticalPanel styleName="{style.controlItem}"
 									verticalAlignment="middle" horizontalAlignment="center">
 									<g:cell verticalAlignment="top" horizontalAlignment="center">
-										<g:Image styleName="{style.controlImage}" height="30px"
+										<g:Image styleName="{style.controlImage} {style.applyGrayscale}" height="30px"
 											width="auto" ui:field="info" />
 									</g:cell>
 									<g:cell verticalAlignment="bottom" horizontalAlignment="center">
 										<g:RadioButton ui:field="infoRadio" name="control"
-											enabled="true" checked="false" />
+											enabled="false" checked="false" />
 									</g:cell>
 								</g:VerticalPanel>
 
 								<g:VerticalPanel styleName="{style.controlItem}"
 									verticalAlignment="middle" horizontalAlignment="left">
 									<g:cell verticalAlignment="top" horizontalAlignment="center">
-										<g:Image styleName="{style.controlImage}" height="30px"
+										<g:Image styleName="{style.controlImage} {style.applyGrayscale}" height="30px"
 											width="auto" ui:field="reinforcements" />
 									</g:cell>
 									<g:cell verticalAlignment="bottom" horizontalAlignment="center">
 										<g:RadioButton ui:field="reinforcementsRadio"
-											name="control" enabled="true" checked="false" />
+											name="control" enabled="false" checked="false" />
 									</g:cell>
 								</g:VerticalPanel>
 							</g:FlowPanel>

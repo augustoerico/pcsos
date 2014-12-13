@@ -82,16 +82,19 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 			Victim victim = (Victim) item;
 			view.addHeaderAttribute(constants.givenName(), victim.getName());
 			view.addHeaderAttribute(constants.surname(), victim.getSurname());
-			view.setPicture(victim.getPictureURL());
+			if(victim.getPictureURL() != null)
+				view.setPicture(victim.getPictureURL());
 		}else if(item instanceof Vehicle){
 			Vehicle vehicle = (Vehicle) item;
 			view.addHeaderAttribute(constants.priority(), vehicle.getPriority().getText());
-			view.setPicture(vehicle.getImageURL());
+			if(vehicle.getImageURL() != null)
+				view.setPicture(vehicle.getImageURL());
 		}else if(item instanceof Agent){
 			Agent agent = (Agent) item;
 			view.addHeaderAttribute(constants.givenName(), agent.getName());
 			view.addHeaderAttribute(constants.surname(), agent.getSurname());
-			view.setPicture(agent.getPictureURL());
+			if(agent.getPictureURL() != null)
+				view.setPicture(agent.getPictureURL());
 		}
 		
 		container.clear();

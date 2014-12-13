@@ -44,6 +44,7 @@ import epusp.pcs.os.shared.model.vehicle.Priority;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
 import epusp.pcs.os.shared.model.vehicle.car.Car;
 import epusp.pcs.os.shared.model.vehicle.helicopter.Helicopter;
+import epusp.pcs.os.shared.model.vehicle.motorcycle.Motorcycle;
 
 public class Connection extends RemoteServiceServlet implements IConnectionService{
 
@@ -579,6 +580,50 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		}
 
 
+		//------------------------------
+		
+		Motorcycle moto = new Motorcycle("TAG999", "XPR-0123");
+		moto.setPrioraty(Priority.SUPPORT);
+		moto.setIsActive(true);
+		moto.setImageURL("http://2.bp.blogspot.com/_goJpH6STjio/S_bDtC0Jm2I/AAAAAAAABy8/bTisR96KxEE/s1600/moto-do-batman-f1c75.jpg");
+		Motorcycle detachedMoto = null;
+
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(moto);
+			detachedMoto = pm.detachCopy(moto);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+		
+		Agent batman = new Agent("Wayne", "Bruce", "bruce.wayne@gmail.com");
+		batman.setIsActive(true);
+		batman.setPictureURL("http://static.comicvine.com/uploads/original/0/40/2486696-batman_the_dark_knight_rises_the_dark_knight_rises_30411051_967_1450.jpeg");
+		Agent detachedBatman = null; 
+
+		pm =  PMF.get().getPersistenceManager();
+
+		try{
+			pm.currentTransaction().begin();
+			pm.makePersistent(batman);
+			detachedBatman = pm.detachCopy(batman);
+			pm.currentTransaction().commit();
+		}catch (Exception e){
+			e.printStackTrace();
+			if(pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+		
+		
 		/*************************************************************************************************************************/
 		Position ATLANTA = new Position(33.7814790, -84.3880580);
 		Position STONE_MOUNTAIN_PARK = new Position(33.80653802509606, -84.15252685546875);
@@ -608,6 +653,10 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		l.clear();
 		l.add(detachedRobocop);
 		workflow.addFreeVehicle(detachedC1.getIdTag(), l, PIEDMONT_HOSPITAL);
+		
+		l.clear();
+		l.add(detachedBatman);
+		workflow.addFreeVehicle(detachedMoto.getIdTag(), l, UNDERGROUND_ATLANTA);
 		/*************************************************************************************************************************/
 
 
