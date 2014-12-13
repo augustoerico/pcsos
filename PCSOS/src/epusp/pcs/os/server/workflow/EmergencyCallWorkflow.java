@@ -77,7 +77,7 @@ public enum EmergencyCallWorkflow {
 				mgr.close();
 			}
 			
-			if(detached != null){
+			if(detached != null && detached.isActive()){
 				EmergencyCall emergencyCall = new EmergencyCall(new Date(), victimEmail);
 				
 				System.out.println("Emergency call for " + emergencyCall.getVictimEmail() + ", begin " + emergencyCall.getBegin() + " at " + position.toString());
@@ -102,7 +102,7 @@ public enum EmergencyCallWorkflow {
 				mgr.close();
 			}
 
-			if(detached != null){
+			if(detached != null && detached.isActive()){
 				if(!freeMonitors.contains(detached)){
 					freeMonitors.addLast(detached);
 					activeMonitors.put(detached.getId(), detached);
@@ -135,7 +135,7 @@ public enum EmergencyCallWorkflow {
 				}
 			}
 
-			if(detached != null){
+			if(detached != null && detached.isActive()){
 				switch(detached.getPriority()){
 				case PRIMARY:
 					freePrimaryVehicles.put(detached.getIdTag(), detached);

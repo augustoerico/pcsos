@@ -36,7 +36,7 @@ public abstract class Person extends SystemObject implements Serializable {
 	private String surname;
 	
 	@Persistent
-	private Boolean isActive = false; //default value
+	private Boolean isActive = false;
 	
 	@Persistent
 	private String imageURL;

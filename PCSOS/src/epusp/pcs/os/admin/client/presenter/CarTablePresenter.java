@@ -2,7 +2,9 @@ package epusp.pcs.os.admin.client.presenter;
 
 import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.cell.client.ImageCell;
+import com.google.gwt.cell.client.ImageResourceCell;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -17,6 +19,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 
 import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
+import epusp.pcs.os.shared.client.SharedResources;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.general.SelectedRowHandler;
 import epusp.pcs.os.shared.model.vehicle.car.Car;
@@ -27,6 +30,7 @@ public class CarTablePresenter implements Presenter{
 	private final IAdminWorkspaceServiceAsync rpcService;
 	private final AdminWorkspaceConstants constants;
 	private final int pageSize;
+	private final SharedResources resources;
 	
 	private final CellTable<Car> table = new CellTable<Car>();
 	
@@ -43,11 +47,12 @@ public class CarTablePresenter implements Presenter{
 	
 	private final DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Unit.PX);
 	
-	public CarTablePresenter(IAdminWorkspaceServiceAsync rpcService, AdminWorkspaceConstants constants, int pageSize, SelectedRowHandler<Car> handler){
+	public CarTablePresenter(IAdminWorkspaceServiceAsync rpcService, AdminWorkspaceConstants constants, SharedResources resources, int pageSize, SelectedRowHandler<Car> handler){
 		this.rpcService = rpcService;
 		this.constants = constants;
 		this.pageSize = pageSize;
 		this.handler = handler;
+		this.resources = resources;
 	}
 
 	@Override
@@ -80,7 +85,15 @@ public class CarTablePresenter implements Presenter{
 			}
 		};
 
-
+		Column<Car, ImageResource> carActiveColumn = new Column<Car, ImageResource>(new ImageResourceCell()) {
+			@Override
+			public ImageResource getValue(Car object) {
+				if(object.isActive())
+					return resources.active();
+				else
+					return resources.inactive();
+			}
+		};
 
 		Column<Car, String> pictureColumn = new Column<Car, String>(new ImageCell()) {
 			@Override
@@ -108,6 +121,8 @@ public class CarTablePresenter implements Presenter{
 		table.addColumn(priorityColumn, constants.priority());
 
 		table.addColumn(pictureColumn, constants.picture());
+		
+		table.addColumn(carActiveColumn, constants.active());
 		
 		dockLayoutPanel.setSize("100%", "100%");
 		dockLayoutPanel.addSouth(pager, 35);

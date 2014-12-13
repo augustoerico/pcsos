@@ -8,6 +8,7 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
@@ -50,6 +51,7 @@ public class CreateVehiclePresenter extends CreateUpdatePresenter{
 	
 	private TextBox idTag, plate;
 	private ListBox vehicleTypes, priority;
+	private CheckBox isActive;
 
 	@Override
 	public void go(HasWidgets container){
@@ -67,10 +69,13 @@ public class CreateVehiclePresenter extends CreateUpdatePresenter{
 		}
 		
 		idTag = new TextBox();
+		isActive = new CheckBox();
+		
 		view.addPrimaryAttribute(constants.tag(), true, idTag);
 		view.addPrimaryAttribute(constants.vehicleType(), true, vehicleTypes);
 		view.addPrimaryAttribute(constants.priority(), true, priority);
-
+		view.addPrimaryAttribute(constants.active(), false, isActive);
+		
 		super.go(container);
 		bind();
 	}
@@ -159,6 +164,8 @@ public class CreateVehiclePresenter extends CreateUpdatePresenter{
 				
 				vehicle.setPrioraty(Priority.valueOf(priority.getValue(priority.getSelectedIndex())));
 				
+				vehicle.setIsActive(isActive.getValue());
+				
 				readValuesAndSaveOnObject(vehicle);
 				
 				getRpcService().createVehicle(vehicle, new AsyncCallback<Void>() {
@@ -192,6 +199,10 @@ public class CreateVehiclePresenter extends CreateUpdatePresenter{
 	
 	protected ListBox getPriorityListBox(){
 		return priority;
+	}
+	
+	protected CheckBox getIsActiveCheckBox(){
+		return isActive;
 	}
 	
 	@Override

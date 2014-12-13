@@ -44,6 +44,8 @@ public class UpdateCarPresenter extends CreateVehiclePresenter{
 		getView().setPictureUrl(car.getImageURL());
 		getView().showPicture();
 		
+		getIsActiveCheckBox().setValue(car.isActive());
+		
 		addValuesToCustomWidgets(car);
 	}
 

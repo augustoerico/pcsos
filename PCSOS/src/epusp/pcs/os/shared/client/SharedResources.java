@@ -28,4 +28,10 @@ public interface SharedResources extends ClientBundle {
 	
 	@Source("images/remove.png")
 	ImageResource remove();
+	
+	@Source("images/true.png")
+	ImageResource active();
+	
+	@Source("images/false.png")
+	ImageResource inactive();
 }

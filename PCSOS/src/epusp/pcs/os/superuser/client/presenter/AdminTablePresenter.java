@@ -7,6 +7,7 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
 
+import epusp.pcs.os.shared.client.SharedResources;
 import epusp.pcs.os.shared.general.SelectedRowHandler;
 import epusp.pcs.os.shared.model.person.user.admin.Admin;
 import epusp.pcs.os.shared.provider.AsyncAdminProvider;
@@ -25,8 +26,8 @@ public class AdminTablePresenter extends UserTablePresenter{
 	private final SelectedRowHandler<Admin> handler;
 
 	public AdminTablePresenter(ISuperUserWorkspaceServiceAsync rpcService,
-			SuperUserWorkspaceConstants constants, int pageSize, SelectedRowHandler<Admin> handler) {
-		super(rpcService, constants, pageSize);
+			SuperUserWorkspaceConstants constants, SharedResources resources, int pageSize, SelectedRowHandler<Admin> handler) {
+		super(rpcService, constants, resources, pageSize);
 		this.handler = handler;
 	}
 	

@@ -33,7 +33,7 @@ public class CreatePersonPresenter extends CreateUpdatePresenter{
 		view.addPrimaryAttribute(constants.name(), true, givenName);
 		view.addPrimaryAttribute(constants.email(), true, email);
 		view.addPrimaryAttribute(constants.googleId(), false, googleId);
-		view.addPrimaryAttribute(constants.active(), true, active);
+		view.addPrimaryAttribute(constants.active(), false, active);
 		view.setSaveEnabled(true);
 		super.go(container);
 		bind();

@@ -121,7 +121,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 		HasWidgets adminContainer = display.addType(Admin.class.getName(), adminHeaderButton);
 		HasWidgets superUserContainer = display.addType(SuperUser.class.getName(), superHeaderButton);
 
-		UserTablePresenter monitorTablePresenter = new MonitorTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Monitor>() {
+		UserTablePresenter monitorTablePresenter = new MonitorTablePresenter(rpcService, constants, resources, pageSize, new SelectedRowHandler<Monitor>() {
 			@Override
 			public void onSelectedRow(final Monitor objectSelected) {
 				loader.loadCustomAttributes(MonitorCustomAttributes.values(), new IAttributeInfoLoaded() {
@@ -151,7 +151,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 		
 		monitorTablePresenter.go(monitorContainer);
 
-		UserTablePresenter adminTablePresenter = new AdminTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Admin>() {
+		UserTablePresenter adminTablePresenter = new AdminTablePresenter(rpcService, constants, resources, pageSize, new SelectedRowHandler<Admin>() {
 			@Override
 			public void onSelectedRow(final Admin objectSelected) {
 				loader.loadCustomAttributes(AdminCustomProperties.values(), new IAttributeInfoLoaded() {
@@ -181,7 +181,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 		
 		adminTablePresenter.go(adminContainer);
 
-		UserTablePresenter superUserTablePresenter = new SuperUserTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<SuperUser>() {
+		UserTablePresenter superUserTablePresenter = new SuperUserTablePresenter(rpcService, constants, resources, pageSize, new SelectedRowHandler<SuperUser>() {
 			@Override
 			public void onSelectedRow(final SuperUser objectSelected) {
 				loader.loadCustomAttributes(SuperUserCustomAttributes.values(), new IAttributeInfoLoaded() {

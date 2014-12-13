@@ -44,6 +44,8 @@ public class UpdateMotorcyclePresenter  extends CreateVehiclePresenter{
 		getView().setPictureUrl(motorcycle.getImageURL());
 		getView().showPicture();
 		
+		getIsActiveCheckBox().setValue(motorcycle.isActive());
+		
 		addValuesToCustomWidgets(motorcycle);
 	}
 

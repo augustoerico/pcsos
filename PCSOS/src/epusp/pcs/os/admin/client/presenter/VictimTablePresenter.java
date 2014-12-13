@@ -2,7 +2,9 @@ package epusp.pcs.os.admin.client.presenter;
 
 import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.cell.client.ImageCell;
+import com.google.gwt.cell.client.ImageResourceCell;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -17,6 +19,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 
 import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
+import epusp.pcs.os.shared.client.SharedResources;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.general.SelectedRowHandler;
 import epusp.pcs.os.shared.model.person.victim.Victim;
@@ -27,6 +30,7 @@ public class VictimTablePresenter implements Presenter{
 	private final IAdminWorkspaceServiceAsync rpcService;
 	private final AdminWorkspaceConstants constants;
 	private final int pageSize;
+	private final SharedResources resources;
 
 	private final CellTable<Victim> table = new CellTable<Victim>();
 
@@ -43,11 +47,13 @@ public class VictimTablePresenter implements Presenter{
 	
 	private final SelectedRowHandler<Victim> handler;
 
-	public VictimTablePresenter(IAdminWorkspaceServiceAsync rpcService, AdminWorkspaceConstants constants, int pageSize, SelectedRowHandler<Victim> handler){
+	public VictimTablePresenter(IAdminWorkspaceServiceAsync rpcService, AdminWorkspaceConstants constants, SharedResources resources,
+			int pageSize, SelectedRowHandler<Victim> handler){
 		this.rpcService = rpcService;
 		this.constants = constants;
 		this.pageSize = pageSize;
 		this.handler = handler;
+		this.resources = resources;
 	}
 
 	@Override
@@ -83,7 +89,15 @@ public class VictimTablePresenter implements Presenter{
 			}
 		};
 
-
+		Column<Victim, ImageResource> victimActiveColumn = new Column<Victim, ImageResource>(new ImageResourceCell()) {
+			@Override
+			public ImageResource getValue(Victim object) {
+				if(object.isActive())
+					return resources.active();
+				else
+					return resources.inactive();
+			}
+		};
 
 		Column<Victim, String> victimPictureColumn = new Column<Victim, String>(new ImageCell()) {
 			@Override
@@ -111,6 +125,8 @@ public class VictimTablePresenter implements Presenter{
 		table.addColumn(victimEmailColumn, constants.email());
 
 		table.addColumn(victimPictureColumn, constants.picture());
+		
+		table.addColumn(victimActiveColumn, constants.active());
 
 		dockLayoutPanel.setSize("100%", "100%");
 		dockLayoutPanel.addSouth(pager, 35);

@@ -128,7 +128,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 		
 		display.setBackgroundStyleName(backgroundResources.backgroundStyles().adminBackground());
 		
-		VictimTablePresenter victimTablePresenter = new VictimTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Victim>() {
+		VictimTablePresenter victimTablePresenter = new VictimTablePresenter(rpcService, constants, resources, pageSize, new SelectedRowHandler<Victim>() {
 			
 			@Override
 			public void onSelectedRow(final Victim objectSelected) {
@@ -160,7 +160,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 		HasWidgets victimContainer = display.addType(Victim.class.getName(), victimHeaderButton);
 		victimTablePresenter.go(victimContainer);
 
-		AgentTablePresenter agentTablePresenter = new AgentTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Agent>() {
+		AgentTablePresenter agentTablePresenter = new AgentTablePresenter(rpcService, constants, resources, pageSize, new SelectedRowHandler<Agent>() {
 			@Override
 			public void onSelectedRow(final Agent objectSelected) {
 				loader.loadCustomAttributes(AgentCustomAttributes.values(), new IAttributeInfoLoaded() {
@@ -200,7 +200,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 			panel.setSize("100%", "100%");
 			switch (type) {
 			case Car:
-				CarTablePresenter carTablePresenter = new CarTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Car>() {
+				CarTablePresenter carTablePresenter = new CarTablePresenter(rpcService, constants, resources, pageSize, new SelectedRowHandler<Car>() {
 					
 					@Override
 					public void onSelectedRow(final Car objectSelected) {
@@ -232,7 +232,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 				imageTabPresenter.addInfo(constants.car(), resources.car().getSafeUri().asString(), panel);
 				break;
 			case Helicopter:
-				HelicopterTablePresenter helicopterTablePresenter = new HelicopterTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Helicopter>() {
+				HelicopterTablePresenter helicopterTablePresenter = new HelicopterTablePresenter(rpcService, constants, resources, pageSize, new SelectedRowHandler<Helicopter>() {
 					
 					@Override
 					public void onSelectedRow(final Helicopter objectSelected) {
@@ -264,7 +264,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 				imageTabPresenter.addInfo(constants.helicopter(), resources.helicopter().getSafeUri().asString(), panel);
 				break;
 			case Motorcycle:
-				MotorcycleTablePresenter motorcycleTablePresenter = new MotorcycleTablePresenter(rpcService, constants, pageSize, new SelectedRowHandler<Motorcycle>() {
+				MotorcycleTablePresenter motorcycleTablePresenter = new MotorcycleTablePresenter(rpcService, constants, resources, pageSize, new SelectedRowHandler<Motorcycle>() {
 
 					@Override
 					public void onSelectedRow(final Motorcycle objectSelected) {

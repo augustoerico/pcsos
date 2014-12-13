@@ -41,6 +41,8 @@ public class UpdateHelicopterPresenter extends CreateVehiclePresenter{
 		getView().setPictureUrl(helicopter.getImageURL());
 		getView().showPicture();
 		
+		getIsActiveCheckBox().setValue(helicopter.isActive());
+		
 		addValuesToCustomWidgets(helicopter);
 	}
 

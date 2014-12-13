@@ -33,6 +33,9 @@ public abstract class Vehicle extends SystemObject implements Serializable {
 	@Persistent
 	private String imageURL;
 	
+	@Persistent
+	private Boolean isActive = false;
+	
 	@NotPersistent
 	private List<Agent> agents = new ArrayList<Agent>();
 	
@@ -104,6 +107,14 @@ public abstract class Vehicle extends SystemObject implements Serializable {
 	public void setPosition(Position position){
 		this.latitude = position.getLatitude();
 		this.longitude = position.getLongitude();
+	}
+	
+	public void setIsActive(Boolean isActive){
+		this.isActive = isActive;
+	}
+	
+	public Boolean isActive(){
+		return isActive;
 	}
 	
 	@Override

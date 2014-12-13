@@ -2,7 +2,9 @@ package epusp.pcs.os.admin.client.presenter;
 
 import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.cell.client.ImageCell;
+import com.google.gwt.cell.client.ImageResourceCell;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -17,6 +19,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 
 import epusp.pcs.os.admin.client.constants.AdminWorkspaceConstants;
 import epusp.pcs.os.admin.client.rpc.IAdminWorkspaceServiceAsync;
+import epusp.pcs.os.shared.client.SharedResources;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.general.SelectedRowHandler;
 import epusp.pcs.os.shared.model.vehicle.helicopter.Helicopter;
@@ -27,6 +30,7 @@ public class HelicopterTablePresenter implements Presenter{
 	private final IAdminWorkspaceServiceAsync rpcService;
 	private final AdminWorkspaceConstants constants;
 	private final int pageSize;
+	private final SharedResources resources;
 	
 	private final CellTable<Helicopter> table = new CellTable<Helicopter>();
 	
@@ -43,11 +47,13 @@ public class HelicopterTablePresenter implements Presenter{
 	
 	private final SelectedRowHandler<Helicopter> handler;
 	
-	public HelicopterTablePresenter(IAdminWorkspaceServiceAsync rpcService, AdminWorkspaceConstants constants, int pageSize, SelectedRowHandler<Helicopter> handler){
+	public HelicopterTablePresenter(IAdminWorkspaceServiceAsync rpcService, AdminWorkspaceConstants constants, SharedResources resources,
+			int pageSize, SelectedRowHandler<Helicopter> handler){
 		this.rpcService = rpcService;
 		this.constants = constants;
 		this.pageSize = pageSize;
 		this.handler = handler;
+		this.resources = resources;
 	}
 
 	@Override
@@ -68,6 +74,16 @@ public class HelicopterTablePresenter implements Presenter{
 			@Override
 			public String getValue(Helicopter object) {
 				return object.getPriority().getText();
+			}
+		};
+		
+		Column<Helicopter, ImageResource> helicopterActiveColumn = new Column<Helicopter, ImageResource>(new ImageResourceCell()) {
+			@Override
+			public ImageResource getValue(Helicopter object) {
+				if(object.isActive())
+					return resources.active();
+				else
+					return resources.inactive();
 			}
 		};
 
@@ -95,6 +111,8 @@ public class HelicopterTablePresenter implements Presenter{
 		table.addColumn(priorityColumn, constants.priority());
 		
 		table.addColumn(pictureColumn, constants.picture());
+		
+		table.addColumn(helicopterActiveColumn, constants.active());
 		
 		dockLayoutPanel.setSize("100%", "100%");
 		dockLayoutPanel.addSouth(pager, 35);

@@ -108,6 +108,7 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		pm = PMF.get().getPersistenceManager();
 		System.out.println("Create Cars...");
 		Car car = new Car("TAG001", "PCS-0505");
+		car.setIsActive(true);
 		car.setPrioraty(Priority.PRIMARY);
 		car.setImageURL("http://www.landmarkhire.com/images/starsky-and-hutch-car.jpg");
 		//
@@ -297,6 +298,7 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 
 		Helicopter h = new Helicopter("TAG00X");
 		h.setPrioraty(Priority.SUPPORT);
+		h.setIsActive(true);
 		h.setImageURL("http://3.bp.blogspot.com/-nPMJ8lbBR-Q/UVc42PBUfbI/AAAAAAAAAIc/r4pyz4NTEPI/s320/Helicoptero+Aguia+11+PMESP1.jpg");
 		Helicopter detachedH = null;
 
@@ -340,6 +342,7 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 
 		Car cX = new Car("TAG003", "XPT-0002");
 		cX.setPrioraty(Priority.SUPPORT);
+		cX.setIsActive(true);
 		cX.setImageURL("http://ecx.images-amazon.com/images/I/81cOTyQZbEL._SL1500_.jpg");
 		Car detachedCX = null;
 
@@ -390,6 +393,7 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		//-------------------------------------------------------------//
 		Car c1 = new Car("TAG004", "XPT-0003");
 		c1.setPrioraty(Priority.SUPPORT);
+		c1.setIsActive(true);
 		c1.setImageURL("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQOuABFcPm1W7stgmlpAwb9EqUHqIImJJvhSm6SKikl6WJdO1dr");
 		Car detachedC1 = null;
 
@@ -430,6 +434,7 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		//-------------------------------------------------------------//
 		Helicopter c2 = new Helicopter("TAG005");
 		c2.setPrioraty(Priority.SUPPORT);
+		c2.setIsActive(true);
 		c2.setImageURL("http://upload.wikimedia.org/wikipedia/commons/0/01/Blackhawk.jpg");
 		Helicopter detachedC2 = null;
 
