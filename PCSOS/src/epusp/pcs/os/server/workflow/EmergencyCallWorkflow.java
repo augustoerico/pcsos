@@ -19,8 +19,7 @@ import epusp.pcs.os.shared.model.person.user.agent.Agent;
 import epusp.pcs.os.shared.model.person.user.monitor.Monitor;
 import epusp.pcs.os.shared.model.person.victim.Victim;
 import epusp.pcs.os.shared.model.vehicle.Vehicle;
-import epusp.pcs.os.shared.model.vehicle.car.Car;
-import epusp.pcs.os.shared.model.vehicle.helicopter.Helicopter;
+import epusp.pcs.os.shared.model.vehicle.VehicleTypes;
 
 public enum EmergencyCallWorkflow {
 	INSTANCE;
@@ -116,28 +115,23 @@ public enum EmergencyCallWorkflow {
 	
 	public void addFreeVehicle(String vehicleIdTag, List<Agent> agents, Position position){
 		if(!activeVehicles.containsKey(vehicleIdTag)){
-			PersistenceManager mgr = getPersistenceManager();
-			mgr.getFetchPlan().addGroup("all_system_object_attributes");
 			Vehicle vehicle = null, detached = null;
-			try {
-				vehicle = mgr.getObjectById(Car.class, vehicleIdTag);
-				if(vehicle != null)
-					detached = mgr.detachCopy(vehicle);
-			}catch (Exception e){
-			} finally {
-				mgr.close();
-			}
-			
-			if(vehicle == null){
-				mgr = getPersistenceManager();
-				mgr.getFetchPlan().addGroup("all_system_object_attributes");
-				try {
-					vehicle = mgr.getObjectById(Helicopter.class, vehicleIdTag);
-					if(vehicle != null)
-						detached = mgr.detachCopy(vehicle);
-				}catch (Exception e){
-				} finally {
-					mgr.close();
+
+			for(VehicleTypes vehicleType : VehicleTypes.values()){
+				Class<?> targetClass = vehicleType.getTargetClass();
+				if(targetClass != null){
+					PersistenceManager mgr = getPersistenceManager();
+					mgr.getFetchPlan().addGroup("all_system_object_attributes");
+					try {
+						vehicle = (Vehicle) mgr.getObjectById(targetClass, vehicleIdTag);
+						if(vehicle != null){
+							detached = mgr.detachCopy(vehicle);
+							break;
+						}
+					}catch (Exception e){
+					} finally {
+						mgr.close();
+					}
 				}
 			}
 

@@ -17,6 +17,7 @@ import epusp.pcs.os.login.shared.LoginConfig;
 import epusp.pcs.os.server.Connection;
 import epusp.pcs.os.server.PMF;
 import epusp.pcs.os.shared.exception.DeniedAccess;
+import epusp.pcs.os.shared.model.person.user.AccountTypes;
 import epusp.pcs.os.shared.model.person.user.Auditor;
 import epusp.pcs.os.shared.model.person.user.User;
 import epusp.pcs.os.shared.model.person.user.admin.Admin;
@@ -79,49 +80,22 @@ public class LoginConnection extends Connection implements ILoginService{
 				log.log(Level.SEVERE, e.getMessage());
 			}
 
-			if(userEmail != null){
-				PersistenceManager pm = PMF.get().getPersistenceManager();
-
-				pm = PMF.get().getPersistenceManager();
+			if(userEmail != null){				
 				User user = null, detached = null;
-				try{
-					user = pm.getObjectById(Monitor.class, userEmail);
-					detached = pm.detachCopy(user);
-				}catch(Exception e){
-				}finally{				
-					pm.close();
-				}
-
-				if(detached == null){
-					pm = PMF.get().getPersistenceManager();
-					try{
-						user = pm.getObjectById(Admin.class, userEmail);
-						detached = pm.detachCopy(user);
-					}catch(Exception e){
-					}finally{
-						pm.close();
-					}
-				}
-
-				if(detached == null){
-					pm = PMF.get().getPersistenceManager();
-					try{
-						user = pm.getObjectById(Auditor.class, userEmail);
-						detached = pm.detachCopy(user);
-					}catch(Exception e){
-					}finally{
-						pm.close();
-					}
-				}
-
-				if(detached == null){
-					pm = PMF.get().getPersistenceManager();
-					try{
-						user = pm.getObjectById(SuperUser.class, userEmail);
-						detached = pm.detachCopy(user);
-					}catch(Exception e){
-					}finally{
-						pm.close();
+				for(AccountTypes accountType : AccountTypes.values()){
+					Class<?> targetClass = accountType.getTargetClass();
+					if(targetClass != null){
+						PersistenceManager mgr = PMF.get().getPersistenceManager();
+						try {
+							user = (User) mgr.getObjectById(targetClass, userEmail);
+							if(user != null){
+								detached = mgr.detachCopy(user);
+								break;
+							}
+						}catch (Exception e){
+						} finally {
+							mgr.close();
+						}
 					}
 				}
 
@@ -152,7 +126,7 @@ public class LoginConnection extends Connection implements ILoginService{
 							return null;
 						}
 						
-						pm = PMF.get().getPersistenceManager();
+						PersistenceManager pm = PMF.get().getPersistenceManager();
 						try{
 							pm.currentTransaction().begin();
 							if(admin != null)
