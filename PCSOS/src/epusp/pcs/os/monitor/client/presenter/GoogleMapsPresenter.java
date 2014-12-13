@@ -196,6 +196,10 @@ public class GoogleMapsPresenter implements Presenter, FinishCallHandler {
 				icon = Icon.newInstance(resources.helicopterMarker().getSafeUri().asString());
 				options.setTitle(constants.helicopter());
 				break;
+			case Motorcycle:
+				icon = Icon.newInstance(resources.motorcycleMarker().getSafeUri().asString());
+				options.setTitle(constants.motorcycle());
+				break;
 			default:
 				break;
 			}
