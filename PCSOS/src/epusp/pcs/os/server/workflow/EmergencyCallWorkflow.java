@@ -69,6 +69,7 @@ public enum EmergencyCallWorkflow {
 	public void addWaitingCall(String victimEmail, Position position){
 		if(!activeCalls.containsKey(victimEmail)){
 			PersistenceManager mgr = getPersistenceManager();
+			mgr.getFetchPlan().addGroup("all_system_object_attributes");
 			Victim victim, detached = null;
 			try {
 				victim = mgr.getObjectById(Victim.class, victimEmail);
@@ -94,6 +95,7 @@ public enum EmergencyCallWorkflow {
 	public void addFreeMonitor(String monitorId){
 		if(!activeMonitors.containsKey(monitorId)){
 			PersistenceManager mgr = getPersistenceManager();
+			mgr.getFetchPlan().addGroup("all_system_object_attributes");
 			Monitor monitor, detached = null;
 			try {
 				monitor = mgr.getObjectById(Monitor.class, monitorId);
