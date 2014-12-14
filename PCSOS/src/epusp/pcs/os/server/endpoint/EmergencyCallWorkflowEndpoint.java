@@ -8,6 +8,7 @@ import com.google.api.server.spi.config.ApiNamespace;
 
 import epusp.pcs.os.server.workflow.EmergencyCallWorkflow;
 import epusp.pcs.os.shared.model.AgentCollection;
+import epusp.pcs.os.shared.model.EmCallWithVehicles;
 import epusp.pcs.os.shared.model.EmergencyCallLifecycleStatus;
 import epusp.pcs.os.shared.model.oncall.EmergencyCall;
 import epusp.pcs.os.shared.model.oncall.Position;
@@ -31,15 +32,18 @@ public class EmergencyCallWorkflowEndpoint {
 	}
 
 	@ApiMethod(name="addFreeVehicle")
-	public void addFreeVehicle(@Named("vehicleId") String vehicleId, AgentCollection agents, Position position) throws Exception {
-		instance.addFreeVehicle(vehicleId, agents.getAgentCollection(), position);
+	public void addFreeVehicle(@Named("vehicleTag") String vehicleTag, AgentCollection agents, @Named("position") String position) throws Exception {
+		Double lat = Double.parseDouble(position.substring(0, position.indexOf(';')));
+		Double longt = Double.parseDouble(position.substring(position.indexOf(';') + 1));
+		Position pos = new Position(lat, longt);
+		instance.addFreeVehicle(vehicleTag, agents.getAgentCollection(), pos);
 	}
 
 	@ApiMethod(name="updatePositionAndVerifyStatus")
-	public EmergencyCall updatePositionAndVerifyStatus(@Named("vehicleId") String vehicleId, Position position) {
-		instance.addVehiclePosition(vehicleId, position);
-		if(instance.isVehicleOnCall(vehicleId))
-			return instance.getVehicleEmergencyCall(vehicleId);
+	public EmergencyCall updatePositionAndVerifyStatus(@Named("vehicleTag") String vehicleTag, Position position) {
+		instance.addVehiclePosition(vehicleTag, position);
+		if(instance.isVehicleOnCall(vehicleTag))
+			return instance.getVehicleEmergencyCall(vehicleTag);
 		else
 			return null;
 	}
@@ -53,21 +57,22 @@ public class EmergencyCallWorkflowEndpoint {
 	}
 	
 	@ApiMethod(name="updatePositionAndVerifyCallStatus")
-	public EmergencyCallLifecycleStatus updatePositionAndVerifyCallStatus(@Named("vehicleId") String vehicleId, Position position, @Named("victimEmail") String victimEmail) {
-		instance.addVehiclePosition(vehicleId, position);
-		EmergencyCallLifecycleStatus emCallStatus = new EmergencyCallLifecycleStatus();
-		emCallStatus.setStatus(instance.getEmergencyCallLifecycle(victimEmail).name());
-		return emCallStatus;
+	public EmCallWithVehicles updatePositionAndVerifyCallStatus(@Named("vehicleTag") String vehicleTag, Position position, @Named("victimEmail") String victimEmail) {
+		instance.addVehiclePosition(vehicleTag, position);
+		EmCallWithVehicles emCall = new EmCallWithVehicles();
+		emCall.setStatus(instance.getEmergencyCallLifecycle(victimEmail).name());
+		emCall.setEmCall(instance.getVehicleEmergencyCall(vehicleTag));
+		return emCall;
 	}
 
 	@ApiMethod(name="ackVehicleOnCall")
-	public void ackVehicleOnCall(@Named("vehicleId") String vehicleId) {
-		instance.vehicleOnCallAcknowledgment(vehicleId);
+	public void ackVehicleOnCall(@Named("vehicleTag") String vehicleTag) {
+		instance.vehicleOnCallAcknowledgment(vehicleTag);
 	}
 	
 	@ApiMethod(name="ackVehicleFinishedCall")
-	public void ackVehicleFinishedCall(@Named("vehicleId") String vehicleId) {
-		instance.vehicleFinishedCallAcknowledgment(vehicleId);
+	public void ackVehicleFinishedCall(@Named("vehicleTag") String vehicleTag) {
+		instance.vehicleFinishedCallAcknowledgment(vehicleTag);
 	}
 	
 	@ApiMethod(name="getVictim")
@@ -81,22 +86,27 @@ public class EmergencyCallWorkflowEndpoint {
 	}
 	
 	@ApiMethod(name="addAgentsToVehicle")
-	public void addAgentsToVehicle(@Named("vehicleId") String vehicleId, AgentCollection agents) {
-		instance.addAgentsToVehicle(vehicleId, agents.getAgentCollection());
+	public void addAgentsToVehicle(@Named("vehicleTag") String vehicleTag, AgentCollection agents) {
+		instance.addAgentsToVehicle(vehicleTag, agents.getAgentCollection());
 	}
 
 	@ApiMethod(name="addAgentToVehicle")
-	public void addAgentToVehicle(@Named("vehicleId") String vehicleId, Agent agent) {
-		instance.addAgentToVehicle(vehicleId, agent);
+	public void addAgentToVehicle(@Named("vehicleTag") String vehicleTag, Agent agent) {
+		instance.addAgentToVehicle(vehicleTag, agent);
 	}
 	
 	@ApiMethod(name="removeAllAgentsFromVehicle")
-	public void removeAllAgentsFromVehicle(@Named("vehicleId") String vehicleId) {
-		instance.removeAllAgentsFromVehicle(vehicleId);
+	public void removeAllAgentsFromVehicle(@Named("vehicleTag") String vehicleTag) {
+		instance.removeAllAgentsFromVehicle(vehicleTag);
 	}
 
 	@ApiMethod(name="removeAgentFromVehicle")
-	public void removeAgentFromVehicle(@Named("vehicleId") String vehicleId, Agent agent) {
-		instance.removeAgentFromVehicle(vehicleId, agent);
+	public void removeAgentFromVehicle(@Named("vehicleTag") String vehicleTag, Agent agent) {
+		instance.removeAgentFromVehicle(vehicleTag, agent);
+	}
+	
+	@ApiMethod(name="vehicleLeaving")
+	public void vehicleLeaving(@Named("vehicleTag") String vehicleTag) {
+		instance.vehicleLeaving(vehicleTag);
 	}
 }
