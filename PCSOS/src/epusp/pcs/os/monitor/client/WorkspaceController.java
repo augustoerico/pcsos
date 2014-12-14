@@ -156,7 +156,7 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 		reinforcementsPresenter.go(workspacePresenter.getReinforcementsArea());
 		newCallPresenter = new NewCallPresenter(new NewCall(), constants);
 		newCallPresenter.go(newCallPopup);
-		timer.scheduleRepeating(2_000);
+		timer.scheduleRepeating(5_000);
 		bind();
 	}
 
