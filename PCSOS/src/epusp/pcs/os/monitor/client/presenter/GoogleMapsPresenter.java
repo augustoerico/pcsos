@@ -2,7 +2,9 @@ package epusp.pcs.os.monitor.client.presenter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.Maps;
@@ -17,6 +19,7 @@ import com.google.gwt.maps.client.geocode.DirectionsCallback;
 import com.google.gwt.maps.client.geocode.StatusCodes;
 import com.google.gwt.maps.client.geocode.Waypoint;
 import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.geom.LatLngBounds;
 import com.google.gwt.maps.client.geom.Point;
 import com.google.gwt.maps.client.geom.Size;
 import com.google.gwt.maps.client.overlay.Icon;
@@ -29,11 +32,10 @@ import com.google.gwt.user.client.ui.HasWidgets;
 
 import epusp.pcs.os.monitor.client.MonitorResources;
 import epusp.pcs.os.monitor.client.constants.MonitorWorkspaceConstants;
-import epusp.pcs.os.monitor.client.event.FinishCallEvent.FinishCallHandler;
 import epusp.pcs.os.monitor.client.event.FinishCallEvent;
+import epusp.pcs.os.monitor.client.event.FinishCallEvent.FinishCallHandler;
 import epusp.pcs.os.monitor.client.event.HideShowTrafficEvent;
 import epusp.pcs.os.monitor.client.event.HideShowTrafficEvent.HideShowTrafficHandler;
-import epusp.pcs.os.monitor.client.rpc.IMonitorWorkspaceServiceAsync;
 import epusp.pcs.os.shared.client.event.EventBus;
 import epusp.pcs.os.shared.client.presenter.Presenter;
 import epusp.pcs.os.shared.model.oncall.Position;
@@ -46,8 +48,6 @@ public class GoogleMapsPresenter implements Presenter, FinishCallHandler {
 	private MapWidget view;
 
 	private DirectionQueryOptions options;
-
-	private IMonitorWorkspaceServiceAsync monitorService;
 	
 	private MonitorWorkspaceConstants constants;
 	
@@ -64,8 +64,7 @@ public class GoogleMapsPresenter implements Presenter, FinishCallHandler {
 	
 	private MonitorResources resources = MonitorResources.INSTANCE;
 	
-	public GoogleMapsPresenter(IMonitorWorkspaceServiceAsync monitorService, MonitorWorkspaceConstants constants){
-		this.monitorService = monitorService;
+	public GoogleMapsPresenter(MonitorWorkspaceConstants constants){
 		this.constants = constants;
 		
 		EventBus.get().addHandler(FinishCallEvent.TYPE, this);
@@ -129,7 +128,8 @@ public class GoogleMapsPresenter implements Presenter, FinishCallHandler {
 		victim.setDraggingEnabled(false);
 		
 		view.addOverlay(victim);
-		view.setCenter(latLng, 15);
+//		view.setCenter(latLng, 15);
+		resetBounds();
 	}
 
 	public void updateVictimPosition(List<Position> positions){
@@ -214,6 +214,24 @@ public class GoogleMapsPresenter implements Presenter, FinishCallHandler {
 			vehiclesMarker.put(vehicle.getIdTag(), vehicleMarker);
 			
 			view.addOverlay(vehicleMarker);
+			resetBounds();
+		}
+	}
+	
+	public void resetBounds(){
+		try{
+			LatLngBounds bounds = LatLngBounds.newInstance();
+			Iterator<Marker> markerItarator = vehiclesMarker.values().iterator();
+			while(markerItarator.hasNext()){
+				Marker marker = markerItarator.next();
+				bounds.extend(marker.getLatLng());
+			}
+			bounds.extend(victim.getLatLng());
+			int zoomLevel = view.getBoundsZoomLevel(bounds);
+			LatLng center = bounds.getCenter();
+			view.setCenter(center, zoomLevel);
+		}catch(NoSuchElementException e){
+			e.printStackTrace();
 		}
 	}
 	

@@ -202,6 +202,10 @@ public class WorkspacePresenter implements Presenter {
 		return display.getPreferences();
 	}
 	
+	public void addMapClickHanlder(ClickHandler handler){
+		display.addMapClickHandler(handler);
+	}
+	
 	public void setOnCall(Boolean onCall){
 		if(onCall){
 			display.showEndCall();

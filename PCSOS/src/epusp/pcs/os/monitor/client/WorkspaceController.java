@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -59,7 +61,7 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 	PopupPanel preferencesPopup = new PopupPanel(true);
 
 	PopupPanel newCallPopup = new PopupPanel(true);
-	
+
 	private MonitorStatusLifecycle monitorStatus = MonitorStatusLifecycle.Unavailable;
 
 	private EmergencyCallSpecs emergencyCallSpecs = new EmergencyCallSpecs();
@@ -67,7 +69,7 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 	private RPCRequestTracker tracker;
 
 	private final HashMap<String, Vehicle> vehicles = new HashMap<String, Vehicle>();
-	
+
 	private final HashMap<String, Agent> agents = new HashMap<String, Agent>();
 
 	private Timer timer = new Timer() {
@@ -83,7 +85,7 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 		preferencesPopup.setGlassEnabled(true);
 		preferencesPopup.setStyleName("preferencesPopupPanel");
 		preferencesPopup.setGlassStyleName("preferencesPopupGlassPanel");
-		
+
 		newCallPopup.setGlassEnabled(true);
 		newCallPopup.setStyleName("preferencesPopupPanel");
 		newCallPopup.setGlassStyleName("preferencesPopupGlassPanel");
@@ -111,6 +113,18 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 			}
 		});
 
+		workspacePresenter.addMapClickHanlder(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				Scheduler.get().scheduleDeferred(new ScheduledCommand() {    
+					@Override
+					public void execute() {
+						googleMapsPresenter.resetBounds();
+					}
+				});
+			}
+		});
+
 		preferencesPresenter.getCancelButton().addClickHandler(new ClickHandler() {
 
 			@Override
@@ -118,9 +132,9 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 				preferencesPopup.hide();
 			}
 		});
-		
+
 		newCallPresenter.addCloseHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
 				newCallPopup.hide();
@@ -132,7 +146,7 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 	public void go(final HasWidgets container) {
 		workspacePresenter = new WorkspacePresenter(monitorService, new Workspace(), constants);
 		workspacePresenter.go(container);
-		googleMapsPresenter = new GoogleMapsPresenter(monitorService, constants);
+		googleMapsPresenter = new GoogleMapsPresenter(constants);
 		googleMapsPresenter.go(workspacePresenter.getMapsArea());
 		callInfoPresenter = new CallInfoPresenter(monitorService, new CallInfo(), constants);
 		callInfoPresenter.go(workspacePresenter.getInfoArea());
@@ -188,18 +202,18 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 				@Override
 				public void onSuccess(EmergencyCall result) {					
 					loadInfo(result);
-					
+
 					if(!callInfoPresenter.hasVictim()){
 						loadVictim(result.getVictimEmail());
 					}
-					
+
 					if(!googleMapsPresenter.hasVictim()){
 						googleMapsPresenter.addVictim(result.getVictimPositions().remove(0));
 						emergencyCallSpecs.setVictimLastPositionIndex(0);
 					}
-					
+
 					reinforcementsPresenter.update();
-					
+
 					emergencyCallSpecs.setVictimLastPositionIndex(emergencyCallSpecs.getVictimLastPositionIndex() + result.getVictimPositionSize());
 					googleMapsPresenter.updateVictimPosition(result.getVictimPositions());					
 				}
@@ -209,15 +223,15 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 				}
 			});
 			break;
-		
+
 		case FinishingCall:
 			monitorService.finishCallAcknowledgment(new AsyncCallback<Void>() {
-				
+
 				@Override
 				public void onSuccess(Void result) {
 					monitorStatus = MonitorStatusLifecycle.Begin;
 				}
-				
+
 				@Override
 				public void onFailure(Throwable caught) {
 				}
@@ -227,7 +241,7 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 			break;
 		}
 	}
-	
+
 	private void loadVictim(final String victimEmail){
 		monitorService.getFullVictim(victimEmail, new AsyncCallback<Victim>() {
 
@@ -241,12 +255,12 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 			}
 		});
 	}
-	
+
 	private void loadInfo(final EmergencyCall emergencyCall){
 		tracker = new RPCRequestTracker(new LoadedInfoEvent(emergencyCall));
 		for(VehicleOnCall vehicle : emergencyCall.getVehicles()){
 			if(!vehicles.containsKey(vehicle.getVehicleIdTag())){
-				
+
 				AsyncCallback<Vehicle> vehicleCall = new AsyncCallback<Vehicle>() {
 					@Override
 					public void onFailure(Throwable caught) {
@@ -266,10 +280,10 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 				};
 
 				tracker.add(vehicleCall);
-				
+
 				monitorService.getVehicle(vehicle.getVehicleIdTag(), vehicleCall);
 			}
-			
+
 			for(String agent : vehicle.getAgents()){
 				if(!agents.containsKey(agent)){
 					AsyncCallback<Agent> agentCall = new AsyncCallback<Agent>() {
@@ -291,12 +305,12 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 					};
 
 					tracker.add(agentCall);
-					
+
 					monitorService.getFullAgent(agent, agentCall);
 				}
 			}
 		}
-		
+
 		if(tracker.isEmpty())
 			tracker.fire();
 	}
@@ -305,7 +319,7 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 	public void onInfoLoaded(LoadedInfoEvent loadedInfoEvent) {
 		EmergencyCall emergencyCall = loadedInfoEvent.getEmergencyCall();
 		for(VehicleOnCall vehicle : emergencyCall.getVehicles()){
-			
+
 			if(!callInfoPresenter.hasInfo(vehicle.getVehicleIdTag())){
 				List<Agent> agents = new ArrayList<Agent>();
 				for(String id : vehicle.getAgents()){
@@ -315,18 +329,18 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 				}
 				callInfoPresenter.addInfo(vehicles.get(vehicle.getVehicleIdTag()), agents);
 			}
-			
+
 			List<Position> vehiclePositions = emergencyCall.getVehiclePositions(vehicle.getVehicleIdTag());
 			if(!vehiclePositions.isEmpty()){				
 				if(!googleMapsPresenter.hasVehicle(vehicle.getVehicleIdTag())){
 					googleMapsPresenter.addVehicle(vehicles.get(vehicle.getVehicleIdTag()), vehiclePositions.remove(0));
 					emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getVehicleIdTag(), 0);
 				}
-				
+
 				emergencyCallSpecs.putVehiclesLastPositionIndex(vehicle.getVehicleIdTag(), emergencyCallSpecs.getVehicleLastPositionIndex(vehicle.getVehicleIdTag())
 						+ vehicle.getPositions().size());
 			}
-			
+
 			googleMapsPresenter.updateVehiclePosition(vehicle.getVehicleIdTag(), vehiclePositions);
 		}
 	}
@@ -334,16 +348,16 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 	@Override
 	public void onFinishCall(FinishCallEvent finishCallEvent) {
 		monitorService.finishCall(new AsyncCallback<Void>() {
-			
+
 			@Override
 			public void onSuccess(Void result) {
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 			}
 		});
-		
+
 		monitorStatus = MonitorStatusLifecycle.FinishingCall;
 	}
 
@@ -355,21 +369,21 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 		}else{
 			if(monitorStatus.equals(MonitorStatusLifecycle.Begin) || monitorStatus.equals(MonitorStatusLifecycle.WaitingCall)){
 				monitorService.monitorLeaving(new AsyncCallback<Boolean>() {
-					
+
 					@Override
 					public void onSuccess(Boolean result) {
 						if(result){
 							monitorStatus = MonitorStatusLifecycle.Unavailable;
 						}
 					}
-					
+
 					@Override
 					public void onFailure(Throwable caught) {
 					}
 				});
 			}
 		}
-		
+
 	}
 
 }
