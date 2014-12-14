@@ -21,7 +21,7 @@ import epusp.pcs.os.shared.model.person.user.agent.Agent;
 public abstract class Vehicle extends SystemObject implements Serializable {
 	
 	@Persistent
-	private Priority prioraty;
+	private Priority priority;
 	
 	@NotPersistent
 	private static final long serialVersionUID = 1L;
@@ -53,11 +53,11 @@ public abstract class Vehicle extends SystemObject implements Serializable {
 	}
 	
 	public Priority getPriority(){
-		return prioraty;
+		return priority;
 	}
 	
-	public void setPrioraty(Priority prioraty){
-		this.prioraty = prioraty;
+	public void setPrioraty(Priority priority){
+		this.priority = priority;
 	}
 	
 	public String getIdTag() {

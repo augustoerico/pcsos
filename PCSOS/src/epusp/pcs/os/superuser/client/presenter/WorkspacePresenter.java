@@ -33,7 +33,7 @@ import epusp.pcs.os.shared.model.ICustomAttributes;
 import epusp.pcs.os.shared.model.attribute.AttributeInfo;
 import epusp.pcs.os.shared.model.person.user.User;
 import epusp.pcs.os.shared.model.person.user.admin.Admin;
-import epusp.pcs.os.shared.model.person.user.admin.AdminCustomProperties;
+import epusp.pcs.os.shared.model.person.user.admin.AdminCustomAttributes;
 import epusp.pcs.os.shared.model.person.user.monitor.Monitor;
 import epusp.pcs.os.shared.model.person.user.monitor.MonitorCustomAttributes;
 import epusp.pcs.os.shared.model.person.user.superuser.SuperUser;
@@ -154,7 +154,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 		UserTablePresenter adminTablePresenter = new AdminTablePresenter(rpcService, constants, resources, pageSize, new SelectedRowHandler<Admin>() {
 			@Override
 			public void onSelectedRow(final Admin objectSelected) {
-				loader.loadCustomAttributes(AdminCustomProperties.values(), new IAttributeInfoLoaded() {
+				loader.loadCustomAttributes(AdminCustomAttributes.values(), new IAttributeInfoLoaded() {
 					@Override
 					public void onCustomAttributesLoaded() {
 						rpcService.getFullAdmin(objectSelected.getId(), new AsyncCallback<Admin>() {
@@ -162,7 +162,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 							@Override
 							public void onSuccess(Admin result) {
 								List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
-								for(ICustomAttributes attribute : AdminCustomProperties.values()){
+								for(ICustomAttributes attribute : AdminCustomAttributes.values()){
 									attributes.add(attributesInfo.get(attribute.getAttributeName()));
 								}
 								CreateUpdatePresenter createUpdatePresenter = new UpdateAdminPresenter(rpcService, new CreateUpdate(), constants, attributes, result);
@@ -245,11 +245,11 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 			@Override
 			public void onClick(ClickEvent event) {
 				if(adminHeaderButton.isEnabled()){
-					loader.loadCustomAttributes(AdminCustomProperties.values(), new IAttributeInfoLoaded() {
+					loader.loadCustomAttributes(AdminCustomAttributes.values(), new IAttributeInfoLoaded() {
 						@Override
 						public void onCustomAttributesLoaded() {
 							List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
-							for(ICustomAttributes attribute : AdminCustomProperties.values()){
+							for(ICustomAttributes attribute : AdminCustomAttributes.values()){
 								attributes.add(attributesInfo.get(attribute.getAttributeName()));
 							}
 							CreateUpdatePresenter createUpdatePresenter = new CreateAdminPresenter(rpcService, new CreateUpdate(), constants, attributes);

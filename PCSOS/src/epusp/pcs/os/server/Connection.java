@@ -1,5 +1,6 @@
 package epusp.pcs.os.server;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,6 +18,8 @@ import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JDOCursorHelper;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import epusp.pcs.os.server.loader.Loader;
+import epusp.pcs.os.server.loader.LoaderException;
 import epusp.pcs.os.server.login.AuthenticationManager;
 import epusp.pcs.os.server.workflow.EmergencyCallWorkflow;
 import epusp.pcs.os.shared.client.rpc.IConnectionService;
@@ -60,8 +63,17 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 
 	public void init() throws ServletException
 	{
+		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 
+		Loader loader = new Loader();
+		try {
+			loader.load(PMF.get());
+		} catch (IOException | LoaderException e) {
+			e.printStackTrace();
+		}
+		
+		
 		System.out.println("Initializing with test data");
 		Monitor monitor = new Monitor("Giovanni", "Gatti Pinheiro", "giovanni.gatti.pinheiro@gmail.com");
 		monitor.setIsActive(true);
