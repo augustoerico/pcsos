@@ -59,7 +59,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler {
 
 	private final AdminResources resources = AdminResources.INSTANCE;
 
-	private final int pageSize = 2;
+	private final int pageSize = 9;
 
 	private final HeaderButton victimHeaderButton;
 	private final HeaderButton agentHeaderButton;

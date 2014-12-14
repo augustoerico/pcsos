@@ -52,7 +52,7 @@ public class WorkspacePresenter implements Presenter, ClosePopupHandler{
 
 	private WorkspaceStyles backgroundResources = WorkspaceStyles.INSTANCE;
 
-	private final int pageSize = 2;
+	private final int pageSize = 9;
 	private final PopupPanel popup = new PopupPanel(false, false);
 
 	private final HeaderButton adminHeaderButton, superHeaderButton, monitorHeaderButton;
