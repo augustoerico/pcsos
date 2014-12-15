@@ -49,7 +49,11 @@ public class BooleanArrayAttribute extends ArrayAttribute {
 	
 	@Override
 	public String toString() {
-		return Arrays.toString(values);
+		String output = "";
+		for(int i = 0; i < values.length; i++){
+			output = output.concat(String.valueOf(values[i])).concat(", ");
+		}
+		return output;
 	}
 
 	/*

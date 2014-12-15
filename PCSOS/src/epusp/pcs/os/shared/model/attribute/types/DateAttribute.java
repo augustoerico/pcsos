@@ -7,6 +7,9 @@ import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
+
 import epusp.pcs.os.shared.model.attribute.Attribute;
 import epusp.pcs.os.shared.model.attribute.DataType;
 
@@ -40,9 +43,9 @@ public class DateAttribute extends Attribute {
 	
 	@Override
 	public String toString() {
-		if(value != null)
-			return value.toString();
-		else return "null";
+		if(value != null){
+			return String.valueOf(value);
+		}else return "Desconhecido/Unknown";
 	}
 
 	

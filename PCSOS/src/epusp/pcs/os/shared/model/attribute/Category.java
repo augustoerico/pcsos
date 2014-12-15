@@ -8,11 +8,13 @@ import epusp.pcs.os.shared.client.constants.CommonWorkspaceConstants;
 
 public enum Category implements Serializable{
 	
-	PhysicalProfile, MedicalData, PersonalVehicle;
+	GeneralInfo, PhysicalProfile, MedicalData, PersonalVehicle;
 	
 	public String getText(){
 		CommonWorkspaceConstants constants = GWT.create(CommonWorkspaceConstants.class);
 		switch (this) {
+		case GeneralInfo:
+			return constants.generalInfo();
 		case PhysicalProfile:
 			return constants.physicalProfile();
 		case MedicalData:
