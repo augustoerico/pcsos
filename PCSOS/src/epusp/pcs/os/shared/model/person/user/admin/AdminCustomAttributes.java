@@ -4,7 +4,8 @@ import epusp.pcs.os.shared.model.ICustomAttributes;
 import epusp.pcs.os.shared.model.attribute.DataType;
 
 public enum AdminCustomAttributes implements ICustomAttributes{
-	IDADE("idade", DataType.INTEGER), COR_DOS_OLHOS("cor_dos_olhos", DataType.STRING);
+	ADDRESS("address", DataType.STRING), ZIP_CODE("zip_code", DataType.STRING),
+	RG("rg", DataType.STRING), CPF("cpf", DataType.STRING), BIRTHDAY("birthday", DataType.DATE), CONTACT("contact", DataType.STRING);
 	
 	String attributeName;
 	DataType dataType;

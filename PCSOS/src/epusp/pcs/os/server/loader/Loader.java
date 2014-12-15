@@ -276,7 +276,7 @@ public class Loader {
 		String plate = prop.getProperty("plate");
 
 		Priority priority = null;
-		if(prop.contains("priority"))
+		if(prop.containsKey("priority"))
 			priority = Priority.valueOf(prop.getProperty("priority").toUpperCase());
 		
 		String imageURL = null;
@@ -320,8 +320,8 @@ public class Loader {
 		String idTag = prop.getProperty("idTag");
 		String plate = prop.getProperty("plate");
 
-		Priority priority = null;
-		if(prop.contains("priority"))
+		Priority priority = Priority.PRIMARY;
+		if(prop.containsKey("priority"))
 			priority = Priority.valueOf(prop.getProperty("priority").toUpperCase());
 		
 		String imageURL = null;
@@ -365,7 +365,7 @@ public class Loader {
 		String idTag = prop.getProperty("idTag");
 
 		Priority priority = null;
-		if(prop.contains("priority"))
+		if(prop.containsKey("priority"))
 			priority = Priority.valueOf(prop.getProperty("priority").toUpperCase());
 		
 		String imageURL = null;
@@ -410,8 +410,8 @@ public class Loader {
 		String surname = prop.getProperty("surname");
 		String email = prop.getProperty("email");
 
-		AvailableLanguages preferedLanguage = null;
-		if(prop.contains("preferedLanguage"))
+		AvailableLanguages preferedLanguage = AvailableLanguages.ENGLISH;
+		if(prop.containsKey("preferedLanguage"))
 			preferedLanguage = AvailableLanguages.valueOf(prop.getProperty("preferedLanguage").toUpperCase());
 
 		Boolean isActive = null;
@@ -473,8 +473,8 @@ public class Loader {
 		String surname = prop.getProperty("surname");
 		String email = prop.getProperty("email");
 
-		AvailableLanguages preferedLanguage = null;
-		if(prop.contains("preferedLanguage"))
+		AvailableLanguages preferedLanguage = AvailableLanguages.ENGLISH;
+		if(prop.containsKey("preferedLanguage"))
 			preferedLanguage = AvailableLanguages.valueOf(prop.getProperty("preferedLanguage").toUpperCase());
 
 		Boolean isActive = null;
@@ -592,8 +592,8 @@ public class Loader {
 		String surname = prop.getProperty("surname");
 		String email = prop.getProperty("email");
 
-		AvailableLanguages preferedLanguage = null;
-		if(prop.contains("preferedLanguage"))
+		AvailableLanguages preferedLanguage = AvailableLanguages.ENGLISH;
+		if(prop.containsKey("preferedLanguage"))
 			preferedLanguage = AvailableLanguages.valueOf(prop.getProperty("preferedLanguage").toUpperCase());
 
 		Boolean isActive = null;
@@ -655,8 +655,8 @@ public class Loader {
 		String surname = prop.getProperty("surname");
 		String email = prop.getProperty("email");
 
-		AvailableLanguages preferedLanguage = null;
-		if(prop.contains("preferedLanguage"))
+		AvailableLanguages preferedLanguage = AvailableLanguages.ENGLISH;
+		if(prop.containsKey("preferedLanguage"))
 			preferedLanguage = AvailableLanguages.valueOf(prop.getProperty("preferedLanguage").toUpperCase());
 
 		Boolean isActive = null;

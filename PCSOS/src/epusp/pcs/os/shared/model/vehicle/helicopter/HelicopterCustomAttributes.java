@@ -4,7 +4,7 @@ import epusp.pcs.os.shared.model.ICustomAttributes;
 import epusp.pcs.os.shared.model.attribute.DataType;
 
 public enum HelicopterCustomAttributes implements ICustomAttributes{
-	IDADE("idade", DataType.INTEGER), COR_DOS_OLHOS("cor_dos_olhos", DataType.STRING);
+	CARMAKER("carmaker", DataType.STRING), MODEL("model", DataType.STRING), MANUFACTORING_YEAR("manufacturing_year", DataType.STRING);
 	
 	String attributeName;
 	DataType dataType;

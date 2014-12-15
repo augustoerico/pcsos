@@ -8,7 +8,8 @@ public enum VictimCustomAttributes implements ICustomAttributes{
 	HEIGHT("height", DataType.FLOAT), WEIGHT("weight", DataType.FLOAT), MARITAL_STATUS("victim_marital_status", DataType.STRING),
 	EYE_COLOR("eye_color", DataType.STRING), ADDRESS("victim_address", DataType.STRING), ZIP_CODE("victim_zip_code", DataType.STRING),
 	DIABETIC("diabetic", DataType.BOOLEAN), CARDIO("cardio", DataType.BOOLEAN), BLOOD_TYPE("blood_type", DataType.STRING), CARMAKER("carmaker", DataType.STRING),
-	MODEL("model", DataType.STRING), PLATE("license_plate", DataType.STRING), CAR_COLOR("car_color", DataType.STRING), CONTACT("contact", DataType.STRING);
+	MODEL("model", DataType.STRING), PLATE("license_plate", DataType.STRING), CAR_COLOR("car_color", DataType.STRING), CONTACT("contact", DataType.STRING),
+	RG("rg", DataType.STRING), CPF("cpf", DataType.STRING);
 	
 	String attributeName;
 	DataType dataType;

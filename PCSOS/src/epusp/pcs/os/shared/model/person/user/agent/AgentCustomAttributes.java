@@ -4,7 +4,10 @@ import epusp.pcs.os.shared.model.ICustomAttributes;
 import epusp.pcs.os.shared.model.attribute.DataType;
 
 public enum AgentCustomAttributes implements ICustomAttributes{
-	IDADE("idade", DataType.INTEGER), COR_DOS_OLHOS("cor_dos_olhos", DataType.STRING), TEST("test", DataType.DATE_ARRAY), TEST2("test2", DataType.INTERGER_ARRAY);
+	ADDRESS("address", DataType.STRING), ZIP_CODE("zip_code", DataType.STRING), RG("rg", DataType.STRING), CPF("cpf", DataType.STRING),
+	BITHDATE("birthday", DataType.DATE), MARITAL_STATUS("marital_status", DataType.STRING), BLOOD_TYPE("blood_type", DataType.STRING),
+	DIABETIC("diabetic", DataType.BOOLEAN), CARDIO("cardio", DataType.BOOLEAN), CONTACT("contact", DataType.STRING), WARNAME("warname", DataType.STRING),
+	EMERGENCY_CONTACT("emergency_contact", DataType.STRING_ARRAY);
 	
 	String attributeName;
 	DataType dataType;

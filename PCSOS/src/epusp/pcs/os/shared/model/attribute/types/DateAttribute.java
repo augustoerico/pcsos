@@ -7,9 +7,6 @@ import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
-
 import epusp.pcs.os.shared.model.attribute.Attribute;
 import epusp.pcs.os.shared.model.attribute.DataType;
 
