@@ -1,7 +1,10 @@
 package epusp.pcs.os.monitor.client.presenter;
 
+import java.util.Date;
 import java.util.HashMap;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -111,8 +114,28 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 	public void onAttributeInfoLoaded(LoadedAttributeInfoEvent loadedAttributeInfoEvent) {
 		for(IAttribute attribute : item.getAllAttributes()){
 			AttributeInfo info = attributeInfo.get(attribute.getAttributeName());
-			if(info.isVisable(DetailsPresenter.class.getSimpleName()))
-				view.addDynamicAttribute(info.getCategory().getText(), info.getLabel(locale), attribute.getValue().toString());
+			if(info.isVisable(DetailsPresenter.class.getSimpleName())){
+				switch(info.getDataType()){
+				case BOOLEAN:
+					String text;
+					if((Boolean) attribute.getValue()){
+						text = constants.yes();
+					}else{
+						text = constants.no();
+					}
+					view.addDynamicAttribute(info.getCategory().getText(), info.getLabel(locale), text);
+					break;
+				case DATE:
+					DateTimeFormat ft = 
+				      DateTimeFormat.getFormat(PredefinedFormat.DATE_LONG);
+					view.addDynamicAttribute(info.getCategory().getText(), info.getLabel(locale), ft.format((Date) attribute.getValue()));
+					break;
+				default:
+					view.addDynamicAttribute(info.getCategory().getText(), info.getLabel(locale), attribute.toString());
+					break;
+				
+				}
+			}
 		}
 	}	
 }

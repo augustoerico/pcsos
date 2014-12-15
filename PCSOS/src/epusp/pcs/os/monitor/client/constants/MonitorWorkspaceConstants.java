@@ -42,4 +42,10 @@ public interface MonitorWorkspaceConstants extends CommonWorkspaceConstants{
 	
 	@DefaultStringValue("Answer it")
 	String answerIt();
+
+	@DefaultStringValue("Yes")
+	String yes();
+	
+	@DefaultStringValue("No")
+	String no();
 }

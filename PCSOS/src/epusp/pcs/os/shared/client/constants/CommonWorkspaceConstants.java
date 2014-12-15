@@ -102,4 +102,7 @@ public interface CommonWorkspaceConstants extends Constants{
 	
 	@DefaultStringValue("Motorcycle")
 	String motorcycle();
+	
+	@DefaultStringValue("General Info")
+	String generalInfo();
 }
