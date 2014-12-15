@@ -12,7 +12,6 @@ import epusp.pcs.os.monitor.shared.EmergencyCallSpecs;
 import epusp.pcs.os.server.Connection;
 import epusp.pcs.os.shared.exception.CannotLogoutExeception;
 import epusp.pcs.os.shared.model.oncall.EmergencyCall;
-import epusp.pcs.os.shared.model.oncall.Position;
 import epusp.pcs.os.shared.model.person.user.AccountTypes;
 import epusp.pcs.os.shared.model.person.user.User;
 import epusp.pcs.os.shared.model.person.user.monitor.Monitor;
@@ -42,11 +41,6 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 		if(isLoggedIn()){
 			Monitor monitor = (Monitor) getSessionAttibute(userSessionAttribute);
 			
-//			test();
-			
-//			if(t)
-//				test2();
-			
 			if(specs.getVictimLastPositionIndex() == -1 && specs.getVehiclesLastPositionsIndex().isEmpty())
 				return workflow.getMonitorEmergencyCall(monitor.getId());
 			else
@@ -54,35 +48,6 @@ public class MonitorWorkspaceConnection extends Connection implements IMonitorWo
 		}
 		return null;
 	}
-	
-	//test method
-	//remover
-	/*************************************************************/
-	public static int test = 0;
-	private void test(){
-		
-		Position ATLANTA = new Position(33.7814790, -84.3880580);
-		Position STONE_MOUNTAIN_PARK = new Position(33.80653802509606, -84.15252685546875);
-		Position CYCLORAMA = new Position(33.741185330333956, -84.35834884643555);
-		Position GEORGIA_AQUARIUM = new Position(33.761443931868925, -84.39432263374329);
-		Position UNDERGROUND_ATLANTA = new Position(33.75134645137294, -84.39026713371277);
-		
-		Position[] p = new Position[]{ATLANTA,STONE_MOUNTAIN_PARK,CYCLORAMA, GEORGIA_AQUARIUM, UNDERGROUND_ATLANTA};
-		
-	
-		workflow.addVehiclePosition("TAG001", p[test%5]);
-		test++;
-		workflow.addVictimPosition("augusto.ericosilva@gmail.com", p[test%5]);
-		
-	}
-	
-	public static Boolean t = true;
-	public void test2(){
-		t = false;
-		workflow.addVehicleToCall("augusto.ericosilva@gmail.com", "TAG00X");
-	}
-	/**
-	 * @return ***********************************************************/
 	
 	@Override
 	public List<Vehicle> getAvailableSupportVehicles(){
