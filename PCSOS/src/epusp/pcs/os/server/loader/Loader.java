@@ -235,9 +235,9 @@ public class Loader {
 		if(prop.containsKey("isEditable"))
 			isEditable = Boolean.valueOf(prop.getProperty("isEditable"));
 
-		List<String> isVisableAt = new ArrayList<String>();
-		if(prop.containsKey("isVisableAt")){
-			isVisableAt.addAll(Arrays.asList(prop.getProperty("isVisableAt").replaceAll("^\\s*|\\s*$", "").split("\\s*,\\s*")));
+		List<String> isVisibleAt = new ArrayList<String>();
+		if(prop.containsKey("isVisibleAt")){
+			isVisibleAt.addAll(Arrays.asList(prop.getProperty("isVisibleAt").replaceAll("^\\s*|\\s*$", "").split("\\s*,\\s*")));
 		}
 
 		HashMap<String, String> labels = new HashMap<String, String>();
@@ -260,7 +260,7 @@ public class Loader {
 		if(isEditable != null)
 			attributeInfo.setEditable(isEditable);
 
-		for(String isVisable : isVisableAt){
+		for(String isVisable : isVisibleAt){
 			attributeInfo.addIsVisibleAt(isVisable);
 		}
 
