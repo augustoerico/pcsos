@@ -176,7 +176,7 @@ public class CreateUpdatePresenter implements Presenter{
 	
 	protected void addCustomAttributesToView(){
 		for(AttributeInfo attributeInfo : customAttributes){
-			if(attributeInfo.isVisable(CreateUpdatePresenter.class.getName())){
+			if(attributeInfo.isVisable(CreateUpdatePresenter.class.getSimpleName())){
 				Widget arrayInputBox = null;
 				switch(attributeInfo.getDataType()){
 				case BOOLEAN:
@@ -325,7 +325,7 @@ public class CreateUpdatePresenter implements Presenter{
 	
 	protected void addValuesToCustomWidgets(SystemObject sysObject){
 		for(AttributeInfo attributeInfo : getCustomAttributes()){
-			if(attributeInfo.isVisable(CreateUpdatePresenter.class.getName())){
+			if(attributeInfo.isVisable(CreateUpdatePresenter.class.getSimpleName())){
 				String attributeName = attributeInfo.getAttributeName();
 				IAttribute attribute = null;
 				switch (attributeInfo.getDataType()) {
@@ -438,7 +438,7 @@ public class CreateUpdatePresenter implements Presenter{
 	
 	protected void readValuesAndSaveOnObject(SystemObject sysObject){
 		for(AttributeInfo attributeInfo : getCustomAttributes()){
-			if(attributeInfo.isVisable(CreateUpdatePresenter.class.getName())){
+			if(attributeInfo.isVisable(CreateUpdatePresenter.class.getSimpleName())){
 				String attributeName = attributeInfo.getAttributeName();
 				switch (attributeInfo.getDataType()) {
 				case BOOLEAN:

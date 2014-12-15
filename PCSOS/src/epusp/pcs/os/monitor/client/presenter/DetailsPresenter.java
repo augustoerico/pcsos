@@ -111,7 +111,8 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 	public void onAttributeInfoLoaded(LoadedAttributeInfoEvent loadedAttributeInfoEvent) {
 		for(IAttribute attribute : item.getAllAttributes()){
 			AttributeInfo info = attributeInfo.get(attribute.getAttributeName());
-			view.addDynamicAttribute(info.getCategory().getText(), info.getLabel(locale), attribute.getValue().toString());
+			if(info.isVisable(DetailsPresenter.class.getSimpleName()))
+				view.addDynamicAttribute(info.getCategory().getText(), info.getLabel(locale), attribute.getValue().toString());
 		}
 	}	
 }
