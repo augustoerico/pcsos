@@ -74,13 +74,14 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 				};
 				
 				tracker.add(propertyInfoCall);
-
+				
 				rpcService.getAttributeInfo(attribute.getAttributeName(), propertyInfoCall);
 			}
 		}
 		
-		if(tracker.isEmpty())
-			tracker.fire();
+		if(tracker.isEmpty()){
+			onAttributeInfoLoaded(null);
+		}
 		
 		if(item instanceof Victim){
 			Victim victim = (Victim) item;
@@ -118,6 +119,7 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 	@Override
 	public void onAttributeInfoLoaded(LoadedAttributeInfoEvent loadedAttributeInfoEvent) {
 		for(IAttribute attribute : item.getAllAttributes()){
+			System.out.println(attribute.getAttributeName());
 			AttributeInfo info = attributeInfo.get(attribute.getAttributeName());
 			if(info.isVisable(DetailsPresenter.class.getSimpleName())){
 				switch(info.getDataType()){
