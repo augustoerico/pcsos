@@ -119,7 +119,6 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 	@Override
 	public void onAttributeInfoLoaded(LoadedAttributeInfoEvent loadedAttributeInfoEvent) {
 		for(IAttribute attribute : item.getAllAttributes()){
-			System.out.println(attribute.getAttributeName());
 			AttributeInfo info = attributeInfo.get(attribute.getAttributeName());
 			if(info.isVisable(DetailsPresenter.class.getSimpleName())){
 				switch(info.getDataType()){

@@ -83,7 +83,7 @@ public class CallInfoPresenter implements Presenter, FinishCallHandler{
 		CaptionPanel vehiclePanel = new CaptionPanel(constants.vehicle());
 		infoPanel.add(vehiclePanel);
 		vehiclePanel.addStyleName("captionPanelStyle");
-		DetailsPresenter details = new DetailsPresenter(vehicle, new Details(), rpcService, constants);
+		final DetailsPresenter details = new DetailsPresenter(vehicle, new Details(), rpcService, constants);
 		details.go(vehiclePanel);
 		
 		CaptionPanel agentsPanel = new CaptionPanel(constants.agents());
@@ -129,6 +129,11 @@ public class CallInfoPresenter implements Presenter, FinishCallHandler{
 					p.removeStyleDependentName("view");
 				}
 				pti.addStyleDependentName("view");
+				
+				details.doLayout();
+				for(DetailsPresenter agentDetails : agentsDetailsList){
+					agentDetails.doLayout();
+				}
 			}
 		});
 		
