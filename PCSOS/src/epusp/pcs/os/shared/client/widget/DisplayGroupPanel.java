@@ -39,8 +39,41 @@ public class DisplayGroupPanel extends HorizontalDivPanel{
 			}
 		});
 	}
-	
+
 	private void add(VerticalDivPanel verticalPanelDiv){
 		super.add(verticalPanelDiv);
+	}
+
+	public void doLayout(){
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			@Override
+			public void execute() {
+				Boolean ruleViolated = false;
+				for(VerticalDivPanel verticalPanel : verticalPanels){
+					if(verticalPanel.getOffsetHeight() > maxHeight){
+						ruleViolated = true;
+						break;
+					}
+				}
+
+				if(ruleViolated){
+					final List<Widget> widgets = new ArrayList<Widget>();
+					for(VerticalDivPanel verticalPanel : verticalPanels){
+						for(int i = 0; i < verticalPanel.getWidgetCount(); i++){
+							Widget w = verticalPanel.getWidget(i);
+							if(w != null)
+								widgets.add(w);
+						}
+					}
+					
+					for(VerticalDivPanel verticalPanel : verticalPanels){
+						verticalPanel.clear();
+					}
+					
+					for(Widget w : widgets)
+						add(w);
+				}
+			}
+		});
 	}
 }

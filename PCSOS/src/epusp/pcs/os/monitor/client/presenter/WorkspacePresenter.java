@@ -228,5 +228,9 @@ public class WorkspacePresenter implements Presenter {
 		display.setLogoutVisible(!onCall);
 		this.onCall = onCall;
 	}
+	
+	public void addInfoClickHandler(ClickHandler handler){
+		display.addInfoClickHandler(handler);
+	}
 
 }

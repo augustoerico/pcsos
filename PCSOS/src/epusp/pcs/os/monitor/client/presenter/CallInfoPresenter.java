@@ -1,5 +1,6 @@
 package epusp.pcs.os.monitor.client.presenter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,6 +47,8 @@ public class CallInfoPresenter implements Presenter, FinishCallHandler{
 	private HashMap<String, Vehicle> vehicles = new HashMap<String, Vehicle>();
 	
 	private HashMap<Integer, Widget> controlPanel = new HashMap<Integer, Widget>();
+	
+	private List<DetailsPresenter> agentsDetailsList = new ArrayList<DetailsPresenter>();
 
 	public CallInfoPresenter(IMonitorWorkspaceServiceAsync rpcService, Display view, MonitorWorkspaceConstants constants) {
 		this.constants = constants;
@@ -95,6 +98,7 @@ public class CallInfoPresenter implements Presenter, FinishCallHandler{
 			DetailsPresenter agentDetails = new DetailsPresenter(agent, new Details(), rpcService, constants);
 			AbsolutePanel ap = new AbsolutePanel();
 			agentsList.add(ap);
+			agentsDetailsList.add(agentDetails);
 			agentDetails.go(ap);
 		}
 		
@@ -144,5 +148,12 @@ public class CallInfoPresenter implements Presenter, FinishCallHandler{
 	@Override
 	public void onFinishCall(FinishCallEvent finishCallEvent) {
 		view.clear();
+	}
+	
+	public void doLayout(){
+		victim.doLayout();
+		for(DetailsPresenter agentDetails : agentsDetailsList){
+			agentDetails.doLayout();
+		}
 	}
 }

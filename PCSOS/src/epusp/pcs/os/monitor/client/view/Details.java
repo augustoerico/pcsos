@@ -94,4 +94,11 @@ public class Details extends Composite implements Display{
 	public Widget asWidget(){
 		return this;
 	}
+	
+	@Override
+	public void doLayout(){
+		for(DisplayGroupPanel groupPanel : categories.values()){
+			groupPanel.doLayout();
+		}
+	}
 }

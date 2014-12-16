@@ -106,6 +106,14 @@ public class WorkspaceController implements Presenter, LoadedInfoHandler, Finish
 	}
 
 	private void bind(){
+		
+		workspacePresenter.addInfoClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				callInfoPresenter.doLayout();
+			}
+		});
+		
 		workspacePresenter.getPreferencesButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

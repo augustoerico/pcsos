@@ -31,6 +31,7 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 		void addDynamicAttribute(String category, String label, String value);
 		Widget asWidget();
 		void addHeaderAttribute(String label, String text);
+		void doLayout();
 	}
 	
 	private Display view;
@@ -108,6 +109,10 @@ public class DetailsPresenter implements Presenter, LoadedAttributeInfoHandler{
 
 	private void bind(){
 		
+	}
+	
+	public void doLayout(){
+		view.doLayout();
 	}
 
 	@Override
