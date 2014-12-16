@@ -58,6 +58,37 @@ public class Connection extends RemoteServiceServlet implements IConnectionServi
 		} catch (IOException | LoaderException e) {
 			e.printStackTrace();
 		}
+		
+//		PersistenceManager pm = PMF.get().getPersistenceManager();
+//		Agent agent = null, detached = null;
+//		pm.getFetchPlan().addGroup("all_system_object_attributes");
+//		try{
+//			agent = pm.getObjectById(Agent.class, "stmidori@gmail.com");
+//			detached = pm.detachCopy(agent);
+//		}catch(Exception e){
+//		}finally{				
+//			pm.close();
+//		}
+//		
+//		List<Agent> agents = new ArrayList<Agent>();
+//		agents.add(detached);
+//		
+//		workflow.addFreeVehicle("TAG001", agents, new Position(-23.5568822, -46.7302571));
+//		workflow.addWaitingCall("augusto.ericosilva@gmail.com", new Position(-23.556900, -46.7302000));
+//		
+//		agents.clear();
+//		pm = PMF.get().getPersistenceManager();
+//		pm.getFetchPlan().addGroup("all_system_object_attributes");
+//		try{
+//			agent = pm.getObjectById(Agent.class, "maria.hirami@vilt-group.com");
+//			detached = pm.detachCopy(agent);
+//		}catch(Exception e){
+//		}finally{				
+//			pm.close();
+//		}
+//		
+//		agents.add(detached);
+//		workflow.addFreeVehicle("TAG002", agents, new Position(-23.5568822, -46.7302571));
 	}
 
 	@Override

@@ -13,7 +13,6 @@ endpoint-libs/
 *.class
 *.war
 *.ear
-*.api
 # External tool builders
 .externalToolBuilders/
 # Locally stored "Eclipse launch configurations"

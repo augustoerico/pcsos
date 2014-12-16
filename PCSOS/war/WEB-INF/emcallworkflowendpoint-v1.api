@@ -1,0 +1,1045 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://epusp-pcsos.appspot.com/_ah/api",
+  "name" : "emcallworkflowendpoint",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://epusp-pcsos.appspot.com/_ah/spi",
+    "deadline" : 65.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "ownerDomain" : "pcs.epusp",
+  "ownerName" : "pcs.epusp",
+  "packagePath" : "os.workflow",
+  "methods" : {
+    "emcallworkflowendpoint.addFreeVehicle" : {
+      "path" : "addFreeVehicle/{vehicleTag}/{position}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.addFreeVehicle",
+      "request" : {
+        "parameters" : {
+          "vehicleTag" : {
+            "type" : "string",
+            "required" : true
+          },
+          "position" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "emcallworkflowendpoint.addAgentToVehicle" : {
+      "path" : "addAgentToVehicle/{vehicleTag}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.addAgentToVehicle",
+      "request" : {
+        "parameters" : {
+          "vehicleTag" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "emcallworkflowendpoint.getMonitor" : {
+      "path" : "monitorattributesmap/{monitorId}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.getMonitor",
+      "request" : {
+        "parameters" : {
+          "monitorId" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "emcallworkflowendpoint.removeAgentFromVehicle" : {
+      "path" : "agentfromvehicle/{vehicleTag}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.removeAgentFromVehicle",
+      "request" : {
+        "parameters" : {
+          "vehicleTag" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "emcallworkflowendpoint.vehicleLeaving" : {
+      "path" : "vehicleLeaving/{vehicleTag}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.vehicleLeaving",
+      "request" : {
+        "parameters" : {
+          "vehicleTag" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "emcallworkflowendpoint.addAgentsToVehicle" : {
+      "path" : "addAgentsToVehicle/{vehicleTag}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.addAgentsToVehicle",
+      "request" : {
+        "parameters" : {
+          "vehicleTag" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "emcallworkflowendpoint.ackVehicleFinishedCall" : {
+      "path" : "ackVehicleFinishedCall/{vehicleTag}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.ackVehicleFinishedCall",
+      "request" : {
+        "parameters" : {
+          "vehicleTag" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "emcallworkflowendpoint.updateVictimPositionAndVerifyStatus" : {
+      "path" : "emergencycalllifecyclestatus/{victimEmail}",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.updateVictimPositionAndVerifyStatus",
+      "request" : {
+        "parameters" : {
+          "victimEmail" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "emcallworkflowendpoint.addVictimPosition" : {
+      "path" : "addVictimPosition/{victimEmail}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.addVictimPosition",
+      "request" : {
+        "parameters" : {
+          "victimEmail" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "emcallworkflowendpoint.ackVehicleOnCall" : {
+      "path" : "ackVehicleOnCall/{vehicleTag}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.ackVehicleOnCall",
+      "request" : {
+        "parameters" : {
+          "vehicleTag" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "emcallworkflowendpoint.updatePositionAndVerifyStatus" : {
+      "path" : "emergencycall/{vehicleTag}",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.updatePositionAndVerifyStatus",
+      "request" : {
+        "parameters" : {
+          "vehicleTag" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "emcallworkflowendpoint.addWaitingCall" : {
+      "path" : "addWaitingCall/{victimEmail}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.addWaitingCall",
+      "request" : {
+        "parameters" : {
+          "victimEmail" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "emcallworkflowendpoint.removeAllAgentsFromVehicle" : {
+      "path" : "allagentsfromvehicle/{vehicleTag}",
+      "httpMethod" : "DELETE",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.removeAllAgentsFromVehicle",
+      "request" : {
+        "parameters" : {
+          "vehicleTag" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "emcallworkflowendpoint.getVictim" : {
+      "path" : "victimattributesmap/{victimEmail}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.getVictim",
+      "request" : {
+        "parameters" : {
+          "victimEmail" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "emcallworkflowendpoint.updatePositionAndVerifyCallStatus" : {
+      "path" : "emcallwithvehicles/{vehicleTag}/{victimEmail}",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.updatePositionAndVerifyCallStatus",
+      "request" : {
+        "parameters" : {
+          "vehicleTag" : {
+            "type" : "string",
+            "required" : true
+          },
+          "victimEmail" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "AgentCollection" : {
+        "id" : "AgentCollection",
+        "type" : "object",
+        "properties" : {
+          "agentCollection" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Agent"
+            }
+          }
+        }
+      },
+      "Agent" : {
+        "id" : "Agent",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "stringAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "StringAttribute"
+            }
+          },
+          "stringArrayAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "StringArrayAttribute"
+            }
+          },
+          "booleanAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "BooleanAttribute"
+            }
+          },
+          "booleanArrayAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "BooleanArrayAttribute"
+            }
+          },
+          "dateAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "DateAttribute"
+            }
+          },
+          "dateArrayAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "DateArrayAttribute"
+            }
+          },
+          "integerAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "IntegerAttribute"
+            }
+          },
+          "integerArrayAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "IntegerArrayAttribute"
+            }
+          },
+          "floatAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "FloatAttribute"
+            }
+          },
+          "floatArrayAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "FloatArrayAttribute"
+            }
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "googleUserId" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "secondName" : {
+            "type" : "string"
+          },
+          "surname" : {
+            "type" : "string"
+          },
+          "isActive" : {
+            "type" : "boolean"
+          },
+          "preferedLanguage" : {
+            "$ref" : "AvailableLanguages"
+          },
+          "drivingLicence" : {
+            "$ref" : "DrivingLicense"
+          },
+          "helicopterLicense" : {
+            "$ref" : "HelicopterLicense"
+          },
+          "type" : {
+            "$ref" : "AccountTypes"
+          },
+          "licenses" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "License"
+            }
+          },
+          "active" : {
+            "type" : "boolean"
+          },
+          "pictureURL" : {
+            "type" : "string"
+          },
+          "allAttributes" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "IAttribute"
+            }
+          },
+          "allAttributeKeys" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "StringAttribute" : {
+        "id" : "StringAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "string"
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "DataType" : {
+        "id" : "DataType",
+        "type" : "string",
+        "enum" : [ "BOOLEAN", "BOOLEAN_ARRAY", "DATE", "DATE_ARRAY", "STRING", "STRING_ARRAY", "INTEGER", "INTERGER_ARRAY", "FLOAT", "FLOAT_ARRAY" ]
+      },
+      "StringArrayAttribute" : {
+        "id" : "StringArrayAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          },
+          "valuesAsList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "BooleanAttribute" : {
+        "id" : "BooleanAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "boolean"
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "BooleanArrayAttribute" : {
+        "id" : "BooleanArrayAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "array",
+            "items" : {
+              "type" : "boolean"
+            }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          },
+          "valuesAsList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "boolean"
+            }
+          }
+        }
+      },
+      "DateAttribute" : {
+        "id" : "DateAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "DateArrayAttribute" : {
+        "id" : "DateArrayAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "format" : "date-time"
+            }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          },
+          "valuesAsList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "format" : "date-time"
+            }
+          }
+        }
+      },
+      "IntegerAttribute" : {
+        "id" : "IntegerAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "integer"
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "IntegerArrayAttribute" : {
+        "id" : "IntegerArrayAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          },
+          "valuesAsList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          }
+        }
+      },
+      "FloatAttribute" : {
+        "id" : "FloatAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "FloatArrayAttribute" : {
+        "id" : "FloatArrayAttribute",
+        "type" : "object",
+        "properties" : {
+          "attributeName" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "array",
+            "items" : {
+              "type" : "number",
+              "format" : "float"
+            }
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          },
+          "valuesAsList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "number",
+              "format" : "float"
+            }
+          }
+        }
+      },
+      "AvailableLanguages" : {
+        "id" : "AvailableLanguages",
+        "type" : "string",
+        "enum" : [ "PORTUGUES", "ENGLISH" ]
+      },
+      "DrivingLicense" : {
+        "id" : "DrivingLicense",
+        "type" : "object",
+        "properties" : {
+          "registerCode" : {
+            "type" : "string"
+          },
+          "category" : {
+            "$ref" : "DrivingCategories"
+          },
+          "hasAcategory" : {
+            "type" : "boolean"
+          },
+          "licenceType" : {
+            "$ref" : "LicenseTypes"
+          },
+          "licenseCategory" : {
+            "$ref" : "LicenseCategory"
+          },
+          "validUntil" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "DrivingCategories" : {
+        "id" : "DrivingCategories",
+        "type" : "string",
+        "enum" : [ "B", "C", "D", "E" ]
+      },
+      "LicenseTypes" : {
+        "id" : "LicenseTypes",
+        "type" : "string",
+        "enum" : [ "DrivingLicence", "HelicopterLicense" ]
+      },
+      "LicenseCategory" : {
+        "id" : "LicenseCategory",
+        "type" : "object",
+        "properties" : {
+          "text" : {
+            "type" : "string"
+          }
+        }
+      },
+      "HelicopterLicense" : {
+        "id" : "HelicopterLicense",
+        "type" : "object",
+        "properties" : {
+          "registerCode" : {
+            "type" : "string"
+          },
+          "category" : {
+            "$ref" : "HelicopterLicenseTypes"
+          },
+          "licenceType" : {
+            "$ref" : "LicenseTypes"
+          },
+          "licenseCategory" : {
+            "$ref" : "LicenseCategory"
+          },
+          "validUntil" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "HelicopterLicenseTypes" : {
+        "id" : "HelicopterLicenseTypes",
+        "type" : "string",
+        "enum" : [ "PrivatePilot", "CommercialPilot", "CertifiedFlightInstructor", "CertifiedFlightInstructorInstrument" ]
+      },
+      "AccountTypes" : {
+        "id" : "AccountTypes",
+        "type" : "string",
+        "enum" : [ "Admin", "Auditor", "Monitor", "SuperUser", "Agent" ]
+      },
+      "License" : {
+        "id" : "License",
+        "type" : "object",
+        "properties" : {
+          "registerCode" : {
+            "type" : "string"
+          },
+          "validUntil" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "licenceType" : {
+            "$ref" : "LicenseTypes"
+          },
+          "licenseCategory" : {
+            "$ref" : "LicenseCategory"
+          }
+        }
+      },
+      "IAttribute" : {
+        "id" : "IAttribute",
+        "type" : "object",
+        "properties" : {
+          "value" : {
+            "$ref" : "_any"
+          },
+          "attributeName" : {
+            "type" : "string"
+          },
+          "dataType" : {
+            "$ref" : "DataType"
+          }
+        }
+      },
+      "_any" : {
+        "id" : "_any",
+        "type" : "any"
+      },
+      "MonitorAttributesMap" : {
+        "id" : "MonitorAttributesMap",
+        "type" : "object",
+        "properties" : {
+          "primaryMap" : {
+            "$ref" : "JsonMap"
+          },
+          "secondaryMap" : {
+            "$ref" : "JsonMap"
+          }
+        }
+      },
+      "JsonMap" : {
+        "id" : "JsonMap",
+        "type" : "object"
+      },
+      "Position" : {
+        "id" : "Position",
+        "type" : "object",
+        "properties" : {
+          "latitude" : {
+            "type" : "number"
+          },
+          "longitude" : {
+            "type" : "number"
+          },
+          "empty" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "EmergencyCallLifecycleStatus" : {
+        "id" : "EmergencyCallLifecycleStatus",
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string"
+          }
+        }
+      },
+      "EmergencyCall" : {
+        "id" : "EmergencyCall",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "emergencyCallLifecycle" : {
+            "$ref" : "EmergencyCallLifecycle"
+          },
+          "begin" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "end" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "victimEmail" : {
+            "type" : "string"
+          },
+          "vehicles" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "VehicleOnCall"
+            }
+          },
+          "monitor" : {
+            "type" : "string"
+          },
+          "victimPositions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Position"
+            }
+          },
+          "victimPositionSize" : {
+            "type" : "integer"
+          },
+          "lastVictimPosition" : {
+            "$ref" : "Position"
+          }
+        }
+      },
+      "EmergencyCallLifecycle" : {
+        "id" : "EmergencyCallLifecycle",
+        "type" : "string",
+        "enum" : [ "Waiting", "WaitingAcknowledgment", "WaitingMonitorAcknowledgment", "WaitingCarAcknowledgment", "OnCall", "Finished" ]
+      },
+      "VehicleOnCall" : {
+        "id" : "VehicleOnCall",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "vehicleIdTag" : {
+            "type" : "string"
+          },
+          "agents" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "size" : {
+            "type" : "integer"
+          },
+          "positions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Position"
+            }
+          },
+          "lastPosition" : {
+            "$ref" : "Position"
+          }
+        }
+      },
+      "VictimAttributesMap" : {
+        "id" : "VictimAttributesMap",
+        "type" : "object",
+        "properties" : {
+          "primaryMap" : {
+            "$ref" : "JsonMap"
+          },
+          "secondaryMap" : {
+            "$ref" : "JsonMap"
+          }
+        }
+      },
+      "EmCallWithVehicles" : {
+        "id" : "EmCallWithVehicles",
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string"
+          },
+          "emCall" : {
+            "$ref" : "EmergencyCall"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.addFreeVehicle" : {
+        "request" : {
+          "$ref" : "AgentCollection"
+        }
+      },
+      "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.addAgentToVehicle" : {
+        "request" : {
+          "$ref" : "Agent"
+        }
+      },
+      "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.getMonitor" : {
+        "response" : {
+          "$ref" : "MonitorAttributesMap"
+        }
+      },
+      "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.removeAgentFromVehicle" : {
+        "request" : {
+          "$ref" : "Agent"
+        }
+      },
+      "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.vehicleLeaving" : {
+      },
+      "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.addAgentsToVehicle" : {
+        "request" : {
+          "$ref" : "AgentCollection"
+        }
+      },
+      "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.ackVehicleFinishedCall" : {
+      },
+      "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.updateVictimPositionAndVerifyStatus" : {
+        "request" : {
+          "$ref" : "Position"
+        },
+        "response" : {
+          "$ref" : "EmergencyCallLifecycleStatus"
+        }
+      },
+      "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.addVictimPosition" : {
+        "request" : {
+          "$ref" : "Position"
+        }
+      },
+      "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.ackVehicleOnCall" : {
+      },
+      "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.updatePositionAndVerifyStatus" : {
+        "request" : {
+          "$ref" : "Position"
+        },
+        "response" : {
+          "$ref" : "EmergencyCall"
+        }
+      },
+      "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.addWaitingCall" : {
+        "request" : {
+          "$ref" : "Position"
+        }
+      },
+      "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.removeAllAgentsFromVehicle" : {
+      },
+      "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.getVictim" : {
+        "response" : {
+          "$ref" : "VictimAttributesMap"
+        }
+      },
+      "epusp.pcs.os.server.endpoint.EmergencyCallWorkflowEndpoint.updatePositionAndVerifyCallStatus" : {
+        "request" : {
+          "$ref" : "Position"
+        },
+        "response" : {
+          "$ref" : "EmCallWithVehicles"
+        }
+      }
+    }
+  }
+}

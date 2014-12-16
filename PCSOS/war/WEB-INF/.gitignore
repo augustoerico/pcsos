@@ -1,7 +1,3 @@
 /classes/
 /deploy
 /appengine-generated
-/agentendpoint-v1-rest.discovery
-/agentendpoint-v1-rpc.discovery
-/victimendpoint-v1-rest.discovery
-/victimendpoint-v1-rpc.discovery
