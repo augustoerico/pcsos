@@ -45,8 +45,11 @@ public class EmergencyCallWorkflowEndpoint {
 
 	@ApiMethod(name="addFreeVehicle")
 	public void addFreeVehicle(@Named("vehicleTag") String vehicleTag, AgentCollection agents, @Named("position") String position) throws Exception {
-		Double lat = Double.parseDouble(position.substring(0, position.indexOf(';')));
-		Double longt = Double.parseDouble(position.substring(position.indexOf(';') + 1));
+		String[] latLong = position.split(";");
+		if(latLong.length != 2)
+			throw new Exception("Have you set a valid position?");
+		Double lat = Double.valueOf(latLong[0]);
+		Double longt = Double.valueOf(latLong[1]);
 		Position pos = new Position(lat, longt);
 		instance.addFreeVehicle(vehicleTag, agents.getAgentCollection(), pos);
 	}
