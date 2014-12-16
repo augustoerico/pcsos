@@ -1,0 +1,1111 @@
+{
+ "kind": "discovery#restDescription",
+ "etag": "\"9mnLCPwbyZOHH18t8ExzO2gqgTk/Sf93sCix3lAItIrPLW1QGSb8QXc\"",
+ "discoveryVersion": "v1",
+ "id": "emcallworkflowendpoint:v1",
+ "name": "emcallworkflowendpoint",
+ "version": "v1",
+ "description": "This is an API",
+ "ownerDomain": "pcs.epusp",
+ "ownerName": "pcs.epusp",
+ "packagePath": "os.workflow",
+ "icons": {
+  "x16": "http://www.google.com/images/icons/product/search-16.gif",
+  "x32": "http://www.google.com/images/icons/product/search-32.gif"
+ },
+ "protocol": "rest",
+ "baseUrl": "https://epusp-pcsos.appspot.com/_ah/api/emcallworkflowendpoint/v1/",
+ "basePath": "/_ah/api/emcallworkflowendpoint/v1/",
+ "rootUrl": "https://epusp-pcsos.appspot.com/_ah/api/",
+ "servicePath": "emcallworkflowendpoint/v1/",
+ "batchPath": "batch",
+ "parameters": {
+  "alt": {
+   "type": "string",
+   "description": "Data format for the response.",
+   "default": "json",
+   "enum": [
+    "json"
+   ],
+   "enumDescriptions": [
+    "Responses with Content-Type of application/json"
+   ],
+   "location": "query"
+  },
+  "fields": {
+   "type": "string",
+   "description": "Selector specifying which fields to include in a partial response.",
+   "location": "query"
+  },
+  "key": {
+   "type": "string",
+   "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+   "location": "query"
+  },
+  "oauth_token": {
+   "type": "string",
+   "description": "OAuth 2.0 token for the current user.",
+   "location": "query"
+  },
+  "prettyPrint": {
+   "type": "boolean",
+   "description": "Returns response with indentations and line breaks.",
+   "default": "true",
+   "location": "query"
+  },
+  "quotaUser": {
+   "type": "string",
+   "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+   "location": "query"
+  },
+  "userIp": {
+   "type": "string",
+   "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+   "location": "query"
+  }
+ },
+ "auth": {
+  "oauth2": {
+   "scopes": {
+    "https://www.googleapis.com/auth/userinfo.email": {
+     "description": "View your email address"
+    }
+   }
+  }
+ },
+ "schemas": {
+  "AccountTypes": {
+   "id": "AccountTypes",
+   "type": "string",
+   "enum": [
+    "Admin",
+    "Agent",
+    "Auditor",
+    "Monitor",
+    "SuperUser"
+   ],
+   "enumDescriptions": [
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  "Agent": {
+   "id": "Agent",
+   "type": "object",
+   "properties": {
+    "active": {
+     "type": "boolean"
+    },
+    "allAttributeKeys": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "allAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "IAttribute"
+     }
+    },
+    "booleanArrayAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "BooleanArrayAttribute"
+     }
+    },
+    "booleanAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "BooleanAttribute"
+     }
+    },
+    "dateArrayAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "DateArrayAttribute"
+     }
+    },
+    "dateAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "DateAttribute"
+     }
+    },
+    "drivingLicence": {
+     "$ref": "DrivingLicense"
+    },
+    "email": {
+     "type": "string"
+    },
+    "floatArrayAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "FloatArrayAttribute"
+     }
+    },
+    "floatAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "FloatAttribute"
+     }
+    },
+    "googleUserId": {
+     "type": "string"
+    },
+    "helicopterLicense": {
+     "$ref": "HelicopterLicense"
+    },
+    "id": {
+     "type": "string"
+    },
+    "integerArrayAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "IntegerArrayAttribute"
+     }
+    },
+    "integerAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "IntegerAttribute"
+     }
+    },
+    "isActive": {
+     "type": "boolean"
+    },
+    "licenses": {
+     "type": "array",
+     "items": {
+      "$ref": "License"
+     }
+    },
+    "name": {
+     "type": "string"
+    },
+    "pictureURL": {
+     "type": "string"
+    },
+    "preferedLanguage": {
+     "$ref": "AvailableLanguages"
+    },
+    "secondName": {
+     "type": "string"
+    },
+    "stringArrayAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "StringArrayAttribute"
+     }
+    },
+    "stringAttributes": {
+     "type": "array",
+     "items": {
+      "$ref": "StringAttribute"
+     }
+    },
+    "surname": {
+     "type": "string"
+    },
+    "type": {
+     "$ref": "AccountTypes"
+    }
+   }
+  },
+  "AgentCollection": {
+   "id": "AgentCollection",
+   "type": "object",
+   "properties": {
+    "agentCollection": {
+     "type": "array",
+     "items": {
+      "$ref": "Agent"
+     }
+    }
+   }
+  },
+  "AvailableLanguages": {
+   "id": "AvailableLanguages",
+   "type": "string",
+   "enum": [
+    "ENGLISH",
+    "PORTUGUES"
+   ],
+   "enumDescriptions": [
+    "",
+    ""
+   ]
+  },
+  "BooleanArrayAttribute": {
+   "id": "BooleanArrayAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "array",
+     "items": {
+      "type": "boolean"
+     }
+    },
+    "valuesAsList": {
+     "type": "array",
+     "items": {
+      "type": "boolean"
+     }
+    }
+   }
+  },
+  "BooleanAttribute": {
+   "id": "BooleanAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "boolean"
+    }
+   }
+  },
+  "DataType": {
+   "id": "DataType",
+   "type": "string",
+   "enum": [
+    "BOOLEAN",
+    "BOOLEAN_ARRAY",
+    "DATE",
+    "DATE_ARRAY",
+    "FLOAT",
+    "FLOAT_ARRAY",
+    "INTEGER",
+    "INTERGER_ARRAY",
+    "STRING",
+    "STRING_ARRAY"
+   ],
+   "enumDescriptions": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  "DateArrayAttribute": {
+   "id": "DateArrayAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "format": "date-time"
+     }
+    },
+    "valuesAsList": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "format": "date-time"
+     }
+    }
+   }
+  },
+  "DateAttribute": {
+   "id": "DateAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "DrivingCategories": {
+   "id": "DrivingCategories",
+   "type": "string",
+   "enum": [
+    "B",
+    "C",
+    "D",
+    "E"
+   ],
+   "enumDescriptions": [
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  "DrivingLicense": {
+   "id": "DrivingLicense",
+   "type": "object",
+   "properties": {
+    "category": {
+     "$ref": "DrivingCategories"
+    },
+    "hasAcategory": {
+     "type": "boolean"
+    },
+    "licenceType": {
+     "$ref": "LicenseTypes"
+    },
+    "licenseCategory": {
+     "$ref": "LicenseCategory"
+    },
+    "registerCode": {
+     "type": "string"
+    },
+    "validUntil": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "EmCallWithVehicles": {
+   "id": "EmCallWithVehicles",
+   "type": "object",
+   "properties": {
+    "emCall": {
+     "$ref": "EmergencyCall"
+    },
+    "status": {
+     "type": "string"
+    }
+   }
+  },
+  "EmergencyCall": {
+   "id": "EmergencyCall",
+   "type": "object",
+   "properties": {
+    "begin": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "emergencyCallLifecycle": {
+     "$ref": "EmergencyCallLifecycle"
+    },
+    "end": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "id": {
+     "type": "string",
+     "format": "int64"
+    },
+    "lastVictimPosition": {
+     "$ref": "Position"
+    },
+    "monitor": {
+     "type": "string"
+    },
+    "vehicles": {
+     "type": "array",
+     "items": {
+      "$ref": "VehicleOnCall"
+     }
+    },
+    "victimEmail": {
+     "type": "string"
+    },
+    "victimPositionSize": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "victimPositions": {
+     "type": "array",
+     "items": {
+      "$ref": "Position"
+     }
+    }
+   }
+  },
+  "EmergencyCallLifecycle": {
+   "id": "EmergencyCallLifecycle",
+   "type": "string",
+   "enum": [
+    "Finished",
+    "OnCall",
+    "Waiting",
+    "WaitingAcknowledgment",
+    "WaitingCarAcknowledgment",
+    "WaitingMonitorAcknowledgment"
+   ],
+   "enumDescriptions": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  "EmergencyCallLifecycleStatus": {
+   "id": "EmergencyCallLifecycleStatus",
+   "type": "object",
+   "properties": {
+    "status": {
+     "type": "string"
+    }
+   }
+  },
+  "FloatArrayAttribute": {
+   "id": "FloatArrayAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "array",
+     "items": {
+      "type": "number",
+      "format": "float"
+     }
+    },
+    "valuesAsList": {
+     "type": "array",
+     "items": {
+      "type": "number",
+      "format": "float"
+     }
+    }
+   }
+  },
+  "FloatAttribute": {
+   "id": "FloatAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "number",
+     "format": "float"
+    }
+   }
+  },
+  "HelicopterLicense": {
+   "id": "HelicopterLicense",
+   "type": "object",
+   "properties": {
+    "category": {
+     "$ref": "HelicopterLicenseTypes"
+    },
+    "licenceType": {
+     "$ref": "LicenseTypes"
+    },
+    "licenseCategory": {
+     "$ref": "LicenseCategory"
+    },
+    "registerCode": {
+     "type": "string"
+    },
+    "validUntil": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "HelicopterLicenseTypes": {
+   "id": "HelicopterLicenseTypes",
+   "type": "string",
+   "enum": [
+    "CertifiedFlightInstructor",
+    "CertifiedFlightInstructorInstrument",
+    "CommercialPilot",
+    "PrivatePilot"
+   ],
+   "enumDescriptions": [
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  "IAttribute": {
+   "id": "IAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "$ref": "_any"
+    }
+   }
+  },
+  "IntegerArrayAttribute": {
+   "id": "IntegerArrayAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "format": "int32"
+     }
+    },
+    "valuesAsList": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "format": "int32"
+     }
+    }
+   }
+  },
+  "IntegerAttribute": {
+   "id": "IntegerAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "integer",
+     "format": "int32"
+    }
+   }
+  },
+  "JsonMap": {
+   "id": "JsonMap",
+   "type": "object"
+  },
+  "License": {
+   "id": "License",
+   "type": "object",
+   "properties": {
+    "licenceType": {
+     "$ref": "LicenseTypes"
+    },
+    "licenseCategory": {
+     "$ref": "LicenseCategory"
+    },
+    "registerCode": {
+     "type": "string"
+    },
+    "validUntil": {
+     "type": "string",
+     "format": "date-time"
+    }
+   }
+  },
+  "LicenseCategory": {
+   "id": "LicenseCategory",
+   "type": "object",
+   "properties": {
+    "text": {
+     "type": "string"
+    }
+   }
+  },
+  "LicenseTypes": {
+   "id": "LicenseTypes",
+   "type": "string",
+   "enum": [
+    "DrivingLicence",
+    "HelicopterLicense"
+   ],
+   "enumDescriptions": [
+    "",
+    ""
+   ]
+  },
+  "MonitorAttributesMap": {
+   "id": "MonitorAttributesMap",
+   "type": "object",
+   "properties": {
+    "primaryMap": {
+     "$ref": "JsonMap"
+    },
+    "secondaryMap": {
+     "$ref": "JsonMap"
+    }
+   }
+  },
+  "Position": {
+   "id": "Position",
+   "type": "object",
+   "properties": {
+    "empty": {
+     "type": "boolean"
+    },
+    "latitude": {
+     "type": "number",
+     "format": "double"
+    },
+    "longitude": {
+     "type": "number",
+     "format": "double"
+    }
+   }
+  },
+  "StringArrayAttribute": {
+   "id": "StringArrayAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "valuesAsList": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "StringAttribute": {
+   "id": "StringAttribute",
+   "type": "object",
+   "properties": {
+    "attributeName": {
+     "type": "string"
+    },
+    "dataType": {
+     "$ref": "DataType"
+    },
+    "value": {
+     "type": "string"
+    }
+   }
+  },
+  "VehicleOnCall": {
+   "id": "VehicleOnCall",
+   "type": "object",
+   "properties": {
+    "agents": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "id": {
+     "type": "string"
+    },
+    "lastPosition": {
+     "$ref": "Position"
+    },
+    "positions": {
+     "type": "array",
+     "items": {
+      "$ref": "Position"
+     }
+    },
+    "size": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "vehicleIdTag": {
+     "type": "string"
+    }
+   }
+  },
+  "VictimAttributesMap": {
+   "id": "VictimAttributesMap",
+   "type": "object",
+   "properties": {
+    "primaryMap": {
+     "$ref": "JsonMap"
+    },
+    "secondaryMap": {
+     "$ref": "JsonMap"
+    }
+   }
+  },
+  "_any": {
+   "id": "_any",
+   "type": "any"
+  }
+ },
+ "methods": {
+  "ackVehicleFinishedCall": {
+   "id": "emcallworkflowendpoint.ackVehicleFinishedCall",
+   "path": "ackVehicleFinishedCall/{vehicleTag}",
+   "httpMethod": "POST",
+   "parameters": {
+    "vehicleTag": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "vehicleTag"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "ackVehicleOnCall": {
+   "id": "emcallworkflowendpoint.ackVehicleOnCall",
+   "path": "ackVehicleOnCall/{vehicleTag}",
+   "httpMethod": "POST",
+   "parameters": {
+    "vehicleTag": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "vehicleTag"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "addAgentToVehicle": {
+   "id": "emcallworkflowendpoint.addAgentToVehicle",
+   "path": "addAgentToVehicle/{vehicleTag}",
+   "httpMethod": "POST",
+   "parameters": {
+    "vehicleTag": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "vehicleTag"
+   ],
+   "request": {
+    "$ref": "Agent",
+    "parameterName": "resource"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "addAgentsToVehicle": {
+   "id": "emcallworkflowendpoint.addAgentsToVehicle",
+   "path": "addAgentsToVehicle/{vehicleTag}",
+   "httpMethod": "POST",
+   "parameters": {
+    "vehicleTag": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "vehicleTag"
+   ],
+   "request": {
+    "$ref": "AgentCollection",
+    "parameterName": "resource"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "addFreeVehicle": {
+   "id": "emcallworkflowendpoint.addFreeVehicle",
+   "path": "addFreeVehicle/{vehicleTag}/{position}",
+   "httpMethod": "POST",
+   "parameters": {
+    "position": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    },
+    "vehicleTag": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "vehicleTag",
+    "position"
+   ],
+   "request": {
+    "$ref": "AgentCollection",
+    "parameterName": "resource"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "addVictimPosition": {
+   "id": "emcallworkflowendpoint.addVictimPosition",
+   "path": "addVictimPosition/{victimEmail}",
+   "httpMethod": "POST",
+   "parameters": {
+    "victimEmail": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "victimEmail"
+   ],
+   "request": {
+    "$ref": "Position",
+    "parameterName": "resource"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "addWaitingCall": {
+   "id": "emcallworkflowendpoint.addWaitingCall",
+   "path": "addWaitingCall/{victimEmail}",
+   "httpMethod": "POST",
+   "parameters": {
+    "victimEmail": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "victimEmail"
+   ],
+   "request": {
+    "$ref": "Position",
+    "parameterName": "resource"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getMonitor": {
+   "id": "emcallworkflowendpoint.getMonitor",
+   "path": "monitorattributesmap/{monitorId}",
+   "httpMethod": "GET",
+   "parameters": {
+    "monitorId": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "monitorId"
+   ],
+   "response": {
+    "$ref": "MonitorAttributesMap"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getVictim": {
+   "id": "emcallworkflowendpoint.getVictim",
+   "path": "victimattributesmap/{victimEmail}",
+   "httpMethod": "GET",
+   "parameters": {
+    "victimEmail": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "victimEmail"
+   ],
+   "response": {
+    "$ref": "VictimAttributesMap"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "removeAgentFromVehicle": {
+   "id": "emcallworkflowendpoint.removeAgentFromVehicle",
+   "path": "agentfromvehicle/{vehicleTag}",
+   "httpMethod": "DELETE",
+   "parameters": {
+    "vehicleTag": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "vehicleTag"
+   ],
+   "request": {
+    "$ref": "Agent",
+    "parameterName": "resource"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "removeAllAgentsFromVehicle": {
+   "id": "emcallworkflowendpoint.removeAllAgentsFromVehicle",
+   "path": "allagentsfromvehicle/{vehicleTag}",
+   "httpMethod": "DELETE",
+   "parameters": {
+    "vehicleTag": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "vehicleTag"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "updatePositionAndVerifyCallStatus": {
+   "id": "emcallworkflowendpoint.updatePositionAndVerifyCallStatus",
+   "path": "emcallwithvehicles/{vehicleTag}/{victimEmail}",
+   "httpMethod": "PUT",
+   "parameters": {
+    "vehicleTag": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    },
+    "victimEmail": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "vehicleTag",
+    "victimEmail"
+   ],
+   "request": {
+    "$ref": "Position",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "EmCallWithVehicles"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "updatePositionAndVerifyStatus": {
+   "id": "emcallworkflowendpoint.updatePositionAndVerifyStatus",
+   "path": "emergencycall/{vehicleTag}",
+   "httpMethod": "PUT",
+   "parameters": {
+    "vehicleTag": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "vehicleTag"
+   ],
+   "request": {
+    "$ref": "Position",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "EmergencyCall"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "updateVictimPositionAndVerifyStatus": {
+   "id": "emcallworkflowendpoint.updateVictimPositionAndVerifyStatus",
+   "path": "emergencycalllifecyclestatus/{victimEmail}",
+   "httpMethod": "PUT",
+   "parameters": {
+    "victimEmail": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "victimEmail"
+   ],
+   "request": {
+    "$ref": "Position",
+    "parameterName": "resource"
+   },
+   "response": {
+    "$ref": "EmergencyCallLifecycleStatus"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "vehicleLeaving": {
+   "id": "emcallworkflowendpoint.vehicleLeaving",
+   "path": "vehicleLeaving/{vehicleTag}",
+   "httpMethod": "POST",
+   "parameters": {
+    "vehicleTag": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "vehicleTag"
+   ],
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  }
+ }
+}
