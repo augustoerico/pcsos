@@ -3,6 +3,7 @@ package epusp.pcs.os.server.endpoint;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.inject.Named;
 import javax.jdo.PersistenceManager;
@@ -51,7 +52,37 @@ public class EmergencyCallWorkflowEndpoint {
 		Double lat = Double.valueOf(latLong[0]);
 		Double longt = Double.valueOf(latLong[1]);
 		Position pos = new Position(lat, longt);
-		instance.addFreeVehicle(vehicleTag, agents.getAgentCollection(), pos);
+		List<Agent> alist = agents.getAgentCollection();
+		List<Agent> list = alist;
+		list.clear();
+		for(Agent a : alist) {
+			list.add(getFullAgent(a.getEmail()));
+		}
+
+		instance.addFreeVehicle(vehicleTag, list, pos);
+	}
+
+	private Agent getFullAgent(String email) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+
+		pm.getFetchPlan().addGroup("all_system_object_attributes");
+		pm.getFetchPlan().setMaxFetchDepth(-1);
+
+		Agent agent = null, detached = null;
+		try{
+			pm.currentTransaction().begin();
+			agent = pm.getObjectById(Agent.class, email);
+			detached = pm.detachCopy(agent);
+			pm.currentTransaction().commit();
+		}catch(Exception e){
+			e.printStackTrace();
+			if (pm.currentTransaction().isActive())
+				pm.currentTransaction().rollback();
+		}finally{
+			pm.close();
+		}
+
+		return detached;
 	}
 
 	@ApiMethod(name="updatePositionAndVerifyStatus")
